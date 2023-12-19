@@ -29,6 +29,10 @@ public class MazeRunnerGame extends Game {
     // Character animation downwards
     private Animation<TextureRegion> characterDownAnimation;
 
+    public GameEngine getGameEngine() {
+        return gameEngine;
+    }
+
     // Engine
     private  GameEngine gameEngine;
 

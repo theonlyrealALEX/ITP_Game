@@ -1,17 +1,18 @@
 package de.tum.cit.ase.maze;
+import java.util.Arrays;
 import java.util.Properties;
 import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class StaticGameMap {
-    private MapObject[][] mapObjects;
+public class GameMap {
+    private MapObject[][] staticMapObjects;
 
-    public StaticGameMap() {
+    public GameMap() {
     }
 
-    // Loads Game Map into the mapObjects
-    public void loadStaticMap(String filePath){
+    // Loads Game Map into the staticMapObjects
+    public void loadMap(String filePath){
         Properties prop = new Properties();
         int[][] intArray;
         int maxRow = 0, maxCol = 0;
@@ -28,7 +29,11 @@ public class StaticGameMap {
                 maxCol = Math.max(maxCol, col);
             }
 
+            // Initialize the intArray with -1
             intArray = new int[maxRow + 1][maxCol + 1]; // +1 because arrays are 0-indexed
+            for (int[] row : intArray) {
+                Arrays.fill(row, -1);
+            }
 
             // Second pass to fill the array
             for (String key : prop.stringPropertyNames()) {
@@ -45,14 +50,14 @@ public class StaticGameMap {
                 System.out.println();
             }
 
-            mapObjects = new MapObject[maxRow + 1][maxCol + 1];
+            staticMapObjects = new MapObject[maxRow + 1][maxCol + 1];
 
             for (int i = 0; i < intArray.length; i++) {
                 for (int j = 0; j < intArray[i].length; j++) {
                     if (intArray[i][j] == 0) {
-                        mapObjects[i][j] = new Wall();
+                        staticMapObjects[i][j] = new Wall();
                     } else {
-                        mapObjects[i][j] = new Path();
+                        staticMapObjects[i][j] = new Path();
                     }
                 }
             }
@@ -60,5 +65,9 @@ public class StaticGameMap {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public MapObject[][] getStaticMapObjects() {
+        return staticMapObjects;
     }
 }

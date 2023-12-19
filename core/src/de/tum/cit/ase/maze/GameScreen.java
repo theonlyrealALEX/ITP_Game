@@ -47,6 +47,8 @@ public class GameScreen implements Screen {
 
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
 
+        renderMap();
+
         camera.update(); // Update the camera
 
         // Move text in a circular path to have an example of a moving object
@@ -73,6 +75,29 @@ public class GameScreen implements Screen {
 
         game.getSpriteBatch().end(); // Important to call this after drawing everything
     }
+
+    // Render Map
+    public void renderMap() {
+        MapObject[][] mapObjects = game.getGameEngine().getStaticGameMap().getStaticMapObjects();
+
+        // Calculate the size of each tile on the screen, for example:
+        float tileSize = 32;
+
+        game.getSpriteBatch().begin();
+
+        for (int row = 0; row < mapObjects.length; row++) {
+            for (int col = 0; col < mapObjects[row].length; col++) {
+                if (mapObjects[row][col] != null) {
+                    float x = col * tileSize;
+                    float y = row * tileSize;
+                    mapObjects[row][col].render(game.getSpriteBatch(), x, y);
+                }
+            }
+        }
+
+        game.getSpriteBatch().end();
+    }
+
 
     @Override
     public void resize(int width, int height) {

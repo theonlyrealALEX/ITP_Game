@@ -1,18 +1,22 @@
 package de.tum.cit.ase.maze;
 
 public class GameEngine {
-    private StaticGameMap staticGameMap;
+    private GameMap gameMap;
 
     public GameEngine() {
         System.out.println("Loading Game Engine");
         System.out.println("Current working directory: " + System.getProperty("user.dir"));
 
-        staticGameMap = new StaticGameMap();
+        gameMap = new GameMap();
     loadMap();
     }
 
     // Needs to be changed later with Map-Selection Menu
     private void loadMap(){
-        staticGameMap.loadStaticMap("maps/level-1.properties");
+        gameMap.loadMap("maps/level-1.properties");
+    }
+
+    public GameMap getStaticGameMap() {
+return gameMap;
     }
 }
