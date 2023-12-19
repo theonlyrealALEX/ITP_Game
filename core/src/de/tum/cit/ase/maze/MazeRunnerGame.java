@@ -29,6 +29,9 @@ public class MazeRunnerGame extends Game {
     // Character animation downwards
     private Animation<TextureRegion> characterDownAnimation;
 
+    // Engine
+    private  GameEngine gameEngine;
+
     /**
      * Constructor for MazeRunnerGame.
      *
@@ -52,6 +55,9 @@ public class MazeRunnerGame extends Game {
         Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
+
+        // Load Eninge and Map
+        gameEngine = new GameEngine();
 
         goToMenu(); // Navigate to the menu screen
     }
