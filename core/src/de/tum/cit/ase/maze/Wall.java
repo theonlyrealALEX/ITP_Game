@@ -10,7 +10,7 @@ public class Wall extends MapObject {
     private static final TextureRegion wallTextureRegion = new TextureRegion(tilesTexture, 96, 0, 16, 16);
 
     @Override
-    public void render(SpriteBatch spriteBatch, float x, float y) {
-        spriteBatch.draw(wallTextureRegion, x, y);
+    public void render(SpriteBatch spriteBatch, float x, float y, float tileSize) {
+        spriteBatch.draw(wallTextureRegion, x, y, tileSize, tileSize);
     }
 }

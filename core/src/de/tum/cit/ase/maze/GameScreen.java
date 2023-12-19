@@ -45,11 +45,18 @@ public class GameScreen implements Screen {
             game.goToMenu();
         }
 
+
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
 
         renderMap();
 
+
         camera.update(); // Update the camera
+
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W) | Gdx.input.isKeyJustPressed(Input.Keys.UP) ) {
+            game.goToMenu();
+        }
 
         // Move text in a circular path to have an example of a moving object
         sinusInput += delta;
@@ -81,7 +88,7 @@ public class GameScreen implements Screen {
         MapObject[][] mapObjects = game.getGameEngine().getStaticGameMap().getStaticMapObjects();
 
         // Calculate the size of each tile on the screen, for example:
-        float tileSize = 32;
+        float tileSize = 80;
 
         game.getSpriteBatch().begin();
 
@@ -90,7 +97,7 @@ public class GameScreen implements Screen {
                 if (mapObjects[row][col] != null) {
                     float x = col * tileSize;
                     float y = row * tileSize;
-                    mapObjects[row][col].render(game.getSpriteBatch(), x, y);
+                    mapObjects[row][col].render(game.getSpriteBatch(), x, y, tileSize);
                 }
             }
         }
