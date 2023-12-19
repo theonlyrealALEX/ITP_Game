@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 /**
@@ -18,6 +20,10 @@ public class GameScreen implements Screen {
     private final BitmapFont font;
 
     private float sinusInput = 0f;
+
+    private final float tileSize = 80;
+
+    private float playerSpeed = 3;
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -34,6 +40,11 @@ public class GameScreen implements Screen {
 
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
+
+        //Create Player
+        game.getGameEngine().getPlayer().setCurrentWindowX(camera.viewportWidth / 2);
+        game.getGameEngine().getPlayer().setCurrentWindowY(camera.viewportHeight / 2);
+
     }
 
 
@@ -47,7 +58,32 @@ public class GameScreen implements Screen {
 
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
 
+        renderMap();
+        Player player = game.getGameEngine().getPlayer();
+
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            player.setDirection(Direction.UP);
+            renderPlayer();
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            player.setDirection(Direction.DOWN);
+            renderPlayer();
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            player.setDirection(Direction.LEFT);
+            renderPlayer();
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            player.setDirection(Direction.RIGHT);
+            renderPlayer();
+        } else {
+            // Do not change the direction here, just render the standing player
+            renderStandingPlayer();
+        }
+
+
+
         camera.update(); // Update the camera
+
+
+
 
         // Move text in a circular path to have an example of a moving object
         sinusInput += delta;
@@ -57,22 +93,103 @@ public class GameScreen implements Screen {
         // Set up and begin drawing with the sprite batch
         game.getSpriteBatch().setProjectionMatrix(camera.combined);
 
+
         game.getSpriteBatch().begin(); // Important to call this before drawing anything
-
-        // Render the text
-        font.draw(game.getSpriteBatch(), "Press ESC to go to menu", textX, textY);
-
-        // Draw the character next to the text :) / We can reuse sinusInput here
-        game.getSpriteBatch().draw(
-                game.getCharacterDownAnimation().getKeyFrame(sinusInput, true),
-                textX - 96,
-                textY - 64,
-                64,
-                128
-        );
 
         game.getSpriteBatch().end(); // Important to call this after drawing everything
     }
+
+    // Render Map
+    public void renderMap() {
+        MapObject[][] mapObjects = game.getGameEngine().getStaticGameMap().getStaticMapObjects();
+
+        // Calculate the size of each tile on the screen, for example:
+
+
+        game.getSpriteBatch().begin();
+
+        for (int row = 0; row < mapObjects.length; row++) {
+            for (int col = 0; col < mapObjects[row].length; col++) {
+                if (mapObjects[row][col] != null) {
+                    float x = col * tileSize;
+                    float y = row * tileSize;
+                    mapObjects[row][col].render(game.getSpriteBatch(), x, y, tileSize);
+                }
+            }
+        }
+
+        game.getSpriteBatch().end();
+    }
+
+    private void renderStandingPlayer() {
+        Player player = game.getGameEngine().getPlayer();
+        float x = player.getCurrentWindowX();
+        float y = player.getCurrentWindowY();
+
+        TextureRegion currentFrame = null;
+
+        switch (player.getDirection()) {
+            case STANDINGUP:
+                currentFrame = player.getCharacterStandingUpTexture();
+                break;
+            case STANDINGDOWN:
+                currentFrame = player.getCharacterStandingDownTexture();
+                break;
+            case STANDINGLEFT:
+                currentFrame = player.getCharacterStandingLeftTexture();
+                break;
+            case STANDINGRIGHT:
+                currentFrame = player.getCharacterStandingRightTexture();
+                break;
+            default:
+                renderPlayer();
+                return;
+        }
+
+        game.getSpriteBatch().begin();
+        // Draw the standing frame scaled to tileSize
+        game.getSpriteBatch().draw(
+                currentFrame,
+                x, y,
+                64, 128 // Adjust the size as needed
+        );
+        game.getSpriteBatch().end();
+    }
+    private void renderPlayer() {
+        Player player = game.getGameEngine().getPlayer();
+        player.move(playerSpeed);
+        float x = player.getCurrentWindowX();
+        float y = player.getCurrentWindowY();
+
+        Animation<TextureRegion> anim = null;
+
+        switch (player.getDirection()) {
+            case UP -> anim = player.getCharacterUpAnimation();
+            case DOWN -> anim = player.getCharacterDownAnimation();
+            case LEFT -> anim = player.getCharacterLeftAnimation();
+            case RIGHT -> anim = player.getCharacterRightAnimation();
+        }
+
+        TextureRegion currentFrame = anim.getKeyFrame(sinusInput, true);
+
+        game.getSpriteBatch().begin();
+        game.getSpriteBatch().draw(currentFrame, x, y, 64, 128);
+        game.getSpriteBatch().end();
+
+        player.setDirection(getStandingDirection(player.getDirection()));
+    }
+
+    private Direction getStandingDirection(Direction currentDirection) {
+        return switch (currentDirection) {
+            case UP -> Direction.STANDINGUP;
+            case DOWN -> Direction.STANDINGDOWN;
+            case LEFT -> Direction.STANDINGLEFT;
+            case RIGHT -> Direction.STANDINGRIGHT;
+            // For standing directions, keep the same
+            default -> currentDirection;
+        };
+    }
+
 
     @Override
     public void resize(int width, int height) {
@@ -101,4 +218,18 @@ public class GameScreen implements Screen {
     }
 
     // Additional methods and logic can be added as needed for the game screen
+
+       /*
+        // Render the text
+        font.draw(game.getSpriteBatch(), "Press ESC to go to menu", textX, textY);
+
+        // Draw the character next to the text :) / We can reuse sinusInput here
+        game.getSpriteBatch().draw(
+                game.getCharacterDownAnimation().getKeyFrame(sinusInput, true),
+                textX - 96,
+                textY - 64,
+                64,
+                128
+        );
+*/
 }

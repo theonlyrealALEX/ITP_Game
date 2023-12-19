@@ -29,6 +29,14 @@ public class MazeRunnerGame extends Game {
     // Character animation downwards
     private Animation<TextureRegion> characterDownAnimation;
 
+
+    public GameEngine getGameEngine() {
+        return gameEngine;
+    }
+
+    // Engine
+    private  GameEngine gameEngine;
+
     /**
      * Constructor for MazeRunnerGame.
      *
@@ -45,13 +53,15 @@ public class MazeRunnerGame extends Game {
     public void create() {
         spriteBatch = new SpriteBatch(); // Create SpriteBatch
         skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json")); // Load UI skin
-        this.loadCharacterAnimation(); // Load character animation
 
         // Play some background music
         // Background sound
         Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
+
+        // Load Eninge and Map
+        gameEngine = new GameEngine();
 
         goToMenu(); // Navigate to the menu screen
     }
@@ -78,26 +88,6 @@ public class MazeRunnerGame extends Game {
         }
     }
 
-    /**
-     * Loads the character animation from the character.png file.
-     */
-    private void loadCharacterAnimation() {
-        Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
-
-        int frameWidth = 16;
-        int frameHeight = 32;
-        int animationFrames = 4;
-
-        // libGDX internal Array instead of ArrayList because of performance
-        Array<TextureRegion> walkFrames = new Array<>(TextureRegion.class);
-
-        // Add all frames to the animation
-        for (int col = 0; col < animationFrames; col++) {
-            walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, 0, frameWidth, frameHeight));
-        }
-
-        characterDownAnimation = new Animation<>(0.1f, walkFrames);
-    }
 
     /**
      * Cleans up resources when the game is disposed.
@@ -116,7 +106,7 @@ public class MazeRunnerGame extends Game {
     }
 
     public Animation<TextureRegion> getCharacterDownAnimation() {
-        return characterDownAnimation;
+        return gameEngine.getPlayer().getCharacterDownAnimation();
     }
 
     public SpriteBatch getSpriteBatch() {
