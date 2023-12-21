@@ -76,6 +76,13 @@ public class MazeRunnerGame extends Game {
             gameScreen = null;
         }
     }
+    public void goToPauseMenu(){
+        this.setScreen(new PauseMenuScreen(this)); // Set the current screen to MenuScreen
+        if (gameScreen != null) {
+            gameScreen.dispose(); // Dispose the game screen if it exists
+            gameScreen = null;
+        }
+    }
 
     /**
      * Switches to the game screen.
@@ -87,6 +94,7 @@ public class MazeRunnerGame extends Game {
             menuScreen = null;
         }
     }
+
 
 
     /**

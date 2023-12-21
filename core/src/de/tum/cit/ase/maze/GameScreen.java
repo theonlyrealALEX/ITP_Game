@@ -53,7 +53,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         // Check for escape key press to go back to the menu
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.goToMenu();
+            game.goToPauseMenu();
         }
 
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
