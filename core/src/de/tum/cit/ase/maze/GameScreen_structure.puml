@@ -1,0 +1,337 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": false,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": false,
+    "cutInterfaceStructures": false,
+    "cutDataStructures": false,
+    "cutGetterAndSetter": false,
+    "cutConstructors": false
+  },
+  "graphTraversal": {
+    "forwardDepth": 3,
+    "backwardDepth": 3,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "de.tum.cit.ase.maze.GameScreen",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_115212 { 
+   	label=tum
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_972012052 { 
+   	label=cit
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   Direction521980439[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(E)Direction</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+   DOWN: Direction [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   LEFT: Direction [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   RIGHT: Direction [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   STANDINGDOWN: Direction [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   STANDINGLEFT: Direction [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   STANDINGRIGHT: Direction [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   STANDINGUP: Direction [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   UP: Direction [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ valueOf(name: String): Direction</TD></TR>
+<TR><TD ALIGN="LEFT" >+ values(): Direction[]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#DCFBD5"
+];
+
+GameEngine521980439[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)GameEngine</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   player: Player [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   staticGameMap: GameMap [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ GameEngine()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getPlayer(): Player</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getStaticGameMap(): GameMap</TD></TR>
+<TR><TD ALIGN="LEFT" >- loadMap()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+GameMap521980439[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)GameMap</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   staticMapObjects: MapObject[][] [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ GameMap()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getStaticMapObjects(): MapObject[][]</TD></TR>
+<TR><TD ALIGN="LEFT" >+ loadMap(filePath: String)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+GameScreen521980439[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)GameScreen</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   camera: OrthographicCamera [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   font: BitmapFont [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   game: MazeRunnerGame [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   playerSpeed: float [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sinusInput: float [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   tileSize: float [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ GameScreen(game: MazeRunnerGame)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ dispose()</TD></TR>
+<TR><TD ALIGN="LEFT" >- getStandingDirection(currentDirection: Direction): Direction</TD></TR>
+<TR><TD ALIGN="LEFT" >+ hide()</TD></TR>
+<TR><TD ALIGN="LEFT" >- isPlayerAtEdge(): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ pause()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ render(delta: float)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ renderMap()</TD></TR>
+<TR><TD ALIGN="LEFT" >- renderPlayer()</TD></TR>
+<TR><TD ALIGN="LEFT" >- renderStandingPlayer()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ resize(width: int, height: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ resume()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ show()</TD></TR>
+<TR><TD ALIGN="LEFT" >- updateCameraPosition()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MapObject521980439[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MapObject</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ render(spriteBatch: SpriteBatch, x: float, y: float, tileSize: float)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MazeRunnerGame521980439[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MazeRunnerGame</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   characterDownAnimation: Animation&lt;TextureRegion&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   gameEngine: GameEngine [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   gameScreen: GameScreen [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   menuScreen: MenuScreen [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   skin: Skin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   spriteBatch: SpriteBatch [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ MazeRunnerGame(fileChooser: NativeFileChooser)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ create()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ dispose()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getCharacterDownAnimation(): Animation&lt;TextureRegion&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getGameEngine(): GameEngine</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getSkin(): Skin</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getSpriteBatch(): SpriteBatch</TD></TR>
+<TR><TD ALIGN="LEFT" >+ goToGame()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ goToMenu()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MenuScreen521980439[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MenuScreen</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   stage: Stage [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ MenuScreen(game: MazeRunnerGame)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ dispose()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ hide()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ pause()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ render(delta: float)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ resize(width: int, height: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ resume()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ show()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Path521980439[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Path</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ render(spriteBatch: SpriteBatch, x: float, y: float, tileSize: float)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Player521980439[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Player</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   characterDownAnimation: Animation&lt;TextureRegion&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   characterLeftAnimation: Animation&lt;TextureRegion&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   characterRightAnimation: Animation&lt;TextureRegion&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   characterStandingDownTexture: TextureRegion [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   characterStandingLeftTexture: TextureRegion [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   characterStandingRightTexture: TextureRegion [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   characterStandingUpTexture: TextureRegion [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   characterUpAnimation: Animation&lt;TextureRegion&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   currentWindowX: float [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   currentWindowY: float [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   direction: Direction [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ Player()</TD></TR>
+<TR><TD ALIGN="LEFT" >- createAnimation(sheet: Texture, startY: int, frameWidth: int, frameHeight: int, frameCount: int): Animation&lt;TextureRegion&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getCharacterDownAnimation(): Animation&lt;TextureRegion&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getCharacterLeftAnimation(): Animation&lt;TextureRegion&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getCharacterRightAnimation(): Animation&lt;TextureRegion&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getCharacterStandingDownTexture(): TextureRegion</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getCharacterStandingLeftTexture(): TextureRegion</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getCharacterStandingRightTexture(): TextureRegion</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getCharacterStandingUpTexture(): TextureRegion</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getCharacterUpAnimation(): Animation&lt;TextureRegion&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getCurrentWindowX(): float</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getCurrentWindowY(): float</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getDirection(): Direction</TD></TR>
+<TR><TD ALIGN="LEFT" >- loadCharacterAnimations()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ move(speed: float)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setCurrentWindowX(currentWindowX: float)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setCurrentWindowY(currentWindowY: float)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setDirection(direction: Direction)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Wall521980439[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Wall</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ render(spriteBatch: SpriteBatch, x: float, y: float, tileSize: float)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+GameEngine521980439 -> GameMap521980439[label="staticGameMap
+[0..1]"];
+GameEngine521980439 -> Player521980439[label="player
+[0..1]"];
+GameMap521980439 -> MapObject521980439[label="staticMapObjects
+[0..*]"];
+GameScreen521980439 -> GameMap521980439[label="renderMap() -> getStaticMapObjects()"];
+GameScreen521980439 -> MapObject521980439[label="renderMap() -> render()"];
+GameScreen521980439 -> MazeRunnerGame521980439[label="game
+[0..1]"];
+MapObject521980439 -> Path521980439[arrowhead=none, arrowtail=empty, dir=both];
+MapObject521980439 -> Wall521980439[arrowhead=none, arrowtail=empty, dir=both];
+MazeRunnerGame521980439 -> GameEngine521980439[label="gameEngine
+[0..1]"];
+MazeRunnerGame521980439 -> GameScreen521980439[label="gameScreen
+[0..1]"];
+MazeRunnerGame521980439 -> MenuScreen521980439[label="menuScreen
+[0..1]"];
+MazeRunnerGame521980439 -> Player521980439[label="getCharacterDownAnimation() -> getCharacterDownAnimation()"];
+Player521980439 -> Direction521980439[label="direction
+[0..1]"];
+    
+}
+@enduml
