@@ -3,6 +3,7 @@ package de.tum.cit.ase.maze;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -24,6 +25,8 @@ public class GameScreen implements Screen {
     private final float tileSize = 80;
 
     private float playerSpeed = 3;
+
+
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -51,9 +54,18 @@ public class GameScreen implements Screen {
     // Screen interface methods with necessary functionality
     @Override
     public void render(float delta) {
+
         // Check for escape key press to go back to the menu
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            //sound effect
+            Music escMusic = Gdx.audio.newMusic(Gdx.files.internal("ESC_sound.mp3"));
+            escMusic.setVolume(2.5f);
+            escMusic.setLooping(false);
+            escMusic.play();
+
+            //go to pause menu
             game.goToPauseMenu();
+
         }
 
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
@@ -97,6 +109,9 @@ public class GameScreen implements Screen {
         game.getSpriteBatch().begin(); // Important to call this before drawing anything
 
         game.getSpriteBatch().end(); // Important to call this after drawing everything
+
+
+
     }
 
     // Render Map

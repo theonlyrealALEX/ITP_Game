@@ -2,6 +2,7 @@ package de.tum.cit.ase.maze;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -12,9 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 /**
- * The MenuScreen class is responsible for displaying the main menu of the game.
+ * The PauseMenuScreen class is responsible for displaying the pause menu in the middle of the game.
  * It extends the LibGDX Screen class and sets up the UI components for the menu.
  */
 public class PauseMenuScreen implements Screen {
@@ -22,7 +24,7 @@ public class PauseMenuScreen implements Screen {
     private final Stage stage;
 
     /**
-     * Constructor for MenuScreen. Sets up the camera, viewport, stage, and UI elements.
+     * Constructor for PauseMenuScreen. Sets up the camera, viewport, stage, and UI elements.
      *
      * @param game The main game class, used to access global resources and methods.
      */
@@ -40,26 +42,29 @@ public class PauseMenuScreen implements Screen {
 
 
         // Add a label as a title
-        table.add(new Label("Hello World from the Pause Menu!", game.getSkin(), "title")).padBottom(80).row();
+        table.add(new Label("Welcome to Pause Menu!", game.getSkin(), "title")).padBottom(80).row();
 
-        /*TextButton continueButton = new TextButton("Continue Game", game.getSkin());
+        TextButton continueButton = new TextButton("Continue Game", game.getSkin());
         table.add(continueButton).width(300).row();
         continueButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.resumeGame();
-                //game.setScreen(new GameScreen(game));
-                // Change to the game screen when button is pressed
+                clickSound();
+                //game.resumeGame();
 
             }
-        });*/
+        });
 
         TextButton startNewGameButton = new TextButton("Start New Game", game.getSkin());
         table.add(startNewGameButton).width(300).row();
         startNewGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame();
+                clickSound();
+                buttonStartNewGameFadeAway(startNewGameButton, game);
+                /*game.dispose();
+                game.create();
+                game.goToGame();*/
                 // Change to the game screen when button is pressed
             }
         });
@@ -69,7 +74,25 @@ public class PauseMenuScreen implements Screen {
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToMenu();
+                clickSound();
+                exitButton.addAction(Actions.sequence(
+                        Actions.fadeOut(0.5f),// Duration of the fade-out effect
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Dispose of the current game and create a new one
+                                game.dispose();
+                                game.create();
+                                // You can add more animation effects here if needed
+
+                                // Switch to the game menu
+                                game.goToMenu();
+                            }
+                        })
+                ));
+                /*game.dispose();
+                game.create();
+                game.goToMenu();*/
             }
         });
 
@@ -103,14 +126,47 @@ public class PauseMenuScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * Sound effect when buttons clicked.
+     */
+    public void clickSound(){
+        Music clickMusic = Gdx.audio.newMusic(Gdx.files.internal("click_sound.mp3"));
+        clickMusic.setVolume(2.5f);
+        clickMusic.setLooping(false);
+        clickMusic.play();
+    }
+
+    /**
+     * Fade away animation for Start New Game button.
+     */
+
+    public void buttonStartNewGameFadeAway(TextButton textButton,MazeRunnerGame game){
+        textButton.addAction(Actions.sequence(
+                Actions.fadeOut(0.5f),// Duration of the fade-out effect
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Dispose of the current game and create a new one
+                        game.dispose();
+                        game.create();
+                        // You can add more animation effects here if needed
+
+                        // Switch to the game screen
+                        game.goToGame();
+                    }
+                })
+        ));
+    }
+
     // The following methods are part of the Screen interface but are not used in this screen.
     @Override
     public void pause() {
     }
 
-    @Override
-    public void resume() {
+    public void resume(){
+
     }
+
 
     @Override
     public void hide() {

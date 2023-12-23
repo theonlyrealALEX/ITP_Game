@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.files.FileHandle;
 
 /**
  * The MazeRunnerGame class represents the core of the Maze Runner game.
@@ -18,6 +20,7 @@ import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 public class MazeRunnerGame extends Game {
     // Screens
     private MenuScreen menuScreen;
+    private PauseMenuScreen pauseMenuScreen;
     private GameScreen gameScreen;
 
     // Sprite Batch for rendering
@@ -26,16 +29,51 @@ public class MazeRunnerGame extends Game {
     // UI Skin
     private Skin skin;
 
+
+
     // Character animation downwards
     private Animation<TextureRegion> characterDownAnimation;
+
+    // Getter methods
+    public Skin getSkin() {
+        return skin;
+    }
+
+    public Animation<TextureRegion> getCharacterDownAnimation() {
+        return gameEngine.getPlayer().getCharacterDownAnimation();
+    }
+
+    public SpriteBatch getSpriteBatch() {
+        return spriteBatch;
+    }
 
 
     public GameEngine getGameEngine() {
         return gameEngine;
     }
 
+
+    private Music backgroundMusic;
+
+
+
+    //JODIE TRYING OUT THINGS
+    public GameScreen getGameScreen() {
+        return gameScreen;
+    }
+
+    public void setGameScreen(GameScreen gameScreen) {
+        this.gameScreen = gameScreen;
+    }
+    //JODIE TRYING OUT THINGS
+
+
+
     // Engine
     private  GameEngine gameEngine;
+    private static final String GAME_STATE_FILE_PATH = "game_state.json";
+
+
 
     /**
      * Constructor for MazeRunnerGame.
@@ -56,14 +94,27 @@ public class MazeRunnerGame extends Game {
 
         // Play some background music
         // Background sound
-        Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
+        this.backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("crystal_cave.mp3"));
+        backgroundMusic.setVolume(0.5f);
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
 
-        // Load Eninge and Map
+        // Load Engine and Map
         gameEngine = new GameEngine();
 
         goToMenu(); // Navigate to the menu screen
+    }
+
+    /**
+     * Cleans up resources when the game is disposed.
+     */
+    @Override
+    public void dispose() {
+        getScreen().hide(); // Hide the current screen
+        getScreen().dispose(); // Dispose the current screen
+        spriteBatch.dispose(); // Dispose the spriteBatch
+        skin.dispose(); // Dispose the skin
+        backgroundMusic.dispose();
     }
 
     /**
@@ -76,13 +127,33 @@ public class MazeRunnerGame extends Game {
             gameScreen = null;
         }
     }
+    /**
+     * Switches to the pause menu screen when press ESC.
+     */
     public void goToPauseMenu(){
+
         this.setScreen(new PauseMenuScreen(this)); // Set the current screen to MenuScreen
         if (gameScreen != null) {
             gameScreen.dispose(); // Dispose the game screen if it exists
             gameScreen = null;
         }
     }
+    /* game resume function for continue game button WIP
+    public void resumeGame() {
+
+        this.getSkin();
+        this.getSpriteBatch();
+        this.getCharacterDownAnimation();
+        this.setScreen(getGameScreen());
+        this.render();
+        // Set the current screen to GameScreen
+        if ( pauseMenuScreen!= null) {
+            pauseMenuScreen.dispose(); // Dispose the game screen if it exists
+            pauseMenuScreen = null;
+        }
+
+    }*/
+
 
     /**
      * Switches to the game screen.
@@ -97,27 +168,10 @@ public class MazeRunnerGame extends Game {
 
 
 
-    /**
-     * Cleans up resources when the game is disposed.
-     */
-    @Override
-    public void dispose() {
-        getScreen().hide(); // Hide the current screen
-        getScreen().dispose(); // Dispose the current screen
-        spriteBatch.dispose(); // Dispose the spriteBatch
-        skin.dispose(); // Dispose the skin
-    }
 
-    // Getter methods
-    public Skin getSkin() {
-        return skin;
-    }
 
-    public Animation<TextureRegion> getCharacterDownAnimation() {
-        return gameEngine.getPlayer().getCharacterDownAnimation();
-    }
 
-    public SpriteBatch getSpriteBatch() {
-        return spriteBatch;
-    }
+
+
+
 }
