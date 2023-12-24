@@ -27,6 +27,7 @@ public class GameScreen implements Screen {
 
     private float playerSpeed = 3;
 
+
     /**
      * Constructor for GameScreen. Sets up the camera and font.
      *
@@ -46,6 +47,8 @@ public class GameScreen implements Screen {
         //Create Player
         game.getGameEngine().getPlayer().setCurrentWindowX(camera.viewportWidth / 2);
         game.getGameEngine().getPlayer().setCurrentWindowY(camera.viewportHeight / 2);
+
+
 
     }
 
@@ -157,10 +160,25 @@ public class GameScreen implements Screen {
         game.getSpriteBatch().end();
     }
     private void renderPlayer() {
+        float projectionPlaneHeight = camera.viewportHeight / camera.zoom;
+        float projectionPlaneWidth = game.getGameEngine().getStaticGameMap().getMapWidth()*tileSize;//camera.viewportWidth / camera.zoom;
         Player player = game.getGameEngine().getPlayer();
         player.move(playerSpeed);
         float x = player.getCurrentWindowX();
         float y = player.getCurrentWindowY();
+
+
+        if(x < 0){
+            player.setCurrentWindowX(0);
+        } else if (y < 0 ) {
+            player.setCurrentWindowY(0);
+        } else if (x+tileSize > projectionPlaneWidth) {
+            System.out.println("Player at Right Part of the Map "+ player.getCurrentWindowX()+" "+player.getCurrentWindowY()+ " proejctionPlanteWidth: "+projectionPlaneWidth);
+            player.setCurrentWindowX(projectionPlaneWidth-tileSize);
+        } else if (y-tileSize > projectionPlaneHeight) {
+            System.out.println("Player at Top Part of the Map "+ player.getCurrentWindowX()+" "+player.getCurrentWindowY()+ " proejctionPlanteHeight: "+projectionPlaneHeight);
+            player.setCurrentWindowY(projectionPlaneHeight+tileSize);
+        }
 
         Animation<TextureRegion> anim = null;
 
@@ -197,78 +215,86 @@ public class GameScreen implements Screen {
         float playerY = player.getCurrentWindowY();
 
         float edge = 0.2f;
-        float playerWidth = 16;  // Replace with actual player width
-        float playerHeight = 32; // Replace with actual player height
 
-        // Calculate the bounds of the camera's viewport
-        float leftBound = camera.position.x - camera.viewportWidth / 2;
-        float rightBound = camera.position.x + camera.viewportWidth / 2;
-        float bottomBound = camera.position.y - camera.viewportHeight / 2;
-        float topBound = camera.position.y + camera.viewportHeight / 2;
+        System.out.println("Camera Coords x/y:"+camera.position.x+ " "+ camera.position.y);
+        System.out.println("Camera Viewport w/h"+camera.viewportWidth +" "+camera.viewportHeight);
+        System.out.println("PlayerCoords x/y "+playerX + " "+playerY);
 
-        System.out.println("LeftBound:"+leftBound);
-
-        System.out.println("Camera Coords:"+camera.position.x+ " "+ camera.position.y);
-        System.out.println("Camera Viewport"+camera.viewportWidth);
-        System.out.println("PlayerCoords"+playerX + " "+playerY);
-
-
+        System.out.println("Left Bound "+(camera.position.x - 0.5 * camera.viewportWidth));
+        System.out.println("Right Bound "+(camera.position.x + 0.5 * camera.viewportWidth));
         // Check left and right bounds
-        if (playerX < 0 + camera.position.x * edge/2 && playerX > 0) {
+        if (playerX < camera.position.x - 0.5 * camera.viewportWidth + tileSize + tileSize) {
             return true;
-        } else if (playerX > camera.position.x * 2 - camera.position.x * edge/2) {
+        } else if (playerX > camera.position.x + 0.5 * camera.viewportWidth- tileSize-tileSize) {
             return true;
         }
 
-        System.out.println("top edge: " + camera.position.y * edge);
-        float val = camera.position.y * 2 -camera.position.y * edge;
-        System.out.println("bottom edge: " +val );
+        System.out.println("Top Bound "+(camera.position.y + 0.5 * camera.viewportHeight));
+        System.out.println("Bottom Bound "+(camera.position.y - 0.5 * camera.viewportHeight));
+
         // Check top and bottom bounds
-        if (playerY < 0 + camera.position.y * edge) {
+        if (playerY < camera.position.y - 0.5 * camera.viewportHeight+ tileSize+tileSize)  {
             return true;
-        } else if (playerY  > camera.position.y * 2 -camera.position.y * edge) {
-            System.out.println("bottom edge: " +val );
+        } else if (playerY  > camera.position.y + 0.5 * camera.viewportHeight - tileSize- tileSize) {
+            System.out.println("bottom edge: " + (camera.position.y * 2 -camera.position.y * edge));
             return true;
         }
+
+        //TODO: check if player is outside of camera range
+        //TODO: Understand logic of what i am checking for oin Paper and check if it actaully makes sense
 
         return false;
     }
 
-    // Reason for the "snapping"-bug is because I work with percentages.
     private void updateCameraPosition() {
         Player player = game.getGameEngine().getPlayer();
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
-
         // Define how close to the edge the player must be to move the camera
-
         System.out.println("Screen Height: "+screenHeight);
         System.out.println("Snap");
         // Check and update camera position based on player's direction
         switch (player.getDirection()) {
             case UP:
             case STANDINGUP:
-                camera.position.y += screenHeight*0.3; // Move camera up by one screen height
-                //player.setCurrentWindowY(camera.position.y); // Adjust player's Y position
+                camera.position.y += screenHeight*0.5; // Move camera up by one screen height
                 break;
             case DOWN:
             case STANDINGDOWN:
-                    camera.position.y -= screenHeight*0.3; // Move camera down by one screen height
-                    //player.setCurrentWindowY(camera.position.y); // Adjust player's Y position
+                    camera.position.y -= screenHeight*0.5; // Move camera down by one screen height
+                System.out.println("Set camera to: " + camera.position.y);
                 break;
             case LEFT:
             case STANDINGLEFT:
-                    camera.position.x -= screenWidth*0.3; // Move camera left by one screen width
-                    //player.setCurrentWindowX(camera.position.x); // Adjust player's X position
+                    camera.position.x -= screenWidth*0.5; // Move camera left by one screen width
+                System.out.println("Set camera to: " + camera.position.x);
                 break;
             case RIGHT:
             case STANDINGRIGHT:
-                    camera.position.x += screenWidth*0.3; // Move camera right by one screen width
-                    //player.setCurrentWindowX(camera.position.x); // Adjust player's X position
+                    camera.position.x += screenWidth*0.5; // Move camera right by one screen width
+                System.out.println("Set camera to: " + camera.position.x);
                 break;
-            default:
-                // Do nothing for standing directions
-                break;
+        }
+
+        float projectionPlaneHeight = camera.viewportHeight / camera.zoom;
+        float projectionPlaneWidth = game.getGameEngine().getStaticGameMap().getMapWidth()*tileSize;//camera.viewportWidth / camera.zoom;
+
+        if(camera.position.y > projectionPlaneHeight){
+            camera.position.y = projectionPlaneHeight;
+            System.out.println("Changed position due to camera out of map-bounds"+camera.position.y);
+        }
+        if(camera.position.y < 0){
+            camera.position.y = 0;
+            System.out.println("Changed position due to camera out of map-bounds"+camera.position.y);
+        }
+        if(camera.position.x < 0){
+            camera.position.x = 0;
+            System.out.println("Changed position due to camera out of map-bounds"+camera.position.x);
+        }
+
+        if(camera.position.x > projectionPlaneWidth){
+            camera.position.x = projectionPlaneWidth;
+            System.out.println("Changed position due to camera out of map-bounds"+camera.position.x);
         }
         camera.update(); // Update the camera after repositioning
     }
