@@ -7,19 +7,20 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.graphics.Color;
 
 /**
  * The PauseMenuScreen class is responsible for displaying the pause menu in the middle of the game.
  * It extends the LibGDX Screen class and sets up the UI components for the menu.
  */
-public class PauseMenuScreen implements Screen {
+public class VictoryScreen implements Screen {
 
     private final Stage stage;
 
@@ -28,7 +29,7 @@ public class PauseMenuScreen implements Screen {
      *
      * @param game The main game class, used to access global resources and methods.
      */
-    public PauseMenuScreen(MazeRunnerGame game) {
+    public VictoryScreen(MazeRunnerGame game) {
         var camera = new OrthographicCamera();
         camera.zoom = 1.5f; // Set camera zoom for a closer view
 
@@ -39,9 +40,20 @@ public class PauseMenuScreen implements Screen {
         table.setFillParent(true); // Make the table fill the stage
         stage.addActor(table); // Add the table to the stage
 
+        // Create a Label with the victory text
+        Label.LabelStyle labelStyle = new Label.LabelStyle(game.getSkin().getFont("font"), Color.WHITE);
+        Label victoryLabel = new Label("Victory!", labelStyle);
 
+        // Set up actions to make the text move
+        victoryLabel.addAction(Actions.forever(Actions.sequence(
+                Actions.moveBy(50, 0, 1.0f), // Move right
+                Actions.moveBy(-50, 0, 1.0f) // Move left
+        )));
 
-        // Add a label as a title
+        // Add the label to the table
+        table.add(victoryLabel).expand().center();
+
+// Add a label as a title
         table.add(new Label("Welcome to Pause Menu!", game.getSkin(), "title")).padBottom(80).row();
 
         TextButton continueButton = new TextButton("Continue Game", game.getSkin());
@@ -95,6 +107,8 @@ public class PauseMenuScreen implements Screen {
                 game.goToMenu();*/
             }
         });
+
+
 
 
 

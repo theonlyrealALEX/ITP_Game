@@ -22,6 +22,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 public class PauseMenuScreen implements Screen {
 
     private final Stage stage;
+    private FireScreen fireScreen;
+
+
+
 
     /**
      * Constructor for PauseMenuScreen. Sets up the camera, viewport, stage, and UI elements.
@@ -29,15 +33,19 @@ public class PauseMenuScreen implements Screen {
      * @param game The main game class, used to access global resources and methods.
      */
     public PauseMenuScreen(MazeRunnerGame game) {
+
+        game.setPauseMenuScreen(this);
         var camera = new OrthographicCamera();
         camera.zoom = 1.5f; // Set camera zoom for a closer view
 
         Viewport viewport = new ScreenViewport(camera); // Create a viewport with the camera
         stage = new Stage(viewport, game.getSpriteBatch()); // Create a stage for UI elements
 
+
         Table table = new Table(); // Create a table for layout
         table.setFillParent(true); // Make the table fill the stage
         stage.addActor(table); // Add the table to the stage
+
 
 
 
@@ -49,8 +57,9 @@ public class PauseMenuScreen implements Screen {
         continueButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                clickSound();
-                //game.resumeGame();
+                clickSound(); // Sound effect
+                game.continueGame();
+
 
             }
         });
@@ -60,7 +69,7 @@ public class PauseMenuScreen implements Screen {
         startNewGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                clickSound();
+                clickSound(); // Sound effect
                 buttonStartNewGameFadeAway(startNewGameButton, game);
                 /*game.dispose();
                 game.create();
@@ -74,7 +83,7 @@ public class PauseMenuScreen implements Screen {
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                clickSound();
+                clickSound();  // Sound effect
                 exitButton.addAction(Actions.sequence(
                         Actions.fadeOut(0.5f),// Duration of the fade-out effect
                         Actions.run(new Runnable() {
@@ -95,6 +104,7 @@ public class PauseMenuScreen implements Screen {
                 game.goToMenu();*/
             }
         });
+
 
 
 
@@ -156,6 +166,7 @@ public class PauseMenuScreen implements Screen {
                     }
                 })
         ));
+
     }
 
     // The following methods are part of the Screen interface but are not used in this screen.

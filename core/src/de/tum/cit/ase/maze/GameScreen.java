@@ -9,22 +9,49 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
-
+import com.badlogic.gdx.ScreenAdapter;
+//Test
+import java.io.Serializable;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.FileInputStream;
 /**
  * The GameScreen class is responsible for rendering the gameplay screen.
  * It handles the game logic and rendering of the game elements.
  */
-public class GameScreen implements Screen {
+public class GameScreen extends ScreenAdapter implements Screen, Serializable {
+    //JODIE TRY
+    static final int GAME_READY = 0;
+    static final int GAME_RUNNING = 1;
+    static final int GAME_PAUSED = 2;
+    static final int GAME_LEVEL_END = 3;
+    static final int GAME_OVER = 4;
+
+    int gameState;
+
+    public int getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(int gameState) {
+        this.gameState = gameState;
+    }
+
+    //JODIE TRY
 
     private final MazeRunnerGame game;
     private final OrthographicCamera camera;
     private final BitmapFont font;
+
 
     private float sinusInput = 0f;
 
     private final float tileSize = 80;
 
     private float playerSpeed = 3;
+
 
 
 
@@ -35,6 +62,8 @@ public class GameScreen implements Screen {
      */
     public GameScreen(MazeRunnerGame game) {
         this.game = game;
+
+        gameState = GAME_RUNNING; // JODIE TRY
 
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
@@ -47,6 +76,7 @@ public class GameScreen implements Screen {
         //Create Player
         game.getGameEngine().getPlayer().setCurrentWindowX(camera.viewportWidth / 2);
         game.getGameEngine().getPlayer().setCurrentWindowY(camera.viewportHeight / 2);
+        game.setGameScreen(this);
 
     }
 
@@ -55,8 +85,10 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
+
         // Check for escape key press to go back to the menu
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            //this.gameState=GAME_PAUSED;
             //sound effect
             Music escMusic = Gdx.audio.newMusic(Gdx.files.internal("ESC_sound.mp3"));
             escMusic.setVolume(2.5f);
@@ -64,52 +96,51 @@ public class GameScreen implements Screen {
             escMusic.play();
 
             //go to pause menu
+
             game.goToPauseMenu();
 
         }
 
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
 
-        renderMap();
-        Player player = game.getGameEngine().getPlayer();
+        if(gameState==GAME_RUNNING) {
+            renderMap();
+            Player player = game.getGameEngine().getPlayer();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            player.setDirection(Direction.UP);
-            renderPlayer();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            player.setDirection(Direction.DOWN);
-            renderPlayer();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            player.setDirection(Direction.LEFT);
-            renderPlayer();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            player.setDirection(Direction.RIGHT);
-            renderPlayer();
-        } else {
-            // Do not change the direction here, just render the standing player
-            renderStandingPlayer();
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+                player.setDirection(Direction.UP);
+                renderPlayer();
+            } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+                player.setDirection(Direction.DOWN);
+                renderPlayer();
+            } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                player.setDirection(Direction.LEFT);
+                renderPlayer();
+            } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                player.setDirection(Direction.RIGHT);
+                renderPlayer();
+            } else {
+                // Do not change the direction here, just render the standing player
+                renderStandingPlayer();
+            }
+
+
+            camera.update(); // Update the camera
+
+
+            // Move text in a circular path to have an example of a moving object
+            sinusInput += delta;
+            float textX = (float) (camera.position.x + Math.sin(sinusInput) * 100);
+            float textY = (float) (camera.position.y + Math.cos(sinusInput) * 100);
+
+            // Set up and begin drawing with the sprite batch
+            game.getSpriteBatch().setProjectionMatrix(camera.combined);
+
+
+            game.getSpriteBatch().begin(); // Important to call this before drawing anything
+
+            game.getSpriteBatch().end(); // Important to call this after drawing everything
         }
-
-
-
-        camera.update(); // Update the camera
-
-
-
-
-        // Move text in a circular path to have an example of a moving object
-        sinusInput += delta;
-        float textX = (float) (camera.position.x + Math.sin(sinusInput) * 100);
-        float textY = (float) (camera.position.y + Math.cos(sinusInput) * 100);
-
-        // Set up and begin drawing with the sprite batch
-        game.getSpriteBatch().setProjectionMatrix(camera.combined);
-
-
-        game.getSpriteBatch().begin(); // Important to call this before drawing anything
-
-        game.getSpriteBatch().end(); // Important to call this after drawing everything
-
 
 
     }
