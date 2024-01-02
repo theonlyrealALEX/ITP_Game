@@ -45,6 +45,7 @@ public class MenuScreen implements Screen {
         // Create and add a button to go to the game screen
         TextButton goToGameButton = new TextButton("Go To Game", game.getSkin());
         table.add(goToGameButton).width(300).row();
+        // Add sound effect to the button
         goToGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

@@ -7,49 +7,53 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.graphics.Color;
 
 /**
  * The PauseMenuScreen class is responsible for displaying the pause menu in the middle of the game.
  * It extends the LibGDX Screen class and sets up the UI components for the menu.
  */
-public class PauseMenuScreen implements Screen {
+public class VictoryScreen implements Screen {
 
     private final Stage stage;
-    private FireScreen fireScreen;
-
-
-
 
     /**
      * Constructor for PauseMenuScreen. Sets up the camera, viewport, stage, and UI elements.
      *
      * @param game The main game class, used to access global resources and methods.
      */
-    public PauseMenuScreen(MazeRunnerGame game) {
-
-        game.setPauseMenuScreen(this);
+    public VictoryScreen(MazeRunnerGame game) {
         var camera = new OrthographicCamera();
         camera.zoom = 1.5f; // Set camera zoom for a closer view
 
         Viewport viewport = new ScreenViewport(camera); // Create a viewport with the camera
         stage = new Stage(viewport, game.getSpriteBatch()); // Create a stage for UI elements
 
-
         Table table = new Table(); // Create a table for layout
         table.setFillParent(true); // Make the table fill the stage
         stage.addActor(table); // Add the table to the stage
 
+        // Create a Label with the victory text
+        Label.LabelStyle labelStyle = new Label.LabelStyle(game.getSkin().getFont("font"), Color.WHITE);
+        Label victoryLabel = new Label("Victory!", labelStyle);
 
+        // Set up actions to make the text move
+        victoryLabel.addAction(Actions.forever(Actions.sequence(
+                Actions.moveBy(50, 0, 1.0f), // Move right
+                Actions.moveBy(-50, 0, 1.0f) // Move left
+        )));
 
+        // Add the label to the table
+        table.add(victoryLabel).expand().center();
 
-        // Add a label as a title
+// Add a label as a title
         table.add(new Label("Welcome to Pause Menu!", game.getSkin(), "title")).padBottom(80).row();
 
         TextButton continueButton = new TextButton("Continue Game", game.getSkin());
@@ -57,9 +61,8 @@ public class PauseMenuScreen implements Screen {
         continueButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                clickSound(); // Sound effect
-                game.continueGame();
-
+                clickSound();
+                //game.resumeGame();
 
             }
         });
@@ -69,7 +72,7 @@ public class PauseMenuScreen implements Screen {
         startNewGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                clickSound(); // Sound effect
+                clickSound();
                 buttonStartNewGameFadeAway(startNewGameButton, game);
                 /*game.dispose();
                 game.create();
@@ -83,7 +86,7 @@ public class PauseMenuScreen implements Screen {
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                clickSound();  // Sound effect
+                clickSound();
                 exitButton.addAction(Actions.sequence(
                         Actions.fadeOut(0.5f),// Duration of the fade-out effect
                         Actions.run(new Runnable() {
@@ -104,6 +107,7 @@ public class PauseMenuScreen implements Screen {
                 game.goToMenu();*/
             }
         });
+
 
 
 
@@ -166,7 +170,6 @@ public class PauseMenuScreen implements Screen {
                     }
                 })
         ));
-
     }
 
     // The following methods are part of the Screen interface but are not used in this screen.

@@ -21,6 +21,7 @@ public class MazeRunnerGame extends Game {
     // Screens
     private MenuScreen menuScreen;
     private PauseMenuScreen pauseMenuScreen;
+    private FireScreen fireScreen;
     private GameScreen gameScreen;
 
     // Sprite Batch for rendering
@@ -52,6 +53,13 @@ public class MazeRunnerGame extends Game {
         return gameEngine;
     }
 
+    public void setGameEngine(GameEngine gameEngine) {
+        this.gameEngine = gameEngine;
+    }
+
+    public void setPauseMenuScreen(PauseMenuScreen pauseMenuScreen) {
+        this.pauseMenuScreen = pauseMenuScreen;
+    }
 
     private Music backgroundMusic;
 
@@ -65,13 +73,21 @@ public class MazeRunnerGame extends Game {
     public void setGameScreen(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
     }
+
+    public FireScreen getFireScreen() {
+        return fireScreen;
+    }
+
+    public void setFireScreen(FireScreen fireScreen) {
+        this.fireScreen = fireScreen;
+    }
     //JODIE TRYING OUT THINGS
 
 
 
     // Engine
     private  GameEngine gameEngine;
-    private static final String GAME_STATE_FILE_PATH = "game_state.json";
+    //private static final String GAME_STATE_FILE_PATH = "game_state.json";
 
 
 
@@ -103,6 +119,7 @@ public class MazeRunnerGame extends Game {
         gameEngine = new GameEngine();
 
         goToMenu(); // Navigate to the menu screen
+
     }
 
     /**
@@ -115,6 +132,7 @@ public class MazeRunnerGame extends Game {
         spriteBatch.dispose(); // Dispose the spriteBatch
         skin.dispose(); // Dispose the skin
         backgroundMusic.dispose();
+
     }
 
     /**
@@ -130,29 +148,27 @@ public class MazeRunnerGame extends Game {
     /**
      * Switches to the pause menu screen when press ESC.
      */
-    public void goToPauseMenu(){
+    public void goToVictoryScreen(){
+        //this.setScreen(new FireScreen());  // Testing
+        this.setScreen(new VictoryScreen(this)); // Set the current screen to MenuScreen
 
-        this.setScreen(new PauseMenuScreen(this)); // Set the current screen to MenuScreen
         if (gameScreen != null) {
             gameScreen.dispose(); // Dispose the game screen if it exists
             gameScreen = null;
         }
     }
-    /* game resume function for continue game button WIP
-    public void resumeGame() {
 
-        this.getSkin();
-        this.getSpriteBatch();
-        this.getCharacterDownAnimation();
-        this.setScreen(getGameScreen());
-        this.render();
-        // Set the current screen to GameScreen
-        if ( pauseMenuScreen!= null) {
-            pauseMenuScreen.dispose(); // Dispose the game screen if it exists
-            pauseMenuScreen = null;
-        }
+    public void goToPauseMenu(){
 
-    }*/
+        this.setScreen(new PauseMenuScreen(this)); // Set the current screen to MenuScreen
+        this.pause();
+        /*if (gameScreen != null) {
+            gameScreen.dispose(); // Dispose the game screen if it exists
+            gameScreen = null;
+        }*/
+
+    }
+
 
 
     /**
@@ -160,9 +176,21 @@ public class MazeRunnerGame extends Game {
      */
     public void goToGame() {
         this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
+
         if (menuScreen != null) {
             menuScreen.dispose(); // Dispose the menu screen if it exists
             menuScreen = null;
+        }
+    }
+
+
+    //Jodie TEST
+    public void continueGame(){
+       // this.setScreen(getGameScreen());// Set the current screen to GameScreen
+        this.setScreen(gameScreen);
+        if (pauseMenuScreen != null) {
+            pauseMenuScreen.dispose(); // Dispose the menu screen if it exists
+            pauseMenuScreen = null;
         }
     }
 
