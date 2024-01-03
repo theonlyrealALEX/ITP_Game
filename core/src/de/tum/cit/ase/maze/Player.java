@@ -69,7 +69,7 @@ public class Player {
         this.currentWindowY = currentWindowY;
     }
 
-
+//test
 
     private void loadCharacterAnimations() {
         Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
