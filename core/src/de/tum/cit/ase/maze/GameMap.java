@@ -78,4 +78,16 @@ public class GameMap {
         return staticMapObjects.length;
     }
 
+    public MapObject getTile(float x, float y, float tileSize){
+        int i = (int) (x / tileSize);
+        int j = (int) (y / tileSize);
+
+        if (i >= 0 && i < staticMapObjects.length && j >= 0 && j < staticMapObjects[0].length) {
+            System.out.println("Map Coordinates at tile x/y: "+i+" "+j);
+            return staticMapObjects[i][j];
+        } else {
+            return null; // Or handle the out-of-bounds scenario differently
+        }
+    }
+
 }

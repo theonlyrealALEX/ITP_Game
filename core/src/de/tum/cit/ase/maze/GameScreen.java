@@ -56,8 +56,10 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
     private final float tileSize = 80;
 
+
     private float playerSpeed = 3;
 
+    private  float mapMaxX, mapMaxY;
 
 
     /**
@@ -137,7 +139,9 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
             if (Gdx.input.isKeyPressed(Input.Keys.W)) {
                 player.setDirection(UP);
-                renderPlayer();
+
+                    renderPlayer();
+
             } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
                 player.setDirection(DOWN);
                 renderPlayer();
@@ -172,23 +176,6 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             game.getSpriteBatch().begin(); // Important to call this before drawing anything
 
             game.getSpriteBatch().end(); // Important to call this after drawing everything
-
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                player.setDirection(Direction.UP);
-                renderPlayer();
-            } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                player.setDirection(Direction.DOWN);
-                renderPlayer();
-            } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                player.setDirection(Direction.LEFT);
-                renderPlayer();
-            } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                player.setDirection(Direction.RIGHT);
-                renderPlayer();
-            } else {
-                // Do not change the direction here, just render the standing player
-                renderStandingPlayer();
-            }
 
 
             camera.update(); // Update the camera
@@ -225,6 +212,9 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                 }
             }
         }
+
+        mapMaxX = mapObjects.length * tileSize;
+        mapMaxY = mapObjects[0].length * tileSize;
 
         game.getSpriteBatch().end();
     }
@@ -284,6 +274,9 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             player.setCurrentWindowY(projectionPlaneHeight+tileSize);
         }
 
+
+
+
         Animation<TextureRegion> anim = null;
 
         switch (player.getDirection()) {
@@ -300,6 +293,29 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         game.getSpriteBatch().end();
 
         player.setDirection(getStandingDirection(player.getDirection()));
+    }
+    private boolean isPlayerAtBarrier(){
+        Player player = game.getGameEngine().getPlayer();
+        float offsetVertical= 0;
+        float offsetHorizontal = 20;
+
+        System.out.println("Player Direction: " + player.getDirection());
+        System.out.println("Player CurrentWindowX: " + player.getCurrentWindowX());
+        System.out.println("Player CurrentWindowY: " + player.getCurrentWindowY());
+        System.out.println("Offset Vertical: " + offsetVertical);
+        System.out.println("Offset Horizontal: " + offsetHorizontal);
+        System.out.println("Tile Size: " + tileSize);
+        System.out.println("MapMaxX: "+mapMaxX);
+        System.out.println("MapMaxY: "+mapMaxY);
+
+        switch (player.getDirection()) {
+            case LEFT -> {
+                if(game.getGameEngine().getStaticGameMap().getTile(player.getCurrentWindowX(), player.getCurrentWindowY(), tileSize) instanceof Wall){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private Direction getStandingDirection(Direction currentDirection) {
