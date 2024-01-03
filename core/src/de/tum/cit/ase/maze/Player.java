@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
+
 public class Player {
     private float currentWindowX, currentWindowY;
     private Animation<TextureRegion> characterDownAnimation;

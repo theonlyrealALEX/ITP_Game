@@ -1,10 +1,16 @@
 package de.tum.cit.ase.maze;
 
+import java.io.Serializable;
+
 public class GameEngine {
     private GameMap staticGameMap;
 
     public Player getPlayer() {
         return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     private Player player;
