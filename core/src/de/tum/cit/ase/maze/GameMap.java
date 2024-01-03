@@ -70,4 +70,12 @@ public class GameMap {
     public MapObject[][] getStaticMapObjects() {
         return staticMapObjects;
     }
+
+    public float getMapWidth(){
+        return staticMapObjects[0].length;
+    }
+    public float getMapHeight(){
+        return staticMapObjects.length;
+    }
+
 }
