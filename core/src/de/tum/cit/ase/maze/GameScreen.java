@@ -385,7 +385,6 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
 
 
-
     @Override
     public void resize(int width, int height) {
         camera.setToOrtho(false);
