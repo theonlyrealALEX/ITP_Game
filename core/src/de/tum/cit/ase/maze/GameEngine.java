@@ -24,6 +24,7 @@ public class GameEngine {
         staticGameMap.loadMap("maps/level-1.properties");
     }
 
+
     public GameMap getStaticGameMap() {
         return staticGameMap;
     }
