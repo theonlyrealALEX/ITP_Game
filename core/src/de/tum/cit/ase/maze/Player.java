@@ -69,8 +69,6 @@ public class Player {
         this.currentWindowY = currentWindowY;
     }
 
-
-
     private void loadCharacterAnimations() {
         Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
         int frameWidth = 16;
@@ -142,13 +140,7 @@ public class Player {
     public void setCurrentTileFromCoords(GameMap gameMap, float tileSize){
         int i = (int) ((getCurrentWindowX() + 32) / tileSize);
         int j = (int) ((getCurrentWindowY() + 48)/ tileSize);
-
         currentTile = gameMap.getStaticMapObjects()[j][i];
-
-
-        System.out.println("Player X/Y: "+ getCurrentWindowX() + " "+ getCurrentWindowY());
-        //System.out.println("Player X/Y: "+ getCurrentWindowXPlayerCenter() + " "+ getCurrentWindowYPlayerCenter()+" new!");
-        System.out.println("Block I/J: "+i+" "+j);
     }
 
 }

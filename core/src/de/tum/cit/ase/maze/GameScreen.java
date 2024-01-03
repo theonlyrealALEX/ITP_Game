@@ -135,19 +135,37 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             Player player = game.getGameEngine().getPlayer();
 
             if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                player.setDirection(UP);
-
+                if(isPlayerAtBarrier()){
+                    player.setDirection(STANDINGUP);
+                    renderStandingPlayer();
+                }else {
+                    player.setDirection(UP);
                     renderPlayer();
-
+                }
             } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                player.setDirection(DOWN);
-                renderPlayer();
+                if(isPlayerAtBarrier()){
+                    player.setDirection(STANDINGDOWN);
+                    renderStandingPlayer();
+                }else {
+                    player.setDirection(DOWN);
+                    renderPlayer();
+                }
             } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                player.setDirection(LEFT);
-                renderPlayer();
+                if(isPlayerAtBarrier()){
+                    player.setDirection(STANDINGLEFT);
+                    renderStandingPlayer();
+                }else {
+                    player.setDirection(LEFT);
+                    renderPlayer();
+                }
             } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                player.setDirection(RIGHT);
-                renderPlayer();
+                if(isPlayerAtBarrier()){
+                    player.setDirection(STANDINGRIGHT);
+                    renderStandingPlayer();
+                }else {
+                    player.setDirection(RIGHT);
+                    renderPlayer();
+                }
             } else {
                 // Do not change the direction here, just render the standing player
                 renderStandingPlayer();
@@ -192,8 +210,6 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             game.getSpriteBatch().end(); // Important to call this after drawing everything
 
             player.setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
-
-            System.out.println("Tile: "+ player.getCurrentTile());
         }
     }
 
@@ -293,26 +309,46 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     }
     private boolean isPlayerAtBarrier(){
         Player player = game.getGameEngine().getPlayer();
-        float offsetVertical= 0;
-        float offsetHorizontal = 20;
+        float centerPlayerXOffset = 32;
+        float centerPlayerYOffset = 48;
 
-/*
-        System.out.println("Player Direction: " + player.getDirection());
-        System.out.println("Player CurrentWindowX: " + player.getCurrentWindowX());
-        System.out.println("Player CurrentWindowY: " + player.getCurrentWindowY());
-        System.out.println("Offset Vertical: " + offsetVertical);
-        System.out.println("Offset Horizontal: " + offsetHorizontal);
-        System.out.println("Tile Size: " + tileSize);
-        System.out.println("MapMaxX: "+mapMaxX);
-        System.out.println("MapMaxY: "+mapMaxY);
-        */
+        float offsetVerticalTop = 5;
+        float offsetVerticalBottom = 33;
+        float offsetHorizontal = 30;
+
+        float playerCenterX = player.getCurrentWindowX() + centerPlayerXOffset;
+        float playerCenterY = player.getCurrentWindowY() + centerPlayerYOffset;
 
         switch (player.getDirection()) {
-            case LEFT -> {
-                if(game.getGameEngine().getStaticGameMap().getTile(player.getCurrentWindowX(), player.getCurrentWindowY(), tileSize) instanceof Wall){
+            case STANDINGLEFT:
+            case LEFT:
+                if(game.getGameEngine().getStaticGameMap().getTile(playerCenterX - offsetHorizontal, playerCenterY, tileSize) instanceof Wall){
+                    System.out.println("Player On Wall");
                     return true;
                 }
-            }
+            break;
+            case STANDINGRIGHT:
+            case RIGHT:
+                if(game.getGameEngine().getStaticGameMap().getTile(playerCenterX + offsetHorizontal, playerCenterY, tileSize) instanceof Wall){
+                    System.out.println("Player On Wall");
+                    return true;
+                }
+                break;
+            case STANDINGUP:
+            case UP:
+                if(game.getGameEngine().getStaticGameMap().getTile(playerCenterX, playerCenterY + offsetVerticalTop, tileSize) instanceof Wall){
+                    System.out.println("Player On Wall");
+                    return true;
+                }
+                break;
+
+            case STANDINGDOWN:
+            case DOWN:
+                if(game.getGameEngine().getStaticGameMap().getTile(playerCenterX, playerCenterY - offsetVerticalBottom, tileSize) instanceof Wall){
+                    System.out.println("Player On Wall");
+                    return true;
+                }
+                break;
         }
         return false;
     }
