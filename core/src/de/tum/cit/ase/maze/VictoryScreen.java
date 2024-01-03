@@ -3,6 +3,7 @@ package de.tum.cit.ase.maze;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -14,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.graphics.Color;
+
 
 /**
  * The PauseMenuScreen class is responsible for displaying the pause menu in the middle of the game.
@@ -24,12 +25,23 @@ public class VictoryScreen implements Screen {
 
     private final Stage stage;
 
+    private Music victoryMusic;
+    private Music victoryMusic2;
     /**
      * Constructor for PauseMenuScreen. Sets up the camera, viewport, stage, and UI elements.
      *
      * @param game The main game class, used to access global resources and methods.
      */
     public VictoryScreen(MazeRunnerGame game) {
+
+        this.victoryMusic = Gdx.audio.newMusic(Gdx.files.internal("victory2.wav"));
+        victoryMusic.setVolume(2.0f);
+        victoryMusic.setLooping(false);
+        victoryMusic.play();
+
+
+
+
         var camera = new OrthographicCamera();
         camera.zoom = 1.5f; // Set camera zoom for a closer view
 
@@ -38,25 +50,51 @@ public class VictoryScreen implements Screen {
 
         Table table = new Table(); // Create a table for layout
         table.setFillParent(true); // Make the table fill the stage
-        stage.addActor(table); // Add the table to the stage
+
 
         // Create a Label with the victory text
-        Label.LabelStyle labelStyle = new Label.LabelStyle(game.getSkin().getFont("font"), Color.WHITE);
-        Label victoryLabel = new Label("Victory!", labelStyle);
+        Label victory = new Label("VICTORY!", game.getSkin(), "title");
+        victory.setColor(Color.YELLOW);
+        // Set up actions to make the text move and change color
+        victory.addAction(Actions.parallel(
+                Actions.moveBy(200, 0, 1.0f), // Move right
+                Actions.color(new Color(1, 0.5f, 0, 1), 1.0f) // Change to orange
+
+        ));
+        victory.addAction(
+                Actions.forever(
+                        Actions.sequence(
+                                Actions.parallel(
+                                        Actions.moveBy(-400, 0, 2.0f), // Move left
+                                        Actions.color(Color.YELLOW, 1.0f)// Change back to yellow
+
+                                ),
+                                Actions.parallel(
+                                        Actions.moveBy(400, 0, 2.0f), // Move left
+                                        Actions.color(new Color(1, 0.5f, 0, 1), 1.0f)// Change back to yellow
+                                )
+                        )
+                )
+        );
+
+        table.add(victory).padBottom(100).row();
+        stage.addActor(table); // Add the table to the stage
+
+
+        /*table.add(victory).padBottom(100).row();
 
         // Set up actions to make the text move
-        victoryLabel.addAction(Actions.forever(Actions.sequence(
-                Actions.moveBy(50, 0, 1.0f), // Move right
-                Actions.moveBy(-50, 0, 1.0f) // Move left
-        )));
+        victory.addAction(Actions.forever(Actions.sequence(
+                Actions.moveBy(200, 0, 2.0f) // Move right
+                        ,Actions.moveBy(-400, 0, 2.0f) // Move left
+        )));*/
 
-        // Add the label to the table
-        table.add(victoryLabel).expand().center();
+
 
 // Add a label as a title
-        table.add(new Label("Welcome to Pause Menu!", game.getSkin(), "title")).padBottom(80).row();
+        table.add(new Label("You successfully exit the maze", game.getSkin(), "title")).padBottom(80).row();
 
-        TextButton continueButton = new TextButton("Continue Game", game.getSkin());
+        TextButton continueButton = new TextButton("Next Level", game.getSkin());
         table.add(continueButton).width(300).row();
         continueButton.addListener(new ChangeListener() {
             @Override
@@ -67,7 +105,7 @@ public class VictoryScreen implements Screen {
             }
         });
 
-        TextButton startNewGameButton = new TextButton("Start New Game", game.getSkin());
+        TextButton startNewGameButton = new TextButton("Play Again", game.getSkin());
         table.add(startNewGameButton).width(300).row();
         startNewGameButton.addListener(new ChangeListener() {
             @Override
@@ -81,7 +119,7 @@ public class VictoryScreen implements Screen {
             }
         });
 
-        TextButton exitButton = new TextButton("Exit Game", game.getSkin());
+        TextButton exitButton = new TextButton("Back to Menu", game.getSkin());
         table.add(exitButton).width(300).row();
         exitButton.addListener(new ChangeListener() {
             @Override
