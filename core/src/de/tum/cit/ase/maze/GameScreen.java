@@ -100,6 +100,26 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             game.goToPauseMenu();
 
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
+            //Sound effect
+            Music escMusic = Gdx.audio.newMusic(Gdx.files.internal("ESC_sound.mp3"));
+            escMusic.setVolume(2.5f);
+            escMusic.setLooping(false);
+            escMusic.play();
+            //go to Victory Screen
+            game.goToVictoryScreen();
+
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
+            //Sound effect
+            Music escMusic = Gdx.audio.newMusic(Gdx.files.internal("ESC_sound.mp3"));
+            escMusic.setVolume(2.5f);
+            escMusic.setLooping(false);
+            escMusic.play();
+            //go to Victory Screen
+            game.goToGameOverScreen();
+
+        }
 
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
 

@@ -29,6 +29,8 @@ public class MazeRunnerGame extends Game {
 
     // UI Skin
     private Skin skin;
+    // Music
+    private Music backgroundMusic;
 
 
 
@@ -53,23 +55,11 @@ public class MazeRunnerGame extends Game {
         return gameEngine;
     }
 
-    public void setGameEngine(GameEngine gameEngine) {
-        this.gameEngine = gameEngine;
-    }
-
     public void setPauseMenuScreen(PauseMenuScreen pauseMenuScreen) {
         this.pauseMenuScreen = pauseMenuScreen;
     }
 
-    private Music backgroundMusic;
-
-
-
     //JODIE TRYING OUT THINGS
-    public GameScreen getGameScreen() {
-        return gameScreen;
-    }
-
     public void setGameScreen(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
     }
@@ -80,6 +70,14 @@ public class MazeRunnerGame extends Game {
 
     public void setFireScreen(FireScreen fireScreen) {
         this.fireScreen = fireScreen;
+    }
+
+    public Music getBackgroundMusic() {
+        return backgroundMusic;
+    }
+
+    public void setBackgroundMusic(Music backgroundMusic) {
+        this.backgroundMusic = backgroundMusic;
     }
     //JODIE TRYING OUT THINGS
 
@@ -158,6 +156,16 @@ public class MazeRunnerGame extends Game {
         }
     }
 
+    public void goToGameOverScreen(){
+        //this.setScreen(new FireScreen());  // Testing
+        this.setScreen(new GameOverScreen(this)); // Set the current screen to MenuScreen
+
+        if (gameScreen != null) {
+            gameScreen.dispose(); // Dispose the game screen if it exists
+            gameScreen = null;
+        }
+    }
+
     public void goToPauseMenu(){
 
         this.setScreen(new PauseMenuScreen(this)); // Set the current screen to MenuScreen
@@ -168,8 +176,6 @@ public class MazeRunnerGame extends Game {
         }*/
 
     }
-
-
 
     /**
      * Switches to the game screen.
@@ -184,7 +190,6 @@ public class MazeRunnerGame extends Game {
     }
 
 
-    //Jodie TEST
     public void continueGame(){
        // this.setScreen(getGameScreen());// Set the current screen to GameScreen
         this.setScreen(gameScreen);
