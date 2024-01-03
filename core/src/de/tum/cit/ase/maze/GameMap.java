@@ -78,6 +78,7 @@ public class GameMap {
         return staticMapObjects.length;
     }
 
+
     public MapObject getTile(float x, float y, float tileSize){
         int i = (int) (x / tileSize);
         int j = (int) (y / tileSize);

@@ -93,8 +93,6 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     // Screen interface methods with necessary functionality
     @Override
     public void render(float delta) {
-
-
         // Check for escape key press to go back to the menu
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             //this.gameState=GAME_PAUSED;
@@ -135,7 +133,6 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         if(gameState==GAME_RUNNING) {
             renderMap();
             Player player = game.getGameEngine().getPlayer();
-
 
             if (Gdx.input.isKeyPressed(Input.Keys.W)) {
                 player.setDirection(UP);
@@ -193,6 +190,10 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             game.getSpriteBatch().begin(); // Important to call this before drawing anything
 
             game.getSpriteBatch().end(); // Important to call this after drawing everything
+
+            player.setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
+
+            System.out.println("Tile: "+ player.getCurrentTile());
         }
     }
 
@@ -261,7 +262,6 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         float x = player.getCurrentWindowX();
         float y = player.getCurrentWindowY();
 
-
         if(x < 0){
             player.setCurrentWindowX(0);
         } else if (y < 0 ) {
@@ -273,9 +273,6 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             System.out.println("Player at Top Part of the Map "+ player.getCurrentWindowX()+" "+player.getCurrentWindowY()+ " proejctionPlanteHeight: "+projectionPlaneHeight);
             player.setCurrentWindowY(projectionPlaneHeight+tileSize);
         }
-
-
-
 
         Animation<TextureRegion> anim = null;
 
@@ -299,6 +296,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         float offsetVertical= 0;
         float offsetHorizontal = 20;
 
+/*
         System.out.println("Player Direction: " + player.getDirection());
         System.out.println("Player CurrentWindowX: " + player.getCurrentWindowX());
         System.out.println("Player CurrentWindowY: " + player.getCurrentWindowY());
@@ -307,6 +305,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         System.out.println("Tile Size: " + tileSize);
         System.out.println("MapMaxX: "+mapMaxX);
         System.out.println("MapMaxY: "+mapMaxY);
+        */
 
         switch (player.getDirection()) {
             case LEFT -> {
@@ -336,12 +335,12 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
         float edge = 0.2f;
 
-        System.out.println("Camera Coords x/y:"+camera.position.x+ " "+ camera.position.y);
-        System.out.println("Camera Viewport w/h"+camera.viewportWidth +" "+camera.viewportHeight);
-        System.out.println("PlayerCoords x/y "+playerX + " "+playerY);
+        //.out.println("Camera Coords x/y:"+camera.position.x+ " "+ camera.position.y);
+        //System.out.println("Camera Viewport w/h"+camera.viewportWidth +" "+camera.viewportHeight);
+        //System.out.println("PlayerCoords x/y "+playerX + " "+playerY);
 
-        System.out.println("Left Bound "+(camera.position.x - 0.5 * camera.viewportWidth));
-        System.out.println("Right Bound "+(camera.position.x + 0.5 * camera.viewportWidth));
+        //System.out.println("Left Bound "+(camera.position.x - 0.5 * camera.viewportWidth));
+        //System.out.println("Right Bound "+(camera.position.x + 0.5 * camera.viewportWidth));
         // Check left and right bounds
         if (playerX < camera.position.x - 0.5 * camera.viewportWidth + tileSize + tileSize) {
             return true;
@@ -349,19 +348,15 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             return true;
         }
 
-        System.out.println("Top Bound "+(camera.position.y + 0.5 * camera.viewportHeight));
-        System.out.println("Bottom Bound "+(camera.position.y - 0.5 * camera.viewportHeight));
+        //System.out.println("Top Bound "+(camera.position.y + 0.5 * camera.viewportHeight));
+        //System.out.println("Bottom Bound "+(camera.position.y - 0.5 * camera.viewportHeight));
 
         // Check top and bottom bounds
         if (playerY < camera.position.y - 0.5 * camera.viewportHeight+ tileSize+tileSize)  {
             return true;
         } else if (playerY  > camera.position.y + 0.5 * camera.viewportHeight - tileSize- tileSize) {
-            System.out.println("bottom edge: " + (camera.position.y * 2 -camera.position.y * edge));
             return true;
         }
-
-        //TODO: check if player is outside of camera range
-        //TODO: Understand logic of what i am checking for oin Paper and check if it actaully makes sense
 
         return false;
     }
