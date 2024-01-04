@@ -54,10 +54,22 @@ public class GameMap {
 
             for (int i = 0; i < intArray.length; i++) {
                 for (int j = 0; j < intArray[i].length; j++) {
-                    if (intArray[i][j] == 0) {
-                        staticMapObjects[i][j] = new Wall();
-                    } else {
-                        staticMapObjects[i][j] = new Path();
+                    switch (intArray[i][j]){
+                        case 0:
+                            staticMapObjects[i][j] = new Wall();
+                            break;
+                        case 1:
+                            staticMapObjects[i][j] = new EntryPoint();
+                            break;
+                        case 2:
+                            staticMapObjects[i][j] = new Exit();
+                            break;
+                        case 3:
+                            staticMapObjects[i][j] = new Trap();
+                            break;
+                        default:
+                            staticMapObjects[i][j] = new Path();
+                            break;
                     }
                 }
             }
