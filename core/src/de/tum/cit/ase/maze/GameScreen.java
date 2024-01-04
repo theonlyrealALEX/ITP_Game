@@ -214,6 +214,11 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
             player.setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
 
+            for(Enemy enemy: game.getGameEngine().getStaticGameMap().getEnemies()){
+                enemy.setWindowCordsFromTilet(tileSize);
+                renderEnemy(enemy);
+            }
+
             if(player.getCurrentTile() instanceof Trap){
                 gameState = GAME_OVER;
             }
@@ -249,21 +254,40 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
         game.getSpriteBatch().end();
 
-        for(Enemy enemy: game.getGameEngine().getStaticGameMap().getEnemies()){
-            System.out.println("Loading Enemies");
-            TextureRegion currentFrame = enemy.getCharacterStandingUpTexture();
-            enemy.setWindowCordsFromTilet(tileSize);
+    }
 
-            game.getSpriteBatch().begin();
-            // Draw the standing frame scaled to tileSize
-            game.getSpriteBatch().draw(
-                    currentFrame,
-                    enemy.getCurrentWindowX(), enemy.getCurrentWindowY(),
-                    64, 128 // Adjust the size as needed
-            );
-            game.getSpriteBatch().end();
+    private void renderStandingEnemy(Enemy enemy) {
+        float x = enemy.getCurrentWindowX();
+        float y = enemy.getCurrentWindowY();
+
+        TextureRegion currentFrame = null;
+
+        switch (enemy.getDirection()) {
+            case STANDINGUP:
+                currentFrame = enemy.getCharacterStandingUpTexture();
+                break;
+            case STANDINGDOWN:
+                currentFrame = enemy.getCharacterStandingDownTexture();
+                break;
+            case STANDINGLEFT:
+                currentFrame = enemy.getCharacterStandingLeftTexture();
+                break;
+            case STANDINGRIGHT:
+                currentFrame = enemy.getCharacterStandingRightTexture();
+                break;
+            default:
+                //renderPlayer();
+                return;
         }
 
+        game.getSpriteBatch().begin();
+        // Draw the standing frame scaled to tileSize
+        game.getSpriteBatch().draw(
+                currentFrame,
+                x, y,
+                64, 128 // Adjust the size as needed
+        );
+        game.getSpriteBatch().end();
     }
 
     private void renderStandingPlayer() {
@@ -299,6 +323,30 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                 64, 128 // Adjust the size as needed
         );
         game.getSpriteBatch().end();
+    }
+
+    private void renderEnemy(Enemy enemy) {
+
+        Animation<TextureRegion> anim = null;
+
+        switch (enemy.getDirection()) {
+            case UP -> anim = enemy.getCharacterUpAnimation();
+            case DOWN -> anim = enemy.getCharacterDownAnimation();
+            case LEFT -> anim = enemy.getCharacterLeftAnimation();
+            case RIGHT -> anim = enemy.getCharacterRightAnimation();
+            default -> {
+                renderStandingEnemy(enemy);
+                return;
+            }
+        }
+
+        TextureRegion currentFrame = anim.getKeyFrame(sinusInput, true);
+
+        game.getSpriteBatch().begin();
+        game.getSpriteBatch().draw(currentFrame, enemy.getCurrentWindowX(), enemy.getCurrentWindowY(), 64, 128);
+        game.getSpriteBatch().end();
+
+        enemy.setDirection(getStandingDirection(enemy.getDirection()));
     }
     private void renderPlayer() {
         float projectionPlaneHeight = camera.viewportHeight / camera.zoom;

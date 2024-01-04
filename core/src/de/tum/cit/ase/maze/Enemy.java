@@ -67,9 +67,10 @@ public class Enemy extends MapObject{
 
         public Enemy(int tileX, int tileY) {
             loadCharacterAnimations();
-            direction = Direction.STANDINGUP;
+            direction = Direction.DOWN;
             this.tileX = tileX;
             this.tileY = tileY;
+
         }
 
         public float getCurrentWindowX() {
@@ -89,20 +90,20 @@ public class Enemy extends MapObject{
         }
 
         private void loadCharacterAnimations() {
-            Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
+            Texture walkSheet = new Texture(Gdx.files.internal("mobs.png"));
             int frameWidth = 16;
-            int frameHeight = 32;
-            int animationFrames = 4;
+            int frameHeight = 16;
+            int animationFrames = 3;
 
-            characterDownAnimation = createAnimation(walkSheet, 0, frameWidth, frameHeight, animationFrames);
-            characterRightAnimation = createAnimation(walkSheet, 32, frameWidth, frameHeight, animationFrames);
-            characterUpAnimation = createAnimation(walkSheet, 64, frameWidth, frameHeight, animationFrames);
-            characterLeftAnimation = createAnimation(walkSheet, 96, frameWidth, frameHeight, animationFrames);
+            characterDownAnimation = createAnimation(walkSheet, 144, 64, frameWidth, frameHeight, animationFrames);
+            characterRightAnimation = createAnimation(walkSheet, 144, 96, frameWidth, frameHeight, animationFrames);
+            characterUpAnimation = createAnimation(walkSheet,144, 112, frameWidth, frameHeight, animationFrames);
+            characterLeftAnimation = createAnimation(walkSheet, 144, 80, frameWidth, frameHeight, animationFrames);
 
-            characterStandingDownTexture = new TextureRegion(walkSheet, 0, 0, frameWidth, frameHeight);
-            characterStandingRightTexture = new TextureRegion(walkSheet, 0, 32, frameWidth, frameHeight);
-            characterStandingUpTexture = new TextureRegion(walkSheet, 0, 64, frameWidth, frameHeight);
-            characterStandingLeftTexture = new TextureRegion(walkSheet, 0, 96, frameWidth, frameHeight);
+            characterStandingDownTexture = new TextureRegion(walkSheet, 160, 64, frameWidth, frameHeight);
+            characterStandingRightTexture = new TextureRegion(walkSheet, 160, 96, frameWidth, frameHeight);
+            characterStandingUpTexture = new TextureRegion(walkSheet, 160, 112, frameWidth, frameHeight);
+            characterStandingLeftTexture = new TextureRegion(walkSheet, 160, 80, frameWidth, frameHeight);
         }
 
         private Animation<TextureRegion> createAnimation(Texture sheet, int startY, int frameWidth, int frameHeight, int frameCount) {
@@ -112,6 +113,14 @@ public class Enemy extends MapObject{
             }
             return new Animation<>(0.1f, frames);
         }
+
+    private Animation<TextureRegion> createAnimation(Texture sheet,int startX, int startY, int frameWidth, int frameHeight, int frameCount) {
+        Array<TextureRegion> frames = new Array<>(TextureRegion.class);
+        for (int i = 0; i < frameCount; i++) {
+            frames.add(new TextureRegion(sheet, (i * frameWidth)+startX, startY, frameWidth, frameHeight));
+        }
+        return new Animation<>(0.1f, frames);
+    }
 
         // Getters for each animation
         public Animation<TextureRegion> getCharacterDownAnimation() {

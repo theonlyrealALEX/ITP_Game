@@ -84,6 +84,7 @@ public class GameMap {
                         case 4:
                             staticMapObjects[i][j] = new Path();
                             enemies.add(new Enemy(i,j));
+
                             break;
                         case 5:
                             staticMapObjects[i][j] = new Key();
