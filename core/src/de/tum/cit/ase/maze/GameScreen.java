@@ -61,6 +61,9 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
     private  float mapMaxX, mapMaxY;
 
+    float centerPlayerXOffset = 32;
+    float centerPlayerYOffset = 48;
+
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -214,8 +217,12 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             if(player.getCurrentTile() instanceof Trap){
                 gameState = GAME_OVER;
             }
-            if (player.getCurrentTile() instanceof Exit){
+            if (player.getCurrentTile() instanceof Exit && game.getGameEngine().getStaticGameMap().getKeysLeft() == 0){
                 gameState = GAME_LEVEL_END;
+            }
+
+            if (player.getCurrentTile() instanceof Key){
+                game.getGameEngine().getStaticGameMap().removeKey(player.getCurrentWindowX() + centerPlayerXOffset, player.getCurrentWindowY()+ centerPlayerYOffset,  tileSize);
             }
         }
     }
@@ -316,8 +323,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     }
     private boolean isPlayerAtBarrier(){
         Player player = game.getGameEngine().getPlayer();
-        float centerPlayerXOffset = 32;
-        float centerPlayerYOffset = 48;
+
 
         float offsetVerticalTop = 5;
         float offsetVerticalBottom = 33;
