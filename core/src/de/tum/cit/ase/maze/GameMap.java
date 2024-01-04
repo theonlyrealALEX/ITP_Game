@@ -1,5 +1,7 @@
 package de.tum.cit.ase.maze;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.io.InputStream;
 import java.io.FileInputStream;
@@ -7,6 +9,16 @@ import java.io.IOException;
 
 public class GameMap {
     private MapObject[][] staticMapObjects;
+
+    public List<Enemy> getEnemies() {
+        return enemies;
+    }
+
+    public void setEnemies(List<Enemy> enemies) {
+        this.enemies = enemies;
+    }
+
+    private List<Enemy> enemies;
     private int keysLeft;
 
     public GameMap() {
@@ -14,6 +26,7 @@ public class GameMap {
 
     // Loads Game Map into the staticMapObjects
     public void loadMap(String filePath){
+        enemies = new ArrayList<>();
         Properties prop = new Properties();
         int[][] intArray;
         int maxRow = 0, maxCol = 0;
@@ -67,6 +80,10 @@ public class GameMap {
                             break;
                         case 3:
                             staticMapObjects[i][j] = new Trap();
+                            break;
+                        case 4:
+                            staticMapObjects[i][j] = new Path();
+                            enemies.add(new Enemy(i,j));
                             break;
                         case 5:
                             staticMapObjects[i][j] = new Key();

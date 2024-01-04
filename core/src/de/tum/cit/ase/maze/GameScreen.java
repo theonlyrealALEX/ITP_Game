@@ -248,6 +248,22 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         mapMaxY = mapObjects[0].length * tileSize;
 
         game.getSpriteBatch().end();
+
+        for(Enemy enemy: game.getGameEngine().getStaticGameMap().getEnemies()){
+            System.out.println("Loading Enemies");
+            TextureRegion currentFrame = enemy.getCharacterStandingUpTexture();
+            enemy.setWindowCordsFromTilet(tileSize);
+
+            game.getSpriteBatch().begin();
+            // Draw the standing frame scaled to tileSize
+            game.getSpriteBatch().draw(
+                    currentFrame,
+                    enemy.getCurrentWindowX(), enemy.getCurrentWindowY(),
+                    64, 128 // Adjust the size as needed
+            );
+            game.getSpriteBatch().end();
+        }
+
     }
 
     private void renderStandingPlayer() {
