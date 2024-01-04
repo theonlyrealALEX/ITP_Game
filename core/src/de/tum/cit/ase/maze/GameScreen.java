@@ -107,7 +107,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             game.goToPauseMenu();
 
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.V) | gameState == GAME_LEVEL_END) {
             //Sound effect
             Music escMusic = Gdx.audio.newMusic(Gdx.files.internal("ESC_sound.mp3"));
             escMusic.setVolume(2.5f);
@@ -117,7 +117,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             game.goToVictoryScreen();
 
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.L) | gameState == GAME_OVER) {
             //Sound effect
             Music escMusic = Gdx.audio.newMusic(Gdx.files.internal("ESC_sound.mp3"));
             escMusic.setVolume(2.5f);
@@ -210,6 +210,13 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             game.getSpriteBatch().end(); // Important to call this after drawing everything
 
             player.setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
+
+            if(player.getCurrentTile() instanceof Trap){
+                gameState = GAME_OVER;
+            }
+            if (player.getCurrentTile() instanceof Exit){
+                gameState = GAME_LEVEL_END;
+            }
         }
     }
 
