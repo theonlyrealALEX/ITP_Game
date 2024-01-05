@@ -214,6 +214,11 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
             player.setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
 
+            for(Enemy enemy: game.getGameEngine().getStaticGameMap().getEnemies()){
+                enemy.setWindowCordsFromTilet(tileSize);
+                renderEnemy(enemy);
+            }
+
             if(player.getCurrentTile() instanceof Trap){
                 gameState = GAME_OVER;
             }
@@ -248,6 +253,41 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         mapMaxY = mapObjects[0].length * tileSize;
 
         game.getSpriteBatch().end();
+
+    }
+
+    private void renderStandingEnemy(Enemy enemy) {
+        float x = enemy.getCurrentWindowX();
+        float y = enemy.getCurrentWindowY();
+
+        TextureRegion currentFrame = null;
+
+        switch (enemy.getDirection()) {
+            case STANDINGUP:
+                currentFrame = enemy.getCharacterStandingUpTexture();
+                break;
+            case STANDINGDOWN:
+                currentFrame = enemy.getCharacterStandingDownTexture();
+                break;
+            case STANDINGLEFT:
+                currentFrame = enemy.getCharacterStandingLeftTexture();
+                break;
+            case STANDINGRIGHT:
+                currentFrame = enemy.getCharacterStandingRightTexture();
+                break;
+            default:
+                //renderPlayer();
+                return;
+        }
+
+        game.getSpriteBatch().begin();
+        // Draw the standing frame scaled to tileSize
+        game.getSpriteBatch().draw(
+                currentFrame,
+                x, y,
+                64, 128 // Adjust the size as needed
+        );
+        game.getSpriteBatch().end();
     }
 
     private void renderStandingPlayer() {
@@ -274,7 +314,6 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                 renderPlayer();
                 return;
         }
-
         game.getSpriteBatch().begin();
         // Draw the standing frame scaled to tileSize
         game.getSpriteBatch().draw(
@@ -284,6 +323,29 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         );
         game.getSpriteBatch().end();
     }
+
+    private void renderEnemy(Enemy enemy) {
+        Animation<TextureRegion> anim = null;
+        switch (enemy.getDirection()) {
+            case UP -> anim = enemy.getCharacterUpAnimation();
+            case DOWN -> anim = enemy.getCharacterDownAnimation();
+            case LEFT -> anim = enemy.getCharacterLeftAnimation();
+            case RIGHT -> anim = enemy.getCharacterRightAnimation();
+            default -> {
+                renderStandingEnemy(enemy);
+                return;
+            }
+        }
+
+        TextureRegion currentFrame = anim.getKeyFrame(sinusInput, true);
+
+        game.getSpriteBatch().begin();
+        game.getSpriteBatch().draw(currentFrame, enemy.getCurrentWindowX(), enemy.getCurrentWindowY(), 64, 128);
+        game.getSpriteBatch().end();
+
+        enemy.setDirection(getStandingDirection(enemy.getDirection()));
+    }
+
     private void renderPlayer() {
         float projectionPlaneHeight = camera.viewportHeight / camera.zoom;
         float projectionPlaneWidth = game.getGameEngine().getStaticGameMap().getMapWidth()*tileSize;//camera.viewportWidth / camera.zoom;
@@ -311,6 +373,10 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             case DOWN -> anim = player.getCharacterDownAnimation();
             case LEFT -> anim = player.getCharacterLeftAnimation();
             case RIGHT -> anim = player.getCharacterRightAnimation();
+            default -> {
+                renderStandingPlayer();
+                return;
+            }
         }
 
         TextureRegion currentFrame = anim.getKeyFrame(sinusInput, true);
@@ -391,9 +457,10 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         //System.out.println("Left Bound "+(camera.position.x - 0.5 * camera.viewportWidth));
         //System.out.println("Right Bound "+(camera.position.x + 0.5 * camera.viewportWidth));
         // Check left and right bounds
-        if (playerX < camera.position.x - 0.5 * camera.viewportWidth + tileSize + tileSize) {
+
+        if (playerX < camera.position.x - 0.3 * camera.viewportWidth) {
             return true;
-        } else if (playerX > camera.position.x + 0.5 * camera.viewportWidth- tileSize-tileSize) {
+        } else if (playerX > camera.position.x + 0.3 * camera.viewportWidth) {
             return true;
         }
 
@@ -401,9 +468,9 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         //System.out.println("Bottom Bound "+(camera.position.y - 0.5 * camera.viewportHeight));
 
         // Check top and bottom bounds
-        if (playerY < camera.position.y - 0.5 * camera.viewportHeight+ tileSize+tileSize)  {
+        if (playerY < camera.position.y - 0.25 * camera.viewportHeight)  {
             return true;
-        } else if (playerY  > camera.position.y + 0.5 * camera.viewportHeight - tileSize- tileSize) {
+        } else if (playerY  > camera.position.y + 0.25 * camera.viewportHeight ) {
             return true;
         }
 
