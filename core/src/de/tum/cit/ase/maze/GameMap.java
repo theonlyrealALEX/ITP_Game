@@ -7,6 +7,7 @@ import java.io.IOException;
 
 public class GameMap {
     private MapObject[][] staticMapObjects;
+    private int keysLeft;
 
     public GameMap() {
     }
@@ -16,7 +17,7 @@ public class GameMap {
         Properties prop = new Properties();
         int[][] intArray;
         int maxRow = 0, maxCol = 0;
-
+        keysLeft = 0;
         try (InputStream input = new FileInputStream(filePath)) {
             prop.load(input);
 
@@ -54,10 +55,26 @@ public class GameMap {
 
             for (int i = 0; i < intArray.length; i++) {
                 for (int j = 0; j < intArray[i].length; j++) {
-                    if (intArray[i][j] == 0) {
-                        staticMapObjects[i][j] = new Wall();
-                    } else {
-                        staticMapObjects[i][j] = new Path();
+                    switch (intArray[i][j]){
+                        case 0:
+                            staticMapObjects[i][j] = new Wall();
+                            break;
+                        case 1:
+                            staticMapObjects[i][j] = new EntryPoint();
+                            break;
+                        case 2:
+                            staticMapObjects[i][j] = new Exit();
+                            break;
+                        case 3:
+                            staticMapObjects[i][j] = new Trap();
+                            break;
+                        case 5:
+                            staticMapObjects[i][j] = new Key();
+                            keysLeft++;
+                            break;
+                        default:
+                            staticMapObjects[i][j] = new Path();
+                            break;
                     }
                 }
             }
@@ -78,4 +95,24 @@ public class GameMap {
         return staticMapObjects.length;
     }
 
+
+    public MapObject getTile(float x, float y, float tileSize){
+        int i = (int) ((x) / tileSize);
+        int j = (int) ((y)/ tileSize);
+        return getStaticMapObjects()[j][i];
+    }
+
+    public int getKeysLeft(){
+        return keysLeft;
+    }
+
+    public void removeKey(float x, float y, float tileSize){
+        int i = (int) ((x) / tileSize);
+        int j = (int) ((y)/ tileSize);
+        staticMapObjects[j][i] = new Path();
+        keysLeft--;
+        if(keysLeft < 0){
+            keysLeft = 0;
+        }
+    }
 }
