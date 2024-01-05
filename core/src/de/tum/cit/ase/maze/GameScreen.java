@@ -73,7 +73,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     public GameScreen(MazeRunnerGame game) {
         this.game = game;
 
-        gameState = GAME_RUNNING; // JODIE TRY
+        gameState = GAME_RUNNING;
 
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
