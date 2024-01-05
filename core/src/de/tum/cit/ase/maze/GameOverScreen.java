@@ -69,11 +69,11 @@ public class GameOverScreen implements Screen {
                         )
                 )
         );
-        table.add(lost).padBottom(100).row();
+        table.add(lost).padBottom(150).row();
 
         // Create an animation for the skull
         Image skullImage = createSkullAnimation();
-        table.add(skullImage).padBottom(20).row();
+        table.add(skullImage).padBottom(50).row();
 
         // Add a label as a title
         table.add(new Label("Nice try", game.getSkin(), "title")).padBottom(80).row();
@@ -116,19 +116,23 @@ public class GameOverScreen implements Screen {
         Texture skullSheet = new Texture(Gdx.files.internal("ExplosiveSkullPixelArt.png"));
         int frameWidth = 32;
         int frameHeight = 32;
-        int animationFrames = 10;
+        int animationFramesRow = 4;
 
-        for (int i = 0; i < animationFrames; i++) {
-            skullFrames.add(new TextureRegion(skullSheet, i * frameWidth, 0, frameWidth, frameHeight));
+        for (int i = 0; i < animationFramesRow; i++) {
+            for(int j =0; j<3;j++){
+                skullFrames.add(new TextureRegion(skullSheet, j * frameWidth, i*frameHeight, frameWidth, frameHeight));
+            }
         }
 
         Image skullImage = new Image(skullFrames.get(0));
+        skullImage.setOrigin(skullImage.getWidth() / 2, skullImage.getHeight() / 2);
         skullImage.setSize(100, 100);
+        skullImage.setScale(10f);
 
         var skullAnimation = Actions.forever(
                 Actions.sequence(
                         Actions.run(() -> {
-                            int frameIndex = (int) (elapsedTime / 0.1f) % 10;
+                            int frameIndex = (int) (elapsedTime / 0.03333f) % skullFrames.size;
                             skullImage.setDrawable(new TextureRegionDrawable(skullFrames.get(frameIndex)));
                             elapsedTime += Gdx.graphics.getDeltaTime();
                         }),
