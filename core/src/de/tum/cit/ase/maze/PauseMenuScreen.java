@@ -23,7 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 public class PauseMenuScreen implements Screen {
 
     private final Stage stage;
-    private FireScreen fireScreen;
+
 
 
 
