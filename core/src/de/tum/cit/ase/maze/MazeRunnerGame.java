@@ -20,9 +20,10 @@ import com.badlogic.gdx.files.FileHandle;
 public class MazeRunnerGame extends Game {
     // Screens
     private MenuScreen menuScreen;
+    private GameScreen gameScreen;
     private PauseMenuScreen pauseMenuScreen;
     private FireScreen fireScreen;
-    private GameScreen gameScreen;
+
 
     // Sprite Batch for rendering
     private SpriteBatch spriteBatch;
@@ -30,7 +31,8 @@ public class MazeRunnerGame extends Game {
     // UI Skin
     private Skin skin;
     // Music
-    private Music backgroundMusic;
+    private Music backGroundMusic;
+    private  GameEngine gameEngine;
 
 
 
@@ -40,10 +42,6 @@ public class MazeRunnerGame extends Game {
     // Getter methods
     public Skin getSkin() {
         return skin;
-    }
-
-    public Animation<TextureRegion> getCharacterDownAnimation() {
-        return gameEngine.getPlayer().getCharacterDownAnimation();
     }
 
     public SpriteBatch getSpriteBatch() {
@@ -59,34 +57,13 @@ public class MazeRunnerGame extends Game {
         this.pauseMenuScreen = pauseMenuScreen;
     }
 
-    //JODIE TRYING OUT THINGS
     public void setGameScreen(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
     }
 
-    public FireScreen getFireScreen() {
-        return fireScreen;
-    }
-
-    public void setFireScreen(FireScreen fireScreen) {
-        this.fireScreen = fireScreen;
-    }
-
     public Music getBackgroundMusic() {
-        return backgroundMusic;
+        return backGroundMusic;
     }
-
-    public void setBackgroundMusic(Music backgroundMusic) {
-        this.backgroundMusic = backgroundMusic;
-    }
-    //JODIE TRYING OUT THINGS
-
-
-
-    // Engine
-    private  GameEngine gameEngine;
-    //private static final String GAME_STATE_FILE_PATH = "game_state.json";
-
 
 
     /**
@@ -108,10 +85,10 @@ public class MazeRunnerGame extends Game {
 
         // Play some background music
         // Background sound
-        this.backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("crystal_cave.mp3"));
-        backgroundMusic.setVolume(0.5f);
-        backgroundMusic.setLooping(true);
-        backgroundMusic.play();
+        this.backGroundMusic = Gdx.audio.newMusic(Gdx.files.internal("crystal_cave.mp3"));
+        backGroundMusic.setVolume(0.5f);
+        backGroundMusic.setLooping(true);
+        backGroundMusic.play();
 
         // Load Engine and Map
         gameEngine = new GameEngine();
@@ -120,18 +97,6 @@ public class MazeRunnerGame extends Game {
 
     }
 
-    /**
-     * Cleans up resources when the game is disposed.
-     */
-    @Override
-    public void dispose() {
-        getScreen().hide(); // Hide the current screen
-        getScreen().dispose(); // Dispose the current screen
-        spriteBatch.dispose(); // Dispose the spriteBatch
-        skin.dispose(); // Dispose the skin
-        backgroundMusic.dispose();
-
-    }
 
     /**
      * Switches to the menu screen.
@@ -146,6 +111,18 @@ public class MazeRunnerGame extends Game {
     /**
      * Switches to the pause menu screen when press ESC.
      */
+
+    public void goToPauseMenu(){
+
+        this.setScreen(new PauseMenuScreen(this)); // Set the current screen to MenuScreen
+        this.pause();
+    }
+
+
+    /**
+     * Switches to the Victory or Game Over screen when win or lose the game.
+     */
+
     public void goToVictoryScreen(){
         //this.setScreen(new FireScreen());  // Testing
         this.setScreen(new VictoryScreen(this)); // Set the current screen to MenuScreen
@@ -166,20 +143,11 @@ public class MazeRunnerGame extends Game {
         }
     }
 
-    public void goToPauseMenu(){
-
-        this.setScreen(new PauseMenuScreen(this)); // Set the current screen to MenuScreen
-        this.pause();
-        /*if (gameScreen != null) {
-            gameScreen.dispose(); // Dispose the game screen if it exists
-            gameScreen = null;
-        }*/
-
-    }
 
     /**
      * Switches to the game screen.
      */
+
     public void goToGame() {
         this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
 
@@ -197,6 +165,19 @@ public class MazeRunnerGame extends Game {
             pauseMenuScreen.dispose(); // Dispose the menu screen if it exists
             pauseMenuScreen = null;
         }
+    }
+
+    /**
+     * Cleans up resources when the game is disposed.
+     */
+    @Override
+    public void dispose() {
+        getScreen().hide(); // Hide the current screen
+        getScreen().dispose(); // Dispose the current screen
+        spriteBatch.dispose(); // Dispose the spriteBatch
+        skin.dispose(); // Dispose the skin
+        backGroundMusic.dispose();
+
     }
 
 

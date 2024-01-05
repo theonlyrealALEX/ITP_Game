@@ -100,6 +100,34 @@ public class VictoryScreen implements Screen {
             }
         });
     }
+    private void buttonStartNewGameFadeAway(TextButton textButton, MazeRunnerGame game) {
+        textButton.addAction(Actions.sequence(
+                Actions.fadeOut(0.5f),
+                Actions.run(() -> {
+                    game.dispose();
+                    game.create();
+                    game.goToGame();
+                })
+        ));
+    }
+
+    private void exitButtonFadeAway(TextButton exitButton, MazeRunnerGame game) {
+        exitButton.addAction(Actions.sequence(
+                Actions.fadeOut(0.5f),
+                Actions.run(() -> {
+                    game.dispose();
+                    game.create();
+                    game.goToMenu();
+                })
+        ));
+    }
+    private void clickSound() {
+        Music clickMusic = Gdx.audio.newMusic(Gdx.files.internal("click_sound.mp3"));
+        clickMusic.setVolume(2.5f);
+        clickMusic.setLooping(false);
+        clickMusic.play();
+    }
+
 
     @Override
     public void render(float delta) {
@@ -122,35 +150,6 @@ public class VictoryScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-    }
-
-    public void clickSound() {
-        Music clickMusic = Gdx.audio.newMusic(Gdx.files.internal("click_sound.mp3"));
-        clickMusic.setVolume(2.5f);
-        clickMusic.setLooping(false);
-        clickMusic.play();
-    }
-
-    public void buttonStartNewGameFadeAway(TextButton textButton, MazeRunnerGame game) {
-        textButton.addAction(Actions.sequence(
-                Actions.fadeOut(0.5f),
-                Actions.run(() -> {
-                    game.dispose();
-                    game.create();
-                    game.goToGame();
-                })
-        ));
-    }
-
-    public void exitButtonFadeAway(TextButton exitButton, MazeRunnerGame game) {
-        exitButton.addAction(Actions.sequence(
-                Actions.fadeOut(0.5f),
-                Actions.run(() -> {
-                    game.dispose();
-                    game.create();
-                    game.goToMenu();
-                })
-        ));
     }
 
     @Override

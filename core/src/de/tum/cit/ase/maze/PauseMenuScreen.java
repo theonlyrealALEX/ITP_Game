@@ -53,6 +53,7 @@ public class PauseMenuScreen implements Screen {
         table.add(new Label("Welcome to Pause Menu!", game.getSkin(), "title")).padBottom(80).row();
 
         TextButton continueButton = new TextButton("Continue Game", game.getSkin());
+        //continueButton.setColor(Color.BLUE);
         table.add(continueButton).width(300).row();
         continueButton.addListener(new ChangeListener() {
             @Override
@@ -99,17 +100,33 @@ public class PauseMenuScreen implements Screen {
                             }
                         })
                 ));
-                /*game.dispose();
-                game.create();
-                game.goToMenu();*/
             }
         });
 
-
-
-
     }
 
+    /**
+     * Fade away animation for Start New Game button.
+     */
+
+    private void buttonStartNewGameFadeAway(TextButton textButton,MazeRunnerGame game){
+        textButton.addAction(Actions.sequence(
+                Actions.fadeOut(0.5f),// Duration of the fade-out effect
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Dispose of the current game and create a new one
+                        game.dispose();
+                        game.create();
+                        // You can add more animation effects here if needed
+
+                        // Switch to the game screen
+                        game.goToGame();
+                    }
+                })
+        ));
+
+    }
 
 
     @Override
@@ -139,34 +156,11 @@ public class PauseMenuScreen implements Screen {
     /**
      * Sound effect when buttons clicked.
      */
-    public void clickSound(){
+    private void clickSound(){
         Music clickMusic = Gdx.audio.newMusic(Gdx.files.internal("click_sound.mp3"));
         clickMusic.setVolume(2.5f);
         clickMusic.setLooping(false);
         clickMusic.play();
-    }
-
-    /**
-     * Fade away animation for Start New Game button.
-     */
-
-    public void buttonStartNewGameFadeAway(TextButton textButton,MazeRunnerGame game){
-        textButton.addAction(Actions.sequence(
-                Actions.fadeOut(0.5f),// Duration of the fade-out effect
-                Actions.run(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Dispose of the current game and create a new one
-                        game.dispose();
-                        game.create();
-                        // You can add more animation effects here if needed
-
-                        // Switch to the game screen
-                        game.goToGame();
-                    }
-                })
-        ));
-
     }
 
     // The following methods are part of the Screen interface but are not used in this screen.
