@@ -22,7 +22,7 @@ public class MazeRunnerGame extends Game {
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
     private PauseMenuScreen pauseMenuScreen;
-    private FireScreen fireScreen;
+
 
 
     // Sprite Batch for rendering
