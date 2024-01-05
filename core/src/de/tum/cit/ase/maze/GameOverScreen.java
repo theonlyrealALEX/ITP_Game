@@ -162,14 +162,14 @@ public class GameOverScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
-    public void clickSound() {
+    private void clickSound() {
         Music clickMusic = Gdx.audio.newMusic(Gdx.files.internal("click_sound.mp3"));
         clickMusic.setVolume(2.5f);
         clickMusic.setLooping(false);
         clickMusic.play();
     }
 
-    public void buttonStartNewGameFadeAway(TextButton textButton, MazeRunnerGame game) {
+    private void buttonStartNewGameFadeAway(TextButton textButton, MazeRunnerGame game) {
         textButton.addAction(Actions.sequence(
                 Actions.fadeOut(0.5f),
                 Actions.run(() -> {
