@@ -5,13 +5,18 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -22,6 +27,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class MenuScreen implements Screen {
 
     private final Stage stage;
+    private float elapsedTime = 2f;
 
     /**
      * Constructor for MenuScreen. Sets up the camera, viewport, stage, and UI elements.
@@ -38,6 +44,9 @@ public class MenuScreen implements Screen {
         Table table = new Table(); // Create a table for layout
         table.setFillParent(true); // Make the table fill the stage
         stage.addActor(table); // Add the table to the stage
+
+        Image fireImage = createFireAnimation();
+        table.add(fireImage).padBottom(100).row();
 
         // Add a label as a title
         table.add(new Label("Welcome to Maze Runner Game!", game.getSkin(), "title")).padBottom(80).row();
@@ -57,6 +66,40 @@ public class MenuScreen implements Screen {
             }
         });
     }
+
+    // Create an animation for the skull
+    private Image createFireAnimation() {
+        Array<TextureRegion> fireFrames = new Array<>();
+        Texture skullSheet = new Texture(Gdx.files.internal("things.png"));
+        int frameWidth = 16;
+        int frameHeight = 16;
+        int animationFramesRow = 3;
+
+        for (int i = 0; i < animationFramesRow; i++) {
+            fireFrames.add(new TextureRegion(skullSheet, 144+ i * frameWidth, 64, frameWidth, frameHeight));
+        }
+
+        Image fireImage = new Image(fireFrames.get(0));
+        fireImage.setOrigin(fireImage.getWidth() / 2, fireImage.getHeight() / 2);
+        fireImage.setSize(100, 100);
+        fireImage.setScale(10f);
+
+        var skullAnimation = Actions.forever(
+                Actions.sequence(
+                        Actions.run(() -> {
+                            int frameIndex = (int) (elapsedTime / 0.03333f) % fireFrames.size;
+                            fireImage.setDrawable(new TextureRegionDrawable(fireFrames.get(frameIndex)));
+                            elapsedTime += Gdx.graphics.getDeltaTime();
+                        }),
+                        Actions.delay(0.1f)
+                )
+        );
+
+        fireImage.addAction(skullAnimation);
+        return fireImage;
+    }
+
+
 
     @Override
     public void render(float delta) {

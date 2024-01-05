@@ -179,13 +179,4 @@ public class MazeRunnerGame extends Game {
         backGroundMusic.dispose();
 
     }
-
-
-
-
-
-
-
-
-
 }
