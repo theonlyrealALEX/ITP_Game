@@ -314,7 +314,6 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                 renderPlayer();
                 return;
         }
-
         game.getSpriteBatch().begin();
         // Draw the standing frame scaled to tileSize
         game.getSpriteBatch().draw(
@@ -326,9 +325,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     }
 
     private void renderEnemy(Enemy enemy) {
-
         Animation<TextureRegion> anim = null;
-
         switch (enemy.getDirection()) {
             case UP -> anim = enemy.getCharacterUpAnimation();
             case DOWN -> anim = enemy.getCharacterDownAnimation();
@@ -348,6 +345,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
         enemy.setDirection(getStandingDirection(enemy.getDirection()));
     }
+
     private void renderPlayer() {
         float projectionPlaneHeight = camera.viewportHeight / camera.zoom;
         float projectionPlaneWidth = game.getGameEngine().getStaticGameMap().getMapWidth()*tileSize;//camera.viewportWidth / camera.zoom;
@@ -375,6 +373,10 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             case DOWN -> anim = player.getCharacterDownAnimation();
             case LEFT -> anim = player.getCharacterLeftAnimation();
             case RIGHT -> anim = player.getCharacterRightAnimation();
+            default -> {
+                renderStandingPlayer();
+                return;
+            }
         }
 
         TextureRegion currentFrame = anim.getKeyFrame(sinusInput, true);
@@ -455,9 +457,10 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         //System.out.println("Left Bound "+(camera.position.x - 0.5 * camera.viewportWidth));
         //System.out.println("Right Bound "+(camera.position.x + 0.5 * camera.viewportWidth));
         // Check left and right bounds
-        if (playerX < camera.position.x - 0.5 * camera.viewportWidth + tileSize + tileSize) {
+
+        if (playerX < camera.position.x - 0.3 * camera.viewportWidth) {
             return true;
-        } else if (playerX > camera.position.x + 0.5 * camera.viewportWidth- tileSize-tileSize) {
+        } else if (playerX > camera.position.x + 0.3 * camera.viewportWidth) {
             return true;
         }
 
@@ -465,9 +468,9 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         //System.out.println("Bottom Bound "+(camera.position.y - 0.5 * camera.viewportHeight));
 
         // Check top and bottom bounds
-        if (playerY < camera.position.y - 0.5 * camera.viewportHeight+ tileSize+tileSize)  {
+        if (playerY < camera.position.y - 0.25 * camera.viewportHeight)  {
             return true;
-        } else if (playerY  > camera.position.y + 0.5 * camera.viewportHeight - tileSize- tileSize) {
+        } else if (playerY  > camera.position.y + 0.25 * camera.viewportHeight ) {
             return true;
         }
 
