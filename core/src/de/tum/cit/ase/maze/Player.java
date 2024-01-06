@@ -15,6 +15,17 @@ public class Player {
     private Animation<TextureRegion> characterUpAnimation;
     private Animation<TextureRegion> characterRightAnimation;
     private Animation<TextureRegion> characterLeftAnimation;
+    private TextureRegion characterStandingUpTexture;
+    private TextureRegion characterStandingDownTexture;
+    private TextureRegion characterStandingLeftTexture;
+    private TextureRegion characterStandingRightTexture;
+    private MapObject currentTile;
+    private Direction direction;
+
+    public Player() {
+        loadCharacterAnimations();
+        direction = Direction.STANDINGUP;
+    }
 
     public TextureRegion getCharacterStandingUpTexture() {
         return characterStandingUpTexture;
@@ -32,12 +43,6 @@ public class Player {
         return characterStandingRightTexture;
     }
 
-    private TextureRegion characterStandingUpTexture;
-    private TextureRegion characterStandingDownTexture;
-    private TextureRegion characterStandingLeftTexture;
-    private TextureRegion characterStandingRightTexture;
-
-    private MapObject currentTile;
     public Direction getDirection() {
         return direction;
     }
@@ -46,23 +51,16 @@ public class Player {
         this.direction = direction;
     }
 
-    private Direction direction;
-
-    public Player() {
-        loadCharacterAnimations();
-        direction = Direction.STANDINGUP;
-    }
-
     public float getCurrentWindowX() {
         return currentWindowX;
     }
 
-    public float getCurrentWindowY() {
-        return currentWindowY;
-    }
-
     public void setCurrentWindowX(float currentWindowX) {
         this.currentWindowX = currentWindowX;
+    }
+
+    public float getCurrentWindowY() {
+        return currentWindowY;
     }
 
     public void setCurrentWindowY(float currentWindowY) {
@@ -114,13 +112,13 @@ public class Player {
     public void move(float speed) {
         switch (this.direction) {
             case UP:
-                this.currentWindowY += speed ;
+                this.currentWindowY += speed;
                 break;
             case DOWN:
-                this.currentWindowY -= speed ;
+                this.currentWindowY -= speed;
                 break;
             case LEFT:
-                this.currentWindowX -= speed ;
+                this.currentWindowX -= speed;
                 break;
             case RIGHT:
                 this.currentWindowX += speed;
@@ -137,9 +135,9 @@ public class Player {
     }
 
 
-    public void setCurrentTileFromCoords(GameMap gameMap, float tileSize){
+    public void setCurrentTileFromCoords(GameMap gameMap, float tileSize) {
         int i = (int) ((getCurrentWindowX() + 32) / tileSize);
-        int j = (int) ((getCurrentWindowY() + 48)/ tileSize);
+        int j = (int) ((getCurrentWindowY() + 48) / tileSize);
         currentTile = gameMap.getStaticMapObjects()[j][i];
     }
 

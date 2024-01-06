@@ -1,14 +1,20 @@
 package de.tum.cit.ase.maze;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 public class GameMap {
     private MapObject[][] staticMapObjects;
+    private List<Enemy> enemies;
+    private int keysLeft;
+
+    public GameMap() {
+    }
 
     public List<Enemy> getEnemies() {
         return enemies;
@@ -18,14 +24,8 @@ public class GameMap {
         this.enemies = enemies;
     }
 
-    private List<Enemy> enemies;
-    private int keysLeft;
-
-    public GameMap() {
-    }
-
     // Loads Game Map into the staticMapObjects
-    public void loadMap(String filePath){
+    public void loadMap(String filePath) {
         enemies = new ArrayList<>();
         Properties prop = new Properties();
         int[][] intArray;
@@ -68,7 +68,7 @@ public class GameMap {
 
             for (int i = 0; i < intArray.length; i++) {
                 for (int j = 0; j < intArray[i].length; j++) {
-                    switch (intArray[i][j]){
+                    switch (intArray[i][j]) {
                         case 0:
                             staticMapObjects[i][j] = new Wall();
                             break;
@@ -83,8 +83,8 @@ public class GameMap {
                             break;
                         case 4:
                             staticMapObjects[i][j] = new Path();
-                            enemies.add(new Enemy(i,j));
-
+                            enemies.add(new Enemy(i, j));
+                            enemies.get(enemies.size() - 1).setWindowCordsFromTilet(GameScreen.tileSize);
                             break;
                         case 5:
                             staticMapObjects[i][j] = new Key();
@@ -106,30 +106,31 @@ public class GameMap {
         return staticMapObjects;
     }
 
-    public float getMapWidth(){
+    public float getMapWidth() {
         return staticMapObjects[0].length;
     }
-    public float getMapHeight(){
+
+    public float getMapHeight() {
         return staticMapObjects.length;
     }
 
 
-    public MapObject getTile(float x, float y, float tileSize){
+    public MapObject getTile(float x, float y, float tileSize) {
         int i = (int) ((x) / tileSize);
-        int j = (int) ((y)/ tileSize);
+        int j = (int) ((y) / tileSize);
         return getStaticMapObjects()[j][i];
     }
 
-    public int getKeysLeft(){
+    public int getKeysLeft() {
         return keysLeft;
     }
 
-    public void removeKey(float x, float y, float tileSize){
+    public void removeKey(float x, float y, float tileSize) {
         int i = (int) ((x) / tileSize);
-        int j = (int) ((y)/ tileSize);
+        int j = (int) ((y) / tileSize);
         staticMapObjects[j][i] = new Path();
         keysLeft--;
-        if(keysLeft < 0){
+        if (keysLeft < 0) {
             keysLeft = 0;
         }
     }
