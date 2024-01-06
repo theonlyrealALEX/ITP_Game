@@ -190,8 +190,10 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             player.setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
 
             for (Enemy enemy : game.getGameEngine().getStaticGameMap().getEnemies()) {
-                //enemy.setWindowCordsFromTilet(tileSize);
                 renderEnemy(enemy);
+                if (isPlayerTouchingEnemy(enemy)) {
+                    gameState = GAME_OVER;
+                }
             }
 
             if (player.getCurrentTile() instanceof Trap) {
@@ -205,6 +207,30 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                 game.getGameEngine().getStaticGameMap().removeKey(player.getCurrentWindowX() + centerPlayerXOffset, player.getCurrentWindowY() + centerPlayerYOffset, tileSize);
             }
         }
+    }
+
+    private boolean isPlayerTouchingEnemy(Enemy enemy) {
+        Player player = game.getGameEngine().getPlayer();
+
+        float offsetVerticalTop = 5;
+        float offsetVerticalBottom = 33;
+        float offsetHorizontal = 30;
+        float centerEnemyXOffset = centerPlayerXOffset;
+        float centerEnemyYOffset = centerPlayerYOffset;
+
+        float playerCenterX = player.getCurrentWindowX() + centerPlayerXOffset;
+        float playerCenterY = player.getCurrentWindowY() + centerPlayerYOffset;
+
+        float enemyCenterX = enemy.getCurrentWindowX() + centerEnemyXOffset;
+        float enemyCenterY = enemy.getCurrentWindowY() + centerEnemyYOffset;
+
+        float deltaX = playerCenterX - enemyCenterX;
+        float deltaY = playerCenterY - enemyCenterY;
+
+        if (Math.abs(deltaX) < offsetHorizontal && Math.abs(deltaY) < offsetVerticalBottom) {
+            return true;
+        }
+        return false;
     }
 
     // Render Map
@@ -445,21 +471,18 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             case STANDINGLEFT:
             case LEFT:
                 if (game.getGameEngine().getStaticGameMap().getTile(playerCenterX - offsetHorizontal, playerCenterY, tileSize) instanceof Wall) {
-                    System.out.println("Player On Wall");
                     return true;
                 }
                 break;
             case STANDINGRIGHT:
             case RIGHT:
                 if (game.getGameEngine().getStaticGameMap().getTile(playerCenterX + offsetHorizontal, playerCenterY, tileSize) instanceof Wall) {
-                    System.out.println("Player On Wall");
                     return true;
                 }
                 break;
             case STANDINGUP:
             case UP:
                 if (game.getGameEngine().getStaticGameMap().getTile(playerCenterX, playerCenterY + offsetVerticalTop, tileSize) instanceof Wall) {
-                    System.out.println("Player On Wall");
                     return true;
                 }
                 break;
@@ -467,7 +490,6 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             case STANDINGDOWN:
             case DOWN:
                 if (game.getGameEngine().getStaticGameMap().getTile(playerCenterX, playerCenterY - offsetVerticalBottom, tileSize) instanceof Wall) {
-                    System.out.println("Player On Wall");
                     return true;
                 }
                 break;

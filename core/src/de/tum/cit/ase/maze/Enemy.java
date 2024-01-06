@@ -218,7 +218,6 @@ public class Enemy extends MapObject {
             movementSmoothing--;
         } else {
             movementSmoothing = 60;
-            System.out.println("Reset Movement Counter");
         }
 
     }
@@ -239,20 +238,6 @@ public class Enemy extends MapObject {
                 case DOWN -> setDirection(Direction.RIGHT);
             }
         }
-    }
-
-    public int getDirectionalCounter() {
-        return directionalCounter;
-    }
-
-    public void decrmenentDirectionalCounter() {
-        if (directionalCounter > 0) {
-            directionalCounter--;
-        } else {
-            directionalCounter = 30;
-            System.out.println("Reset Movement Counter");
-        }
-
     }
 }
 
