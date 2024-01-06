@@ -24,6 +24,7 @@ public class Enemy extends MapObject {
     private MapObject currentTile;
     private Direction direction;
     private Personality personality;
+    private int movementSmoothing = 0;
 
     public Enemy(int tileX, int tileY) {
         loadCharacterAnimations();
@@ -196,6 +197,24 @@ public class Enemy extends MapObject {
 
     public void setPersonality(Personality personality) {
         this.personality = personality;
+    }
+
+    public int getMovementSmoothing() {
+        return movementSmoothing;
+    }
+
+    public void setMovementSmoothing(int movementSmoothing) {
+        this.movementSmoothing = movementSmoothing;
+    }
+
+    public void decrmenentMovementSmoothing() {
+        if (movementSmoothing > 0) {
+            movementSmoothing--;
+        } else {
+            movementSmoothing = 10;
+            System.out.println("Reset Movement Counter");
+        }
+
     }
 }
 

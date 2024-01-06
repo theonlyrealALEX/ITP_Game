@@ -302,9 +302,9 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         x = x - enemy.getCurrentWindowX();
         y = y - enemy.getCurrentWindowY();
 
-        System.out.println(enemy.getPersonality() + " set to " + x + "/" + y + " with Player at " + player.getCurrentWindowX() + "/" + player.getCurrentWindowY());
         //Path Finding Algorythm
         Direction direction;
+
         if (x > 0) {
             if (y > 0) {
                 direction = (x > y) ? RIGHT : UP;
@@ -318,8 +318,11 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                 direction = (Math.abs(x) > Math.abs(y)) ? LEFT : DOWN;
             }
         }
-        System.out.println("Direction set to " + direction);
-        enemy.setDirection(direction);
+        if (enemy.getMovementSmoothing() == 0) {
+            enemy.setDirection(direction);
+        }
+        enemy.decrmenentMovementSmoothing();
+        //enemy.setDirection(direction);
         enemy.move(enemySpeed);
         switch (enemy.getDirection()) {
             case UP -> anim = enemy.getCharacterUpAnimation();
@@ -338,7 +341,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         game.getSpriteBatch().draw(currentFrame, enemy.getCurrentWindowX(), enemy.getCurrentWindowY(), 64, 128);
         game.getSpriteBatch().end();
 
-        enemy.setDirection(getStandingDirection(enemy.getDirection()));
+        //enemy.setDirection(getStandingDirection(enemy.getDirection()));
     }
 
     private void renderPlayer() {

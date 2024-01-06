@@ -144,18 +144,18 @@ public class Player {
             case RIGHT:
             case STANDINGRIGHT:
                 if (personality == Personality.INFRONT) {
-                    return currentWindowX + tileSize;
+                    return currentWindowX + 2 * tileSize;
                 } else if (personality == Personality.FOLLOWER) {
-                    return currentWindowX - tileSize;
+                    return currentWindowX - 1 * tileSize;
                 } else {
                     return getCurrentWindowX();
                 }
             case STANDINGLEFT:
             case LEFT:
                 if (personality == Personality.INFRONT) {
-                    return currentWindowX - tileSize;
+                    return currentWindowX - 2 * tileSize;
                 } else if (personality == Personality.FOLLOWER) {
-                    return currentWindowX + tileSize;
+                    return currentWindowX + 1 * tileSize;
                 } else {
                     return getCurrentWindowX();
                 }
@@ -168,18 +168,18 @@ public class Player {
             case UP:
             case STANDINGUP:
                 if (personality == Personality.INFRONT) {
-                    return currentWindowY + tileSize;
+                    return currentWindowY + 2 * tileSize;
                 } else if (personality == Personality.FOLLOWER) {
-                    return currentWindowY - tileSize;
+                    return currentWindowY - 1 * tileSize;
                 } else {
                     return getCurrentWindowY();
                 }
             case DOWN:
             case STANDINGDOWN:
                 if (personality == Personality.INFRONT) {
-                    return currentWindowY - tileSize;
+                    return currentWindowY - 2 * tileSize;
                 } else if (personality == Personality.FOLLOWER) {
-                    return currentWindowY + tileSize;
+                    return currentWindowY + 1 * tileSize;
                 } else {
                     return getCurrentWindowY();
                 }
