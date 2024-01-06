@@ -296,8 +296,14 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     private void renderEnemy(Enemy enemy) {
         Animation<TextureRegion> anim = null;
         Player player = game.getGameEngine().getPlayer();
-        float x = player.getCurrentWindowX() - enemy.getCurrentWindowX();
-        float y = player.getCurrentWindowY() - enemy.getCurrentWindowY();
+        float x = player.getOffsetWindowX(tileSize, enemy.getPersonality());
+        float y = player.getOffsetWindowY(tileSize, enemy.getPersonality());
+
+        x = x - enemy.getCurrentWindowX();
+        y = y - enemy.getCurrentWindowY();
+
+        System.out.println(enemy.getPersonality() + " set to " + x + "/" + y + " with Player at " + player.getCurrentWindowX() + "/" + player.getCurrentWindowY());
+        //Path Finding Algorythm
         Direction direction;
         if (x > 0) {
             if (y > 0) {
@@ -312,6 +318,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                 direction = (Math.abs(x) > Math.abs(y)) ? LEFT : DOWN;
             }
         }
+        System.out.println("Direction set to " + direction);
         enemy.setDirection(direction);
         enemy.move(enemySpeed);
         switch (enemy.getDirection()) {

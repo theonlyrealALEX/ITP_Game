@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.Random;
+
 public class Enemy extends MapObject {
     public int tileX;
     public int tileY;
@@ -21,14 +23,24 @@ public class Enemy extends MapObject {
     private TextureRegion characterStandingRightTexture;
     private MapObject currentTile;
     private Direction direction;
+    private Personality personality;
 
     public Enemy(int tileX, int tileY) {
         loadCharacterAnimations();
         direction = Direction.DOWN;
         this.tileX = tileX;
         this.tileY = tileY;
-
+        this.personality = getRandomPersonality();
+        System.out.println("Created Enemy with Personality: " + getPersonality());
     }
+
+    public Personality getRandomPersonality() {
+        Random random = new Random();
+        Personality[] personalities = Personality.values();
+        int randomIndex = random.nextInt(personalities.length);
+        return personalities[randomIndex];
+    }
+
 
     public TextureRegion getCharacterStandingUpTexture() {
         return characterStandingUpTexture;
@@ -176,6 +188,14 @@ public class Enemy extends MapObject {
     @Override
     public void render(SpriteBatch spriteBatch, float x, float y, float tileSize) {
         //TODO
+    }
+
+    public Personality getPersonality() {
+        return personality;
+    }
+
+    public void setPersonality(Personality personality) {
+        this.personality = personality;
     }
 }
 

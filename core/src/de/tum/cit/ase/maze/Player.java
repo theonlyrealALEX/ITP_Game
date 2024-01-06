@@ -1,10 +1,8 @@
 package de.tum.cit.ase.maze;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
@@ -141,4 +139,51 @@ public class Player {
         currentTile = gameMap.getStaticMapObjects()[j][i];
     }
 
+    public float getOffsetWindowX(float tileSize, Personality personality) {
+        switch (getDirection()) {
+            case RIGHT:
+            case STANDINGRIGHT:
+                if (personality == Personality.INFRONT) {
+                    return currentWindowX + tileSize;
+                } else if (personality == Personality.FOLLOWER) {
+                    return currentWindowX - tileSize;
+                } else {
+                    return getCurrentWindowX();
+                }
+            case STANDINGLEFT:
+            case LEFT:
+                if (personality == Personality.INFRONT) {
+                    return currentWindowX - tileSize;
+                } else if (personality == Personality.FOLLOWER) {
+                    return currentWindowX + tileSize;
+                } else {
+                    return getCurrentWindowX();
+                }
+        }
+        return getCurrentWindowX();
+    }
+
+    public float getOffsetWindowY(float tileSize, Personality personality) {
+        switch (getDirection()) {
+            case UP:
+            case STANDINGUP:
+                if (personality == Personality.INFRONT) {
+                    return currentWindowY + tileSize;
+                } else if (personality == Personality.FOLLOWER) {
+                    return currentWindowY - tileSize;
+                } else {
+                    return getCurrentWindowY();
+                }
+            case DOWN:
+            case STANDINGDOWN:
+                if (personality == Personality.INFRONT) {
+                    return currentWindowY - tileSize;
+                } else if (personality == Personality.FOLLOWER) {
+                    return currentWindowY + tileSize;
+                } else {
+                    return getCurrentWindowY();
+                }
+        }
+        return getCurrentWindowY();
+    }
 }
