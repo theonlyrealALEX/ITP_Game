@@ -58,11 +58,16 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         font = game.getSkin().getFont("font");
 
         //Create Player
-        game.getGameEngine().getPlayer().setCurrentWindowX(camera.viewportWidth / 2);
-        game.getGameEngine().getPlayer().setCurrentWindowY(camera.viewportHeight / 2);
+        float x = this.game.getGameEngine().getStaticGameMap().getEntryPoints().get(0).getX();
+        float y = this.game.getGameEngine().getStaticGameMap().getEntryPoints().get(0).getY();
+
+        game.getGameEngine().getPlayer().setCurrentWindowX(x * tileSize + 16);
+        game.getGameEngine().getPlayer().setCurrentWindowY(y * tileSize + 16);
+        game.getGameEngine().getPlayer().setDirection(DOWN);
+        camera.position.x = x;
+        camera.position.y = y;
+
         game.setGameScreen(this);
-
-
     }
 
     public int getGameState() {
