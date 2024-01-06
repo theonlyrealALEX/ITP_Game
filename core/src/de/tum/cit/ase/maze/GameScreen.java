@@ -320,7 +320,10 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         }
         if (enemy.getMovementSmoothing() == 0) {
             enemy.setDirection(direction);
+        } else if (isEnemyAtBarrier(enemy)) {
+            enemy.rotateDirection();
         }
+
         enemy.decrmenentMovementSmoothing();
         //enemy.setDirection(direction);
         enemy.move(enemySpeed);
@@ -397,6 +400,48 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         float playerCenterY = player.getCurrentWindowY() + centerPlayerYOffset;
 
         switch (player.getDirection()) {
+            case STANDINGLEFT:
+            case LEFT:
+                if (game.getGameEngine().getStaticGameMap().getTile(playerCenterX - offsetHorizontal, playerCenterY, tileSize) instanceof Wall) {
+                    System.out.println("Player On Wall");
+                    return true;
+                }
+                break;
+            case STANDINGRIGHT:
+            case RIGHT:
+                if (game.getGameEngine().getStaticGameMap().getTile(playerCenterX + offsetHorizontal, playerCenterY, tileSize) instanceof Wall) {
+                    System.out.println("Player On Wall");
+                    return true;
+                }
+                break;
+            case STANDINGUP:
+            case UP:
+                if (game.getGameEngine().getStaticGameMap().getTile(playerCenterX, playerCenterY + offsetVerticalTop, tileSize) instanceof Wall) {
+                    System.out.println("Player On Wall");
+                    return true;
+                }
+                break;
+
+            case STANDINGDOWN:
+            case DOWN:
+                if (game.getGameEngine().getStaticGameMap().getTile(playerCenterX, playerCenterY - offsetVerticalBottom, tileSize) instanceof Wall) {
+                    System.out.println("Player On Wall");
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+    private boolean isEnemyAtBarrier(Enemy enemy) {
+        float offsetVerticalTop = 5;
+        float offsetVerticalBottom = 33;
+        float offsetHorizontal = 30;
+
+        float playerCenterX = enemy.getCurrentWindowX() + centerPlayerXOffset;
+        float playerCenterY = enemy.getCurrentWindowY() + centerPlayerYOffset;
+
+        switch (enemy.getDirection()) {
             case STANDINGLEFT:
             case LEFT:
                 if (game.getGameEngine().getStaticGameMap().getTile(playerCenterX - offsetHorizontal, playerCenterY, tileSize) instanceof Wall) {

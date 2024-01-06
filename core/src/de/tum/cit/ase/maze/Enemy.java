@@ -25,6 +25,7 @@ public class Enemy extends MapObject {
     private Direction direction;
     private Personality personality;
     private int movementSmoothing = 0;
+    private int directionalCounter = 0;
 
     public Enemy(int tileX, int tileY) {
         loadCharacterAnimations();
@@ -33,6 +34,7 @@ public class Enemy extends MapObject {
         this.tileY = tileY;
         this.personality = getRandomPersonality();
         System.out.println("Created Enemy with Personality: " + getPersonality());
+
     }
 
     public Personality getRandomPersonality() {
@@ -40,6 +42,13 @@ public class Enemy extends MapObject {
         Personality[] personalities = Personality.values();
         int randomIndex = random.nextInt(personalities.length);
         return personalities[randomIndex];
+    }
+
+    public Rotation getRandomRotation() {
+        Random random = new Random();
+        Rotation[] rotations = Rotation.values();
+        int randomIndex = random.nextInt(rotations.length);
+        return rotations[randomIndex];
     }
 
 
@@ -203,15 +212,44 @@ public class Enemy extends MapObject {
         return movementSmoothing;
     }
 
-    public void setMovementSmoothing(int movementSmoothing) {
-        this.movementSmoothing = movementSmoothing;
-    }
 
     public void decrmenentMovementSmoothing() {
         if (movementSmoothing > 0) {
             movementSmoothing--;
         } else {
-            movementSmoothing = 10;
+            movementSmoothing = 60;
+            System.out.println("Reset Movement Counter");
+        }
+
+    }
+
+    public void rotateDirection() {
+        if (getRandomRotation() == Rotation.RIGHT) {
+            switch (getDirection()) {
+                case LEFT -> setDirection(Direction.UP);
+                case RIGHT -> setDirection(Direction.DOWN);
+                case UP -> setDirection(Direction.RIGHT);
+                case DOWN -> setDirection(Direction.LEFT);
+            }
+        } else {
+            switch (getDirection()) {
+                case LEFT -> setDirection(Direction.DOWN);
+                case RIGHT -> setDirection(Direction.UP);
+                case UP -> setDirection(Direction.LEFT);
+                case DOWN -> setDirection(Direction.RIGHT);
+            }
+        }
+    }
+
+    public int getDirectionalCounter() {
+        return directionalCounter;
+    }
+
+    public void decrmenentDirectionalCounter() {
+        if (directionalCounter > 0) {
+            directionalCounter--;
+        } else {
+            directionalCounter = 30;
             System.out.println("Reset Movement Counter");
         }
 
