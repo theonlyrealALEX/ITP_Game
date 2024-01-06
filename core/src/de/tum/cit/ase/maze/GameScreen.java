@@ -122,7 +122,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             renderMap();
             Player player = game.getGameEngine().getPlayer();
 
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.W) | Gdx.input.isKeyPressed(Input.Keys.UP)) {
                 if (isPlayerAtBarrier()) {
                     player.setDirection(STANDINGUP);
                     renderStandingPlayer();
@@ -130,7 +130,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                     player.setDirection(UP);
                     renderPlayer();
                 }
-            } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            } else if (Gdx.input.isKeyPressed(Input.Keys.S) | Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
                 if (isPlayerAtBarrier()) {
                     player.setDirection(STANDINGDOWN);
                     renderStandingPlayer();
@@ -138,7 +138,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                     player.setDirection(DOWN);
                     renderPlayer();
                 }
-            } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            } else if (Gdx.input.isKeyPressed(Input.Keys.A) | Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 if (isPlayerAtBarrier()) {
                     player.setDirection(STANDINGLEFT);
                     renderStandingPlayer();
@@ -146,7 +146,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                     player.setDirection(LEFT);
                     renderPlayer();
                 }
-            } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            } else if (Gdx.input.isKeyPressed(Input.Keys.D) | Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 if (isPlayerAtBarrier()) {
                     player.setDirection(STANDINGRIGHT);
                     renderStandingPlayer();

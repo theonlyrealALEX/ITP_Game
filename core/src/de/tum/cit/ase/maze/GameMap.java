@@ -26,6 +26,7 @@ public class GameMap {
         this.enemies = enemies;
     }
 
+
     // Loads Game Map into the staticMapObjects
     public void loadMap(String filePath) {
         enemies = new ArrayList<>();
