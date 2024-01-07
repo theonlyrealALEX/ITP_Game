@@ -1,20 +1,8 @@
 package de.tum.cit.ase.maze;
 
-import java.io.Serializable;
-
 public class GameEngine {
     private GameMap staticGameMap;
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
     private Player player;
-
 
     public GameEngine() {
         System.out.println("Loading Game Engine");
@@ -25,9 +13,17 @@ public class GameEngine {
         loadMap();
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
     // Needs to be changed later with Map-Selection Menu
-    private void loadMap(){
-        staticGameMap.loadMap("maps/level-1.properties");
+    private void loadMap() {
+        staticGameMap.loadMap("maps/level-4.properties");
     }
 
 

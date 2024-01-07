@@ -33,7 +33,7 @@ public class Enemy extends MapObject {
         this.tileX = tileX;
         this.tileY = tileY;
         this.personality = getRandomPersonality();
-        System.out.println("Created Enemy with Personality: " + getPersonality());
+        //System.out.println("Created Enemy with Personality: " + getPersonality());
 
     }
 

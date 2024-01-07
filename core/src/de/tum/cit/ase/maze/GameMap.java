@@ -13,6 +13,8 @@ public class GameMap {
     private List<Enemy> enemies;
     private int keysLeft;
 
+    private List<EntryPoint> entryPoints;
+
     public GameMap() {
     }
 
@@ -23,6 +25,7 @@ public class GameMap {
     public void setEnemies(List<Enemy> enemies) {
         this.enemies = enemies;
     }
+
 
     // Loads Game Map into the staticMapObjects
     public void loadMap(String filePath) {
@@ -65,6 +68,7 @@ public class GameMap {
             }
 
             staticMapObjects = new MapObject[maxRow + 1][maxCol + 1];
+            entryPoints = new ArrayList<>();
 
             for (int i = 0; i < intArray.length; i++) {
                 for (int j = 0; j < intArray[i].length; j++) {
@@ -74,6 +78,9 @@ public class GameMap {
                             break;
                         case 1:
                             staticMapObjects[i][j] = new EntryPoint();
+                            entryPoints.add((EntryPoint) staticMapObjects[i][j]);
+                            ((EntryPoint) staticMapObjects[i][j]).setX(j);
+                            ((EntryPoint) staticMapObjects[i][j]).setY(i);
                             break;
                         case 2:
                             staticMapObjects[i][j] = new Exit();
@@ -133,5 +140,9 @@ public class GameMap {
         if (keysLeft < 0) {
             keysLeft = 0;
         }
+    }
+
+    public List<EntryPoint> getEntryPoints() {
+        return entryPoints;
     }
 }

@@ -38,6 +38,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     private float sinusInput = 0f;
     private float playerSpeed = 3;
     private float mapMaxX, mapMaxY;
+    private boolean gameStart;
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -58,12 +59,32 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         font = game.getSkin().getFont("font");
 
         //Create Player
-        game.getGameEngine().getPlayer().setCurrentWindowX(camera.viewportWidth / 2);
-        game.getGameEngine().getPlayer().setCurrentWindowY(camera.viewportHeight / 2);
+        float x = this.game.getGameEngine().getStaticGameMap().getEntryPoints().get(0).getX();
+        float y = this.game.getGameEngine().getStaticGameMap().getEntryPoints().get(0).getY();
+
+        game.getGameEngine().getPlayer().setCurrentWindowX(x * tileSize + 16);
+        game.getGameEngine().getPlayer().setCurrentWindowY(y * tileSize + 16);
+        game.getGameEngine().getPlayer().setDirection(DOWN);
+
+        intialCameraPositon();
+
+        gameStart = true;
+
         game.setGameScreen(this);
-
-
     }
+
+    private void intialCameraPositon() {
+        System.out.println("");
+        game.getGameEngine().getPlayer().setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
+
+        camera.position.x = game.getGameEngine().getPlayer().getCurrentWindowX();
+        camera.position.y = game.getGameEngine().getPlayer().getCurrentWindowY();
+
+        camera.update();
+        System.out.println("Set initial Camera to: " + camera.position.x + " " + camera.position.y);
+        System.out.println("Player at " + game.getGameEngine().getPlayer().getCurrentWindowX() + " " + game.getGameEngine().getPlayer().getCurrentWindowY());
+    }
+
 
     public int getGameState() {
         return gameState;
@@ -77,6 +98,10 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     @Override
     public void render(float delta) {
         // Check for escape key press to go back to the menu
+        if (gameStart) {
+            intialCameraPositon();
+            gameStart = false;
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             //this.gameState=GAME_PAUSED;
             //sound effect
@@ -117,7 +142,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             renderMap();
             Player player = game.getGameEngine().getPlayer();
 
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.W) | Gdx.input.isKeyPressed(Input.Keys.UP)) {
                 if (isPlayerAtBarrier()) {
                     player.setDirection(STANDINGUP);
                     renderStandingPlayer();
@@ -125,7 +150,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                     player.setDirection(UP);
                     renderPlayer();
                 }
-            } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            } else if (Gdx.input.isKeyPressed(Input.Keys.S) | Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
                 if (isPlayerAtBarrier()) {
                     player.setDirection(STANDINGDOWN);
                     renderStandingPlayer();
@@ -133,7 +158,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                     player.setDirection(DOWN);
                     renderPlayer();
                 }
-            } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            } else if (Gdx.input.isKeyPressed(Input.Keys.A) | Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 if (isPlayerAtBarrier()) {
                     player.setDirection(STANDINGLEFT);
                     renderStandingPlayer();
@@ -141,7 +166,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                     player.setDirection(LEFT);
                     renderPlayer();
                 }
-            } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            } else if (Gdx.input.isKeyPressed(Input.Keys.D) | Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 if (isPlayerAtBarrier()) {
                     player.setDirection(STANDINGRIGHT);
                     renderStandingPlayer();
@@ -154,12 +179,12 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                 renderStandingPlayer();
             }
 
-            if (isPlayerAtEdge()) {
+            //camera.update(); // Update the camera
+
+            if (isPlayerAtEdge() && !gameStart) {
                 System.out.println("Player at Edge; Updating Camera");
                 updateCameraPosition();
             }
-
-            //camera.update(); // Update the camera
 
             // Move text in a circular path to have an example of a moving object
             sinusInput += delta;
@@ -206,6 +231,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             if (player.getCurrentTile() instanceof Key) {
                 game.getGameEngine().getStaticGameMap().removeKey(player.getCurrentWindowX() + centerPlayerXOffset, player.getCurrentWindowY() + centerPlayerYOffset, tileSize);
             }
+
         }
     }
 
@@ -381,6 +407,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         float x = player.getCurrentWindowX();
         float y = player.getCurrentWindowY();
 
+        /*
         if (x < 0) {
             player.setCurrentWindowX(0);
         } else if (y < 0) {
@@ -392,6 +419,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             System.out.println("Player at Top Part of the Map " + player.getCurrentWindowX() + " " + player.getCurrentWindowY() + " proejctionPlanteHeight: " + projectionPlaneHeight);
             player.setCurrentWindowY(projectionPlaneHeight + tileSize);
         }
+         */
 
         Animation<TextureRegion> anim = null;
 
@@ -537,6 +565,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         // Define how close to the edge the player must be to move the camera
         System.out.println("Screen Height: " + screenHeight);
         System.out.println("Snap");
+
         // Check and update camera position based on player's direction
         switch (player.getDirection()) {
             case UP:
@@ -560,26 +589,27 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                 break;
         }
 
-        float projectionPlaneHeight = camera.viewportHeight / camera.zoom;
+        float projectionPlaneHeight = game.getGameEngine().getStaticGameMap().getMapHeight() * tileSize;
         float projectionPlaneWidth = game.getGameEngine().getStaticGameMap().getMapWidth() * tileSize;//camera.viewportWidth / camera.zoom;
 
         if (camera.position.y > projectionPlaneHeight) {
             camera.position.y = projectionPlaneHeight;
-            System.out.println("Changed position due to camera out of map-bounds" + camera.position.y);
+            System.out.println("Changed Y-position due to camera out of map-bounds" + camera.position.y);
         }
         if (camera.position.y < 0) {
             camera.position.y = 0;
-            System.out.println("Changed position due to camera out of map-bounds" + camera.position.y);
+            System.out.println("Changed Y-position due to camera out of map-bounds" + camera.position.y);
         }
         if (camera.position.x < 0) {
             camera.position.x = 0;
-            System.out.println("Changed position due to camera out of map-bounds" + camera.position.x);
+            System.out.println("Changed X-position due to camera out of map-bounds" + camera.position.x);
         }
 
         if (camera.position.x > projectionPlaneWidth) {
             camera.position.x = projectionPlaneWidth;
-            System.out.println("Changed position due to camera out of map-bounds" + camera.position.x);
+            System.out.println("Changed X-position due to camera out of map-bounds" + camera.position.x);
         }
+
         camera.update(); // Update the camera after repositioning
     }
 
