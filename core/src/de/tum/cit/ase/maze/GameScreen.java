@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.io.Serializable;
 
@@ -39,6 +40,13 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     private float playerSpeed = 3;
     private float mapMaxX, mapMaxY;
     private boolean gameStart;
+    private GameHUD hud;
+
+
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
+
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -47,7 +55,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
      */
     public GameScreen(MazeRunnerGame game) {
         this.game = game;
-
+        this.hud=new GameHUD(game.getSpriteBatch(),game);
         gameState = GAME_RUNNING;
 
         // Create and configure the camera for the game view
@@ -207,6 +215,8 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
             // Set up and begin drawing with the sprite batch
             game.getSpriteBatch().setProjectionMatrix(camera.combined);
+
+            hud.stage.draw();
 
             game.getSpriteBatch().begin(); // Important to call this before drawing anything
 

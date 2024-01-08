@@ -62,6 +62,10 @@ public class MazeRunnerGame extends Game {
         this.gameScreen = gameScreen;
     }
 
+    public GameScreen getGameScreen() {
+        return gameScreen;
+    }
+
     public Music getBackgroundMusic() {
         return backGroundMusic;
     }
