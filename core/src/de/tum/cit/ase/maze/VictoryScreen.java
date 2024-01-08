@@ -6,13 +6,18 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -24,6 +29,8 @@ public class VictoryScreen implements Screen {
 
     private final Stage stage;
     private Music victoryMusic;
+    private float elapsedTime = 2f;
+
 
     /**
      * Constructor for VictoryScreen. Sets up the camera, viewport, stage, and UI elements.
@@ -69,6 +76,10 @@ public class VictoryScreen implements Screen {
         table.add(victory).padBottom(100).row();
         stage.addActor(table);
 
+        // Create an animation
+        Image winImage = createWinAnimation();
+        table.add(winImage).padBottom(100).row();
+
         table.add(new Label("You successfully exit the maze", game.getSkin(), "title")).padBottom(80).row();
 
         TextButton continueButton = new TextButton("Choose New Map", game.getSkin());
@@ -101,6 +112,39 @@ public class VictoryScreen implements Screen {
             }
         });*/
     }
+
+    private Image createWinAnimation() {
+        Array<TextureRegion> winFrames = new Array<>();
+        Texture winSheet = new Texture(Gdx.files.internal("Character.png"));
+        int frameWidth = 32;
+        int frameHeight = 32;
+        int animationFramesRow = 4;
+
+        for (int i = 0; i < animationFramesRow; i++) {
+            winFrames.add(new TextureRegion(winSheet, i * frameWidth, 128, frameWidth, frameHeight));
+
+        }
+
+        Image winImage = new Image(winFrames.get(0));
+        winImage.setOrigin(winImage.getWidth() / 2, winImage.getHeight() / 2);
+        winImage.setSize(100, 100);
+        winImage.setScale(8f);
+
+        var skullAnimation = Actions.forever(
+                Actions.sequence(
+                        Actions.run(() -> {
+                            int frameIndex = (int) (elapsedTime / 0.03333f) % winFrames.size;
+                            winImage.setDrawable(new TextureRegionDrawable(winFrames.get(frameIndex)));
+                            elapsedTime += Gdx.graphics.getDeltaTime();
+                        }),
+                        Actions.delay(0.1f)
+                )
+        );
+
+        winImage.addAction(skullAnimation);
+        return winImage;
+    }
+
     private void buttonStartNewGameFadeAway(TextButton textButton, MazeRunnerGame game) {
         textButton.addAction(Actions.sequence(
                 Actions.fadeOut(0.5f),
