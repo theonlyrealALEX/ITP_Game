@@ -3,6 +3,7 @@ package de.tum.cit.ase.maze;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -10,18 +11,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.io.Serializable;
 
 import static de.tum.cit.ase.maze.Direction.*;
-
-
-import com.badlogic.gdx.ScreenAdapter;
-//Test
-import java.io.Serializable;
-import java.io.ObjectOutputStream;
-import java.io.IOException;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.FileInputStream;
 
 /**
  * The GameScreen class is responsible for rendering the gameplay screen.
@@ -34,36 +26,19 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     static final int GAME_PAUSED = 2;
     static final int GAME_LEVEL_END = 3;
     static final int GAME_OVER = 4;
-
-    int gameState;
-
-    public int getGameState() {
-        return gameState;
-    }
-
-    public void setGameState(int gameState) {
-        this.gameState = gameState;
-    }
-
     //JODIE TRY
-
+    static final float tileSize = 80;
+    static final float enemySpeed = 1;
     private final MazeRunnerGame game;
     private final OrthographicCamera camera;
     private final BitmapFont font;
-
-
-    private float sinusInput = 0f;
-
-    private final float tileSize = 80;
-
-
-    private float playerSpeed = 3;
-
-    private  float mapMaxX, mapMaxY;
-
+    int gameState;
     float centerPlayerXOffset = 32;
     float centerPlayerYOffset = 48;
-
+    private float sinusInput = 0f;
+    private float playerSpeed = 3;
+    private float mapMaxX, mapMaxY;
+    private boolean gameStart;
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -84,19 +59,49 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         font = game.getSkin().getFont("font");
 
         //Create Player
-        game.getGameEngine().getPlayer().setCurrentWindowX(camera.viewportWidth / 2);
-        game.getGameEngine().getPlayer().setCurrentWindowY(camera.viewportHeight / 2);
+        float x = this.game.getGameEngine().getStaticGameMap().getEntryPoints().get(0).getX();
+        float y = this.game.getGameEngine().getStaticGameMap().getEntryPoints().get(0).getY();
+
+        game.getGameEngine().getPlayer().setCurrentWindowX(x * tileSize + 16);
+        game.getGameEngine().getPlayer().setCurrentWindowY(y * tileSize + 16);
+        game.getGameEngine().getPlayer().setDirection(DOWN);
+
+        intialCameraPositon();
+
+        gameStart = true;
+
         game.setGameScreen(this);
-
-
-
     }
 
+    private void intialCameraPositon() {
+        System.out.println("");
+        game.getGameEngine().getPlayer().setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
+
+        camera.position.x = game.getGameEngine().getPlayer().getCurrentWindowX();
+        camera.position.y = game.getGameEngine().getPlayer().getCurrentWindowY();
+
+        camera.update();
+        System.out.println("Set initial Camera to: " + camera.position.x + " " + camera.position.y);
+        System.out.println("Player at " + game.getGameEngine().getPlayer().getCurrentWindowX() + " " + game.getGameEngine().getPlayer().getCurrentWindowY());
+    }
+
+
+    public int getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(int gameState) {
+        this.gameState = gameState;
+    }
 
     // Screen interface methods with necessary functionality
     @Override
     public void render(float delta) {
         // Check for escape key press to go back to the menu
+        if (gameStart) {
+            intialCameraPositon();
+            gameStart = false;
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             //this.gameState=GAME_PAUSED;
             //sound effect
@@ -133,39 +138,39 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
 
-        if(gameState==GAME_RUNNING) {
+        if (gameState == GAME_RUNNING) {
             renderMap();
             Player player = game.getGameEngine().getPlayer();
 
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                if(isPlayerAtBarrier()){
+            if (Gdx.input.isKeyPressed(Input.Keys.W) | Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                if (isPlayerAtBarrier()) {
                     player.setDirection(STANDINGUP);
                     renderStandingPlayer();
-                }else {
+                } else {
                     player.setDirection(UP);
                     renderPlayer();
                 }
-            } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                if(isPlayerAtBarrier()){
+            } else if (Gdx.input.isKeyPressed(Input.Keys.S) | Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                if (isPlayerAtBarrier()) {
                     player.setDirection(STANDINGDOWN);
                     renderStandingPlayer();
-                }else {
+                } else {
                     player.setDirection(DOWN);
                     renderPlayer();
                 }
-            } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                if(isPlayerAtBarrier()){
+            } else if (Gdx.input.isKeyPressed(Input.Keys.A) | Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                if (isPlayerAtBarrier()) {
                     player.setDirection(STANDINGLEFT);
                     renderStandingPlayer();
-                }else {
+                } else {
                     player.setDirection(LEFT);
                     renderPlayer();
                 }
-            } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                if(isPlayerAtBarrier()){
+            } else if (Gdx.input.isKeyPressed(Input.Keys.D) | Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                if (isPlayerAtBarrier()) {
                     player.setDirection(STANDINGRIGHT);
                     renderStandingPlayer();
-                }else {
+                } else {
                     player.setDirection(RIGHT);
                     renderPlayer();
                 }
@@ -174,13 +179,12 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                 renderStandingPlayer();
             }
 
+            //camera.update(); // Update the camera
 
-            if (isPlayerAtEdge()) {
+            if (isPlayerAtEdge() && !gameStart) {
                 System.out.println("Player at Edge; Updating Camera");
                 updateCameraPosition();
             }
-
-            //camera.update(); // Update the camera
 
             // Move text in a circular path to have an example of a moving object
             sinusInput += delta;
@@ -190,14 +194,11 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             // Set up and begin drawing with the sprite batch
             game.getSpriteBatch().setProjectionMatrix(camera.combined);
 
-
             game.getSpriteBatch().begin(); // Important to call this before drawing anything
 
             game.getSpriteBatch().end(); // Important to call this after drawing everything
 
-
             camera.update(); // Update the camera
-
 
             // Move text in a circular path to have an example of a moving object
             sinusInput += delta;
@@ -207,29 +208,55 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             // Set up and begin drawing with the sprite batch
             game.getSpriteBatch().setProjectionMatrix(camera.combined);
 
-
             game.getSpriteBatch().begin(); // Important to call this before drawing anything
 
             game.getSpriteBatch().end(); // Important to call this after drawing everything
 
             player.setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
 
-            for(Enemy enemy: game.getGameEngine().getStaticGameMap().getEnemies()){
-                enemy.setWindowCordsFromTilet(tileSize);
+            for (Enemy enemy : game.getGameEngine().getStaticGameMap().getEnemies()) {
                 renderEnemy(enemy);
+                if (isPlayerTouchingEnemy(enemy)) {
+                    gameState = GAME_OVER;
+                }
             }
 
-            if(player.getCurrentTile() instanceof Trap){
+            if (player.getCurrentTile() instanceof Trap) {
                 gameState = GAME_OVER;
             }
-            if (player.getCurrentTile() instanceof Exit && game.getGameEngine().getStaticGameMap().getKeysLeft() == 0){
+            if (player.getCurrentTile() instanceof Exit && game.getGameEngine().getStaticGameMap().getKeysLeft() == 0) {
                 gameState = GAME_LEVEL_END;
             }
 
-            if (player.getCurrentTile() instanceof Key){
-                game.getGameEngine().getStaticGameMap().removeKey(player.getCurrentWindowX() + centerPlayerXOffset, player.getCurrentWindowY()+ centerPlayerYOffset,  tileSize);
+            if (player.getCurrentTile() instanceof Key) {
+                game.getGameEngine().getStaticGameMap().removeKey(player.getCurrentWindowX() + centerPlayerXOffset, player.getCurrentWindowY() + centerPlayerYOffset, tileSize);
             }
+
         }
+    }
+
+    private boolean isPlayerTouchingEnemy(Enemy enemy) {
+        Player player = game.getGameEngine().getPlayer();
+
+        float offsetVerticalTop = 5;
+        float offsetVerticalBottom = 33;
+        float offsetHorizontal = 30;
+        float centerEnemyXOffset = centerPlayerXOffset;
+        float centerEnemyYOffset = centerPlayerYOffset;
+
+        float playerCenterX = player.getCurrentWindowX() + centerPlayerXOffset;
+        float playerCenterY = player.getCurrentWindowY() + centerPlayerYOffset;
+
+        float enemyCenterX = enemy.getCurrentWindowX() + centerEnemyXOffset;
+        float enemyCenterY = enemy.getCurrentWindowY() + centerEnemyYOffset;
+
+        float deltaX = playerCenterX - enemyCenterX;
+        float deltaY = playerCenterY - enemyCenterY;
+
+        if (Math.abs(deltaX) < offsetHorizontal && Math.abs(deltaY) < offsetVerticalBottom) {
+            return true;
+        }
+        return false;
     }
 
     // Render Map
@@ -282,10 +309,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
         game.getSpriteBatch().begin();
         // Draw the standing frame scaled to tileSize
-        game.getSpriteBatch().draw(
-                currentFrame,
-                x, y,
-                64, 128 // Adjust the size as needed
+        game.getSpriteBatch().draw(currentFrame, x, y, 64, 128 // Adjust the size as needed
         );
         game.getSpriteBatch().end();
     }
@@ -316,16 +340,45 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         }
         game.getSpriteBatch().begin();
         // Draw the standing frame scaled to tileSize
-        game.getSpriteBatch().draw(
-                currentFrame,
-                x, y,
-                64, 128 // Adjust the size as needed
+        game.getSpriteBatch().draw(currentFrame, x, y, 64, 128 // Adjust the size as needed
         );
         game.getSpriteBatch().end();
     }
 
     private void renderEnemy(Enemy enemy) {
         Animation<TextureRegion> anim = null;
+        Player player = game.getGameEngine().getPlayer();
+        float x = player.getOffsetWindowX(tileSize, enemy.getPersonality());
+        float y = player.getOffsetWindowY(tileSize, enemy.getPersonality());
+
+        x = x - enemy.getCurrentWindowX();
+        y = y - enemy.getCurrentWindowY();
+
+        //Path Finding Algorythm
+        Direction direction;
+
+        if (x > 0) {
+            if (y > 0) {
+                direction = (x > y) ? RIGHT : UP;
+            } else {
+                direction = (Math.abs(x) > Math.abs(y)) ? RIGHT : DOWN;
+            }
+        } else {
+            if (y > 0) {
+                direction = (Math.abs(x) > y) ? LEFT : UP;
+            } else {
+                direction = (Math.abs(x) > Math.abs(y)) ? LEFT : DOWN;
+            }
+        }
+        if (enemy.getMovementSmoothing() == 0) {
+            enemy.setDirection(direction);
+        } else if (isEnemyAtBarrier(enemy)) {
+            enemy.rotateDirection();
+        }
+
+        enemy.decrmenentMovementSmoothing();
+        //enemy.setDirection(direction);
+        enemy.move(enemySpeed);
         switch (enemy.getDirection()) {
             case UP -> anim = enemy.getCharacterUpAnimation();
             case DOWN -> anim = enemy.getCharacterDownAnimation();
@@ -343,28 +396,30 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         game.getSpriteBatch().draw(currentFrame, enemy.getCurrentWindowX(), enemy.getCurrentWindowY(), 64, 128);
         game.getSpriteBatch().end();
 
-        enemy.setDirection(getStandingDirection(enemy.getDirection()));
+        //enemy.setDirection(getStandingDirection(enemy.getDirection()));
     }
 
     private void renderPlayer() {
         float projectionPlaneHeight = camera.viewportHeight / camera.zoom;
-        float projectionPlaneWidth = game.getGameEngine().getStaticGameMap().getMapWidth()*tileSize;//camera.viewportWidth / camera.zoom;
+        float projectionPlaneWidth = game.getGameEngine().getStaticGameMap().getMapWidth() * tileSize;//camera.viewportWidth / camera.zoom;
         Player player = game.getGameEngine().getPlayer();
         player.move(playerSpeed);
         float x = player.getCurrentWindowX();
         float y = player.getCurrentWindowY();
 
-        if(x < 0){
+        /*
+        if (x < 0) {
             player.setCurrentWindowX(0);
-        } else if (y < 0 ) {
+        } else if (y < 0) {
             player.setCurrentWindowY(0);
-        } else if (x+tileSize > projectionPlaneWidth) {
-            System.out.println("Player at Right Part of the Map "+ player.getCurrentWindowX()+" "+player.getCurrentWindowY()+ " proejctionPlanteWidth: "+projectionPlaneWidth);
-            player.setCurrentWindowX(projectionPlaneWidth-tileSize);
-        } else if (y-tileSize > projectionPlaneHeight) {
-            System.out.println("Player at Top Part of the Map "+ player.getCurrentWindowX()+" "+player.getCurrentWindowY()+ " proejctionPlanteHeight: "+projectionPlaneHeight);
-            player.setCurrentWindowY(projectionPlaneHeight+tileSize);
+        } else if (x + tileSize > projectionPlaneWidth) {
+            System.out.println("Player at Right Part of the Map " + player.getCurrentWindowX() + " " + player.getCurrentWindowY() + " proejctionPlanteWidth: " + projectionPlaneWidth);
+            player.setCurrentWindowX(projectionPlaneWidth - tileSize);
+        } else if (y - tileSize > projectionPlaneHeight) {
+            System.out.println("Player at Top Part of the Map " + player.getCurrentWindowX() + " " + player.getCurrentWindowY() + " proejctionPlanteHeight: " + projectionPlaneHeight);
+            player.setCurrentWindowY(projectionPlaneHeight + tileSize);
         }
+         */
 
         Animation<TextureRegion> anim = null;
 
@@ -387,9 +442,9 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
         player.setDirection(getStandingDirection(player.getDirection()));
     }
-    private boolean isPlayerAtBarrier(){
-        Player player = game.getGameEngine().getPlayer();
 
+    private boolean isPlayerAtBarrier() {
+        Player player = game.getGameEngine().getPlayer();
 
         float offsetVerticalTop = 5;
         float offsetVerticalBottom = 33;
@@ -401,21 +456,21 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         switch (player.getDirection()) {
             case STANDINGLEFT:
             case LEFT:
-                if(game.getGameEngine().getStaticGameMap().getTile(playerCenterX - offsetHorizontal, playerCenterY, tileSize) instanceof Wall){
+                if (game.getGameEngine().getStaticGameMap().getTile(playerCenterX - offsetHorizontal, playerCenterY, tileSize) instanceof Wall) {
                     System.out.println("Player On Wall");
                     return true;
                 }
-            break;
+                break;
             case STANDINGRIGHT:
             case RIGHT:
-                if(game.getGameEngine().getStaticGameMap().getTile(playerCenterX + offsetHorizontal, playerCenterY, tileSize) instanceof Wall){
+                if (game.getGameEngine().getStaticGameMap().getTile(playerCenterX + offsetHorizontal, playerCenterY, tileSize) instanceof Wall) {
                     System.out.println("Player On Wall");
                     return true;
                 }
                 break;
             case STANDINGUP:
             case UP:
-                if(game.getGameEngine().getStaticGameMap().getTile(playerCenterX, playerCenterY + offsetVerticalTop, tileSize) instanceof Wall){
+                if (game.getGameEngine().getStaticGameMap().getTile(playerCenterX, playerCenterY + offsetVerticalTop, tileSize) instanceof Wall) {
                     System.out.println("Player On Wall");
                     return true;
                 }
@@ -423,8 +478,46 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
             case STANDINGDOWN:
             case DOWN:
-                if(game.getGameEngine().getStaticGameMap().getTile(playerCenterX, playerCenterY - offsetVerticalBottom, tileSize) instanceof Wall){
+                if (game.getGameEngine().getStaticGameMap().getTile(playerCenterX, playerCenterY - offsetVerticalBottom, tileSize) instanceof Wall) {
                     System.out.println("Player On Wall");
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+    private boolean isEnemyAtBarrier(Enemy enemy) {
+        float offsetVerticalTop = 5;
+        float offsetVerticalBottom = 33;
+        float offsetHorizontal = 30;
+
+        float playerCenterX = enemy.getCurrentWindowX() + centerPlayerXOffset;
+        float playerCenterY = enemy.getCurrentWindowY() + centerPlayerYOffset;
+
+        switch (enemy.getDirection()) {
+            case STANDINGLEFT:
+            case LEFT:
+                if (game.getGameEngine().getStaticGameMap().getTile(playerCenterX - offsetHorizontal, playerCenterY, tileSize) instanceof Wall) {
+                    return true;
+                }
+                break;
+            case STANDINGRIGHT:
+            case RIGHT:
+                if (game.getGameEngine().getStaticGameMap().getTile(playerCenterX + offsetHorizontal, playerCenterY, tileSize) instanceof Wall) {
+                    return true;
+                }
+                break;
+            case STANDINGUP:
+            case UP:
+                if (game.getGameEngine().getStaticGameMap().getTile(playerCenterX, playerCenterY + offsetVerticalTop, tileSize) instanceof Wall) {
+                    return true;
+                }
+                break;
+
+            case STANDINGDOWN:
+            case DOWN:
+                if (game.getGameEngine().getStaticGameMap().getTile(playerCenterX, playerCenterY - offsetVerticalBottom, tileSize) instanceof Wall) {
                     return true;
                 }
                 break;
@@ -448,29 +541,17 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         float playerX = player.getCurrentWindowX();
         float playerY = player.getCurrentWindowY();
 
-        float edge = 0.2f;
-
-        //.out.println("Camera Coords x/y:"+camera.position.x+ " "+ camera.position.y);
-        //System.out.println("Camera Viewport w/h"+camera.viewportWidth +" "+camera.viewportHeight);
-        //System.out.println("PlayerCoords x/y "+playerX + " "+playerY);
-
-        //System.out.println("Left Bound "+(camera.position.x - 0.5 * camera.viewportWidth));
-        //System.out.println("Right Bound "+(camera.position.x + 0.5 * camera.viewportWidth));
         // Check left and right bounds
-
         if (playerX < camera.position.x - 0.3 * camera.viewportWidth) {
             return true;
         } else if (playerX > camera.position.x + 0.3 * camera.viewportWidth) {
             return true;
         }
 
-        //System.out.println("Top Bound "+(camera.position.y + 0.5 * camera.viewportHeight));
-        //System.out.println("Bottom Bound "+(camera.position.y - 0.5 * camera.viewportHeight));
-
         // Check top and bottom bounds
-        if (playerY < camera.position.y - 0.25 * camera.viewportHeight)  {
+        if (playerY < camera.position.y - 0.25 * camera.viewportHeight) {
             return true;
-        } else if (playerY  > camera.position.y + 0.25 * camera.viewportHeight ) {
+        } else if (playerY > camera.position.y + 0.25 * camera.viewportHeight) {
             return true;
         }
 
@@ -482,54 +563,55 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
         // Define how close to the edge the player must be to move the camera
-        System.out.println("Screen Height: "+screenHeight);
+        System.out.println("Screen Height: " + screenHeight);
         System.out.println("Snap");
+
         // Check and update camera position based on player's direction
         switch (player.getDirection()) {
             case UP:
             case STANDINGUP:
-                camera.position.y += screenHeight*0.5; // Move camera up by one screen height
+                camera.position.y += screenHeight * 0.5; // Move camera up by one screen height
                 break;
             case DOWN:
             case STANDINGDOWN:
-                    camera.position.y -= screenHeight*0.5; // Move camera down by one screen height
+                camera.position.y -= screenHeight * 0.5; // Move camera down by one screen height
                 System.out.println("Set camera to: " + camera.position.y);
                 break;
             case LEFT:
             case STANDINGLEFT:
-                    camera.position.x -= screenWidth*0.5; // Move camera left by one screen width
+                camera.position.x -= screenWidth * 0.5; // Move camera left by one screen width
                 System.out.println("Set camera to: " + camera.position.x);
                 break;
             case RIGHT:
             case STANDINGRIGHT:
-                    camera.position.x += screenWidth*0.5; // Move camera right by one screen width
+                camera.position.x += screenWidth * 0.5; // Move camera right by one screen width
                 System.out.println("Set camera to: " + camera.position.x);
                 break;
         }
 
-        float projectionPlaneHeight = camera.viewportHeight / camera.zoom;
-        float projectionPlaneWidth = game.getGameEngine().getStaticGameMap().getMapWidth()*tileSize;//camera.viewportWidth / camera.zoom;
+        float projectionPlaneHeight = game.getGameEngine().getStaticGameMap().getMapHeight() * tileSize;
+        float projectionPlaneWidth = game.getGameEngine().getStaticGameMap().getMapWidth() * tileSize;//camera.viewportWidth / camera.zoom;
 
-        if(camera.position.y > projectionPlaneHeight){
+        if (camera.position.y > projectionPlaneHeight) {
             camera.position.y = projectionPlaneHeight;
-            System.out.println("Changed position due to camera out of map-bounds"+camera.position.y);
+            System.out.println("Changed Y-position due to camera out of map-bounds" + camera.position.y);
         }
-        if(camera.position.y < 0){
+        if (camera.position.y < 0) {
             camera.position.y = 0;
-            System.out.println("Changed position due to camera out of map-bounds"+camera.position.y);
+            System.out.println("Changed Y-position due to camera out of map-bounds" + camera.position.y);
         }
-        if(camera.position.x < 0){
+        if (camera.position.x < 0) {
             camera.position.x = 0;
-            System.out.println("Changed position due to camera out of map-bounds"+camera.position.x);
+            System.out.println("Changed X-position due to camera out of map-bounds" + camera.position.x);
         }
 
-        if(camera.position.x > projectionPlaneWidth){
+        if (camera.position.x > projectionPlaneWidth) {
             camera.position.x = projectionPlaneWidth;
-            System.out.println("Changed position due to camera out of map-bounds"+camera.position.x);
+            System.out.println("Changed X-position due to camera out of map-bounds" + camera.position.x);
         }
+
         camera.update(); // Update the camera after repositioning
     }
-
 
 
     @Override

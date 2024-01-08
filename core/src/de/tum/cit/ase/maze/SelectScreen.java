@@ -63,7 +63,7 @@ public class SelectScreen implements Screen{
 
         // Add a label as a title
         table.add(new Label("Welcome to Maze Runner Game!", game.getSkin(), "title")).padBottom(50).row();
-        table.add(new Label("Please choose a level", game.getSkin(), "title")).padBottom(80).row();
+        table.add(new Label("Please choose a map", game.getSkin(), "title")).padBottom(80).row();
 
         getMapNames();
         for (int i = 0; i < mapNames.size; i++) {

@@ -103,7 +103,7 @@ public class GameOverScreen implements Screen {
                         Actions.run(() -> {
                             game.dispose();
                             game.create();
-                            game.goToMenu();
+                            game.goToSelect();
                         })
                 ));
             }

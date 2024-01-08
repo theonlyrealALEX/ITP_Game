@@ -71,12 +71,13 @@ public class VictoryScreen implements Screen {
 
         table.add(new Label("You successfully exit the maze", game.getSkin(), "title")).padBottom(80).row();
 
-        TextButton continueButton = new TextButton("Next Level", game.getSkin());
+        TextButton continueButton = new TextButton("Choose New Map", game.getSkin());
         table.add(continueButton).width(300).row();
         continueButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 clickSound();
+                game.goToSelect();
             }
         });
 
@@ -90,7 +91,7 @@ public class VictoryScreen implements Screen {
             }
         });
 
-        TextButton exitButton = new TextButton("Back to Menu", game.getSkin());
+        /*TextButton exitButton = new TextButton("Back to Menu", game.getSkin());
         table.add(exitButton).width(300).row();
         exitButton.addListener(new ChangeListener() {
             @Override
@@ -98,7 +99,7 @@ public class VictoryScreen implements Screen {
                 clickSound();
                 exitButtonFadeAway(exitButton, game);
             }
-        });
+        });*/
     }
     private void buttonStartNewGameFadeAway(TextButton textButton, MazeRunnerGame game) {
         textButton.addAction(Actions.sequence(
