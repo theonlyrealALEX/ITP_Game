@@ -1,37 +1,32 @@
 package de.tum.cit.ase.maze;
 
-import java.io.Serializable;
-
 public class GameEngine {
     private GameMap staticGameMap;
+    private Player player;
 
     public Player getPlayer() {
-        return player;
+        return this.player;
     }
 
     public void setPlayer(Player player) {
         this.player = player;
     }
 
-    private Player player;
 
 
-    public GameEngine() {
+    public GameEngine(MazeRunnerGame game) {
         System.out.println("Loading Game Engine");
         System.out.println("Current working directory: " + System.getProperty("user.dir"));
-
-        player = new Player();
-        staticGameMap = new GameMap();
-        loadMap();
+        System.out.println("Game engine select:" + game.selectedMap);
+        this.player = new Player();
+        this.staticGameMap = new GameMap();
+        this.staticGameMap.loadMap(game.selectedMap);
     }
 
-    // Needs to be changed later with Map-Selection Menu
-    private void loadMap(){
-        staticGameMap.loadMap("maps/level-1.properties");
+    public void loadMap() {
     }
-
 
     public GameMap getStaticGameMap() {
-        return staticGameMap;
+        return this.staticGameMap;
     }
 }
