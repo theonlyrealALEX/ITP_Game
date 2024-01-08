@@ -22,7 +22,8 @@ public class MazeRunnerGame extends Game {
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
     private PauseMenuScreen pauseMenuScreen;
-
+    private SelectScreen selectScreen;
+    private GameEngine gameEngine;
 
 
     // Sprite Batch for rendering
@@ -32,7 +33,7 @@ public class MazeRunnerGame extends Game {
     private Skin skin;
     // Music
     private Music backGroundMusic;
-    private  GameEngine gameEngine;
+    public String selectedMap;
 
 
 
@@ -65,6 +66,10 @@ public class MazeRunnerGame extends Game {
         return backGroundMusic;
     }
 
+    public void setSelectScreen(SelectScreen selectScreen) {
+        this.selectScreen = selectScreen;
+    }
+
 
     /**
      * Constructor for MazeRunnerGame.
@@ -91,12 +96,23 @@ public class MazeRunnerGame extends Game {
         backGroundMusic.play();
 
         // Load Engine and Map
-        gameEngine = new GameEngine();
+        //gameEngine = new GameEngine();
 
-        goToMenu(); // Navigate to the menu screen
+        goToSelect(); // Navigate to the menu screen
 
     }
 
+
+    /**
+     * Switches to the select screen.
+     */
+    public void goToSelect() {
+        this.setScreen(new SelectScreen(this)); // Set the current screen to MenuScreen
+        if (gameScreen != null) {
+            gameScreen.dispose(); // Dispose the game screen if it exists
+            gameScreen = null;
+        }
+    }
 
     /**
      * Switches to the menu screen.
@@ -135,6 +151,7 @@ public class MazeRunnerGame extends Game {
 
     public void goToGameOverScreen(){
         //this.setScreen(new FireScreen());  // Testing
+
         this.setScreen(new GameOverScreen(this)); // Set the current screen to MenuScreen
 
         if (gameScreen != null) {
@@ -149,6 +166,7 @@ public class MazeRunnerGame extends Game {
      */
 
     public void goToGame() {
+        this.gameEngine=new GameEngine(this);
         this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
 
         if (menuScreen != null) {
