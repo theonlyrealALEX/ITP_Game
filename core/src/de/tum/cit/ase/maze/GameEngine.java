@@ -4,16 +4,6 @@ public class GameEngine {
     private GameMap staticGameMap;
     private Player player;
 
-    public Player getPlayer() {
-        return this.player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-
-
     public GameEngine(MazeRunnerGame game) {
         System.out.println("Loading Game Engine");
         System.out.println("Current working directory: " + System.getProperty("user.dir"));
@@ -21,6 +11,10 @@ public class GameEngine {
         this.player = new Player();
         this.staticGameMap = new GameMap();
         this.staticGameMap.loadMap(game.selectedMap);
+    }
+
+    public Player getPlayer() {
+        return this.player;
     }
 
     public void loadMap() {
