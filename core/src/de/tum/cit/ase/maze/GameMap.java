@@ -22,12 +22,8 @@ public class GameMap {
         return enemies;
     }
 
-    public void setEnemies(List<Enemy> enemies) {
-        this.enemies = enemies;
-    }
 
-
-    // Loads Game Map into the staticMapObjects
+    // Load Map from File Path
     public void loadMap(String filePath) {
         enemies = new ArrayList<>();
         Properties prop = new Properties();
@@ -67,6 +63,7 @@ public class GameMap {
                 System.out.println();
             }
 
+            // Populate the staticMapObject, enemyList, exit, and entry Objects
             staticMapObjects = new MapObject[maxRow + 1][maxCol + 1];
             entryPoints = new ArrayList<>();
 
@@ -103,7 +100,6 @@ public class GameMap {
                     }
                 }
             }
-
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -122,6 +118,7 @@ public class GameMap {
     }
 
 
+    // Returns the contents of a Tile at coordinates x/y in projection plane
     public MapObject getTile(float x, float y, float tileSize) {
         int i = (int) ((x) / tileSize);
         int j = (int) ((y) / tileSize);

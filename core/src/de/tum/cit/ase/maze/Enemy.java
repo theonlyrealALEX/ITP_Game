@@ -25,7 +25,6 @@ public class Enemy extends MapObject {
     private Direction direction;
     private Personality personality;
     private int movementSmoothing = 0;
-    private int directionalCounter = 0;
 
     public Enemy(int tileX, int tileY) {
         loadCharacterAnimations();
@@ -197,7 +196,6 @@ public class Enemy extends MapObject {
 
     @Override
     public void render(SpriteBatch spriteBatch, float x, float y, float tileSize) {
-        //TODO
     }
 
     public Personality getPersonality() {
