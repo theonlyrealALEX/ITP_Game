@@ -25,6 +25,8 @@ public class GameHUD extends Stage {
     Label keyLabel;
     Label livesLabel;
 
+    private OrthographicCamera HUDcam = new OrthographicCamera();
+
     @Override
     public Viewport getViewport() {
         return viewport;
@@ -42,7 +44,8 @@ public class GameHUD extends Stage {
     public GameHUD(SpriteBatch spriteBatch, MazeRunnerGame game) {
         lives =3;
         key=false;
-        viewport =new FitViewport(800,600, new OrthographicCamera());
+        viewport =new FitViewport(getCamera().position.x,getCamera().position.x, HUDcam);
+
         stage = new Stage(viewport,spriteBatch);
         Table table = new Table();
         table.top(); //table is at the top of stage

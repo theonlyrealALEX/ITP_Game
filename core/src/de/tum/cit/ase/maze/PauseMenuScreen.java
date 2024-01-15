@@ -103,6 +103,18 @@ public class PauseMenuScreen implements Screen {
             }
         });
 
+        TextButton quitGameButton = new TextButton("Quit Game", game.getSkin());
+        table.add(quitGameButton).width(300).row();
+        startNewGameButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                clickSound(); // Sound effect
+                Gdx.app.exit(); // This will close the game
+                System.exit(0);
+
+            }
+        });
+
     }
 
     /**

@@ -55,7 +55,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
      */
     public GameScreen(MazeRunnerGame game) {
         this.game = game;
-        this.hud=new GameHUD(game.getSpriteBatch(),game);
+        //this.hud=new GameHUD(game.getSpriteBatch(),game);
         gameState = GAME_RUNNING;
 
         // Create and configure the camera for the game view
@@ -216,7 +216,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             // Set up and begin drawing with the sprite batch
             game.getSpriteBatch().setProjectionMatrix(camera.combined);
 
-            hud.stage.draw();
+            //hud.stage.draw();
 
             game.getSpriteBatch().begin(); // Important to call this before drawing anything
 
