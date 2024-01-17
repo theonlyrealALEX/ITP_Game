@@ -27,7 +27,6 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     static final int GAME_PAUSED = 2;
     static final int GAME_LEVEL_END = 3;
     static final int GAME_OVER = 4;
-    //JODIE TRY
     static final float tileSize = 80;
     static final float enemySpeed = 1;
     private final MazeRunnerGame game;
@@ -39,7 +38,6 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     private float sinusInput = 0f;
     private float playerSpeed = 3;
     private float mapMaxX, mapMaxY;
-    private boolean gameStart;
     private GameHUD hud;
 
 
@@ -48,15 +46,24 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     }
 
 
+    private boolean gameStart, gamePaused;
+    private float beforePauseCameraX, beforePauseCameraY;
+
+
     /**
      * Constructor for GameScreen. Sets up the camera and font.
      *
      * @param game The main game class, used to access global resources and methods.
      */
     public GameScreen(MazeRunnerGame game) {
+        // Set Miscellaneous values
         this.game = game;
+
         //this.hud=new GameHUD(game.getSpriteBatch(),game);
+
         gameState = GAME_RUNNING;
+        gameStart = true;
+        gamePaused = false;
 
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
@@ -66,28 +73,26 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
 
-        //Create Player
+        //Create Player on Entry Point and set Camera to Player
         float x = this.game.getGameEngine().getStaticGameMap().getEntryPoints().get(0).getX();
         float y = this.game.getGameEngine().getStaticGameMap().getEntryPoints().get(0).getY();
-
         game.getGameEngine().getPlayer().setCurrentWindowX(x * tileSize + 16);
         game.getGameEngine().getPlayer().setCurrentWindowY(y * tileSize + 16);
         game.getGameEngine().getPlayer().setDirection(DOWN);
-
-        intialCameraPositon();
-
-        gameStart = true;
+        setCameraPositonToPlayer();
 
         game.setGameScreen(this);
     }
 
-    private void intialCameraPositon() {
-        System.out.println("");
-        game.getGameEngine().getPlayer().setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
-
-        camera.position.x = game.getGameEngine().getPlayer().getCurrentWindowX();
-        camera.position.y = game.getGameEngine().getPlayer().getCurrentWindowY();
-
+    // Sets camera position on the player
+    private void setCameraPositonToPlayer() {
+        if (gamePaused) {
+            camera.position.x = beforePauseCameraX;
+            camera.position.y = beforePauseCameraY;
+        } else {
+            camera.position.x = game.getGameEngine().getPlayer().getCurrentWindowX();
+            camera.position.y = game.getGameEngine().getPlayer().getCurrentWindowY();
+        }
         camera.update();
         System.out.println("Set initial Camera to: " + camera.position.x + " " + camera.position.y);
         System.out.println("Player at " + game.getGameEngine().getPlayer().getCurrentWindowX() + " " + game.getGameEngine().getPlayer().getCurrentWindowY());
@@ -102,44 +107,42 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         this.gameState = gameState;
     }
 
-    // Screen interface methods with necessary functionality
+    // Main Method for keeping the game running
     @Override
     public void render(float delta) {
-        // Check for escape key press to go back to the menu
         if (gameStart) {
-            intialCameraPositon();
+            setCameraPositonToPlayer();
             gameStart = false;
         }
+
+        if (gamePaused) {
+            setCameraPositonToPlayer();
+            gamePaused = false;
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            //this.gameState=GAME_PAUSED;
-            //sound effect
             Music escMusic = Gdx.audio.newMusic(Gdx.files.internal("ESC_sound.mp3"));
             escMusic.setVolume(2.5f);
             escMusic.setLooping(false);
             escMusic.play();
-
-            //go to pause menu
-
+            gamePaused = true;
+            beforePauseCameraX = camera.position.x;
+            beforePauseCameraY = camera.position.y;
             game.goToPauseMenu();
 
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.V) | gameState == GAME_LEVEL_END) {
-            //Sound effect
+        if (gameState == GAME_LEVEL_END) {
             Music escMusic = Gdx.audio.newMusic(Gdx.files.internal("ESC_sound.mp3"));
             escMusic.setVolume(2.5f);
             escMusic.setLooping(false);
             escMusic.play();
-            //go to Victory Screen
             game.goToVictoryScreen();
 
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.L) | gameState == GAME_OVER) {
-            //Sound effect
+        if (gameState == GAME_OVER) {
             Music escMusic = Gdx.audio.newMusic(Gdx.files.internal("ESC_sound.mp3"));
             escMusic.setVolume(2.5f);
             escMusic.setLooping(false);
             escMusic.play();
-            //go to Victory Screen
             game.goToGameOverScreen();
 
         }
@@ -150,6 +153,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             renderMap();
             Player player = game.getGameEngine().getPlayer();
 
+            // Player Movement
             if (Gdx.input.isKeyPressed(Input.Keys.W) | Gdx.input.isKeyPressed(Input.Keys.UP)) {
                 if (isPlayerAtBarrier()) {
                     player.setDirection(STANDINGUP);
@@ -183,33 +187,25 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                     renderPlayer();
                 }
             } else {
-                // Do not change the direction here, just render the standing player
                 renderStandingPlayer();
             }
 
-            //camera.update(); // Update the camera
-
-            if (isPlayerAtEdge() && !gameStart) {
+            // Update the camera
+            if (isPlayerAtEdgeOfCamera() && !gameStart) {
                 System.out.println("Player at Edge; Updating Camera");
                 updateCameraPosition();
             }
 
-            // Move text in a circular path to have an example of a moving object
-            sinusInput += delta;
-            float textX = (float) (camera.position.x + Math.sin(sinusInput) * 100);
-            float textY = (float) (camera.position.y + Math.cos(sinusInput) * 100);
-
             // Set up and begin drawing with the sprite batch
             game.getSpriteBatch().setProjectionMatrix(camera.combined);
-
-            game.getSpriteBatch().begin(); // Important to call this before drawing anything
-
-            game.getSpriteBatch().end(); // Important to call this after drawing everything
+            game.getSpriteBatch().begin();
+            game.getSpriteBatch().end();
 
             camera.update(); // Update the camera
 
-            // Move text in a circular path to have an example of a moving object
+            // DO NOT DELETE, KILLS ANIMATIONS
             sinusInput += delta;
+
             //float textX = (float) (camera.position.x + Math.sin(sinusInput) * 100);
             //float textY = (float) (camera.position.y + Math.cos(sinusInput) * 100);
 
@@ -224,6 +220,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
             player.setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
 
+            // Render all Enemies
             for (Enemy enemy : game.getGameEngine().getStaticGameMap().getEnemies()) {
                 renderEnemy(enemy);
                 if (isPlayerTouchingEnemy(enemy)) {
@@ -231,6 +228,8 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                 }
             }
 
+            // Tile touching logic
+            player.setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
             if (player.getCurrentTile() instanceof Trap) {
                 gameState = GAME_OVER;
             }
@@ -241,13 +240,12 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             if (player.getCurrentTile() instanceof Key) {
                 game.getGameEngine().getStaticGameMap().removeKey(player.getCurrentWindowX() + centerPlayerXOffset, player.getCurrentWindowY() + centerPlayerYOffset, tileSize);
             }
-
         }
     }
 
     private boolean isPlayerTouchingEnemy(Enemy enemy) {
+        // Yes that's a lot of float's, but it's easier to understand that way
         Player player = game.getGameEngine().getPlayer();
-
         float offsetVerticalTop = 5;
         float offsetVerticalBottom = 33;
         float offsetHorizontal = 30;
@@ -269,13 +267,12 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         return false;
     }
 
-    // Render Map
     public void renderMap() {
         MapObject[][] mapObjects = game.getGameEngine().getStaticGameMap().getStaticMapObjects();
+        mapMaxX = mapObjects.length * tileSize;
+        mapMaxY = mapObjects[0].length * tileSize;
 
-        // Calculate the size of each tile on the screen, for example:
         game.getSpriteBatch().begin();
-
         for (int row = 0; row < mapObjects.length; row++) {
             for (int col = 0; col < mapObjects[row].length; col++) {
                 if (mapObjects[row][col] != null) {
@@ -285,12 +282,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                 }
             }
         }
-
-        mapMaxX = mapObjects.length * tileSize;
-        mapMaxY = mapObjects[0].length * tileSize;
-
         game.getSpriteBatch().end();
-
     }
 
     private void renderStandingEnemy(Enemy enemy) {
@@ -313,19 +305,15 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                 currentFrame = enemy.getCharacterStandingRightTexture();
                 break;
             default:
-                //renderPlayer();
                 return;
         }
 
-        game.getSpriteBatch().begin();
-        // Draw the standing frame scaled to tileSize
-        game.getSpriteBatch().draw(currentFrame, x, y, 64, 128 // Adjust the size as needed
-        );
-        game.getSpriteBatch().end();
+        draw(currentFrame, x, y, 64, 128);
     }
 
     private void renderStandingPlayer() {
         Player player = game.getGameEngine().getPlayer();
+
         float x = player.getCurrentWindowX();
         float y = player.getCurrentWindowY();
 
@@ -348,10 +336,13 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                 renderPlayer();
                 return;
         }
+
+        draw(currentFrame, x, y, 64, 128);
+    }
+
+    private void draw(TextureRegion currentFrame, float x, float y, int width, int height) {
         game.getSpriteBatch().begin();
-        // Draw the standing frame scaled to tileSize
-        game.getSpriteBatch().draw(currentFrame, x, y, 64, 128 // Adjust the size as needed
-        );
+        game.getSpriteBatch().draw(currentFrame, x, y, width, height);
         game.getSpriteBatch().end();
     }
 
@@ -364,7 +355,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         x = x - enemy.getCurrentWindowX();
         y = y - enemy.getCurrentWindowY();
 
-        //Path Finding Algorythm
+        //Path Finding Algorithm
         Direction direction;
 
         if (x > 0) {
@@ -400,36 +391,14 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             }
         }
 
-        TextureRegion currentFrame = anim.getKeyFrame(sinusInput, true);
-
-        game.getSpriteBatch().begin();
-        game.getSpriteBatch().draw(currentFrame, enemy.getCurrentWindowX(), enemy.getCurrentWindowY(), 64, 128);
-        game.getSpriteBatch().end();
-
-        //enemy.setDirection(getStandingDirection(enemy.getDirection()));
+        draw(anim.getKeyFrame(sinusInput, true), enemy.getCurrentWindowX(), enemy.getCurrentWindowY(), 64, 128);
     }
 
     private void renderPlayer() {
-        float projectionPlaneHeight = camera.viewportHeight / camera.zoom;
-        float projectionPlaneWidth = game.getGameEngine().getStaticGameMap().getMapWidth() * tileSize;//camera.viewportWidth / camera.zoom;
         Player player = game.getGameEngine().getPlayer();
         player.move(playerSpeed);
         float x = player.getCurrentWindowX();
         float y = player.getCurrentWindowY();
-
-        /*
-        if (x < 0) {
-            player.setCurrentWindowX(0);
-        } else if (y < 0) {
-            player.setCurrentWindowY(0);
-        } else if (x + tileSize > projectionPlaneWidth) {
-            System.out.println("Player at Right Part of the Map " + player.getCurrentWindowX() + " " + player.getCurrentWindowY() + " proejctionPlanteWidth: " + projectionPlaneWidth);
-            player.setCurrentWindowX(projectionPlaneWidth - tileSize);
-        } else if (y - tileSize > projectionPlaneHeight) {
-            System.out.println("Player at Top Part of the Map " + player.getCurrentWindowX() + " " + player.getCurrentWindowY() + " proejctionPlanteHeight: " + projectionPlaneHeight);
-            player.setCurrentWindowY(projectionPlaneHeight + tileSize);
-        }
-         */
 
         Animation<TextureRegion> anim = null;
 
@@ -444,11 +413,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             }
         }
 
-        TextureRegion currentFrame = anim.getKeyFrame(sinusInput, true);
-
-        game.getSpriteBatch().begin();
-        game.getSpriteBatch().draw(currentFrame, x, y, 64, 128);
-        game.getSpriteBatch().end();
+        draw(anim.getKeyFrame(sinusInput, true), x, y, 64, 128);
 
         player.setDirection(getStandingDirection(player.getDirection()));
     }
@@ -541,12 +506,11 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             case DOWN -> STANDINGDOWN;
             case LEFT -> STANDINGLEFT;
             case RIGHT -> STANDINGRIGHT;
-            // For standing directions, keep the same
             default -> currentDirection;
         };
     }
 
-    private boolean isPlayerAtEdge() {
+    private boolean isPlayerAtEdgeOfCamera() {
         Player player = game.getGameEngine().getPlayer();
         float playerX = player.getCurrentWindowX();
         float playerY = player.getCurrentWindowY();
@@ -572,35 +536,33 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         Player player = game.getGameEngine().getPlayer();
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
-        // Define how close to the edge the player must be to move the camera
-        System.out.println("Screen Height: " + screenHeight);
-        System.out.println("Snap");
 
         // Check and update camera position based on player's direction
         switch (player.getDirection()) {
             case UP:
             case STANDINGUP:
-                camera.position.y += screenHeight * 0.5; // Move camera up by one screen height
+                camera.position.y += screenHeight * 0.5;
+                System.out.println("Set camera-y to: " + camera.position.y);
                 break;
             case DOWN:
             case STANDINGDOWN:
-                camera.position.y -= screenHeight * 0.5; // Move camera down by one screen height
-                System.out.println("Set camera to: " + camera.position.y);
+                camera.position.y -= screenHeight * 0.5;
+                System.out.println("Set camera-y to: " + camera.position.y);
                 break;
             case LEFT:
             case STANDINGLEFT:
-                camera.position.x -= screenWidth * 0.5; // Move camera left by one screen width
-                System.out.println("Set camera to: " + camera.position.x);
+                camera.position.x -= screenWidth * 0.5;
+                System.out.println("Set camera-x to: " + camera.position.x);
                 break;
             case RIGHT:
             case STANDINGRIGHT:
-                camera.position.x += screenWidth * 0.5; // Move camera right by one screen width
-                System.out.println("Set camera to: " + camera.position.x);
+                camera.position.x += screenWidth * 0.5;
+                System.out.println("Set camera-x to: " + camera.position.x);
                 break;
         }
 
         float projectionPlaneHeight = game.getGameEngine().getStaticGameMap().getMapHeight() * tileSize;
-        float projectionPlaneWidth = game.getGameEngine().getStaticGameMap().getMapWidth() * tileSize;//camera.viewportWidth / camera.zoom;
+        float projectionPlaneWidth = game.getGameEngine().getStaticGameMap().getMapWidth() * tileSize;
 
         if (camera.position.y > projectionPlaneHeight) {
             camera.position.y = projectionPlaneHeight;
@@ -614,13 +576,11 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             camera.position.x = 0;
             System.out.println("Changed X-position due to camera out of map-bounds" + camera.position.x);
         }
-
         if (camera.position.x > projectionPlaneWidth) {
             camera.position.x = projectionPlaneWidth;
             System.out.println("Changed X-position due to camera out of map-bounds" + camera.position.x);
         }
-
-        camera.update(); // Update the camera after repositioning
+        camera.update();
     }
 
 
@@ -649,20 +609,4 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     @Override
     public void dispose() {
     }
-
-    // Additional methods and logic can be added as needed for the game screen
-
-       /*
-        // Render the text
-        font.draw(game.getSpriteBatch(), "Press ESC to go to menu", textX, textY);
-
-        // Draw the character next to the text :) / We can reuse sinusInput here
-        game.getSpriteBatch().draw(
-                game.getCharacterDownAnimation().getKeyFrame(sinusInput, true),
-                textX - 96,
-                textY - 64,
-                64,
-                128
-        );
-*/
 }

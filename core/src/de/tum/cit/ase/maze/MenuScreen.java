@@ -89,7 +89,7 @@ public class MenuScreen implements Screen {
         int animationFramesRow = 3;
 
         for (int i = 0; i < animationFramesRow; i++) {
-            fireFrames.add(new TextureRegion(skullSheet, 144+ i * frameWidth, 64, frameWidth, frameHeight));
+            fireFrames.add(new TextureRegion(skullSheet, 144 + i * frameWidth, 64, frameWidth, frameHeight));
         }
 
         Image fireImage = new Image(fireFrames.get(0));
@@ -111,7 +111,6 @@ public class MenuScreen implements Screen {
         fireImage.addAction(skullAnimation);
         return fireImage;
     }
-
 
 
     @Override

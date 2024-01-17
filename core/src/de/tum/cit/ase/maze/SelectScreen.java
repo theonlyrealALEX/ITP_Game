@@ -1,7 +1,8 @@
 package de.tum.cit.ase.maze;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,9 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.files.FileHandle;
 
-public class SelectScreen implements Screen{
+public class SelectScreen implements Screen {
 
     private final Stage stage;
     private float elapsedTime = 2f;
@@ -30,20 +30,11 @@ public class SelectScreen implements Screen{
     private String selectedMap;
 
 
-    public String getSelectedMap() {
-        return selectedMap;
-    }
-
-    public void setSelectedMap(String selectedMap) {
-        this.selectedMap = selectedMap;
-    }
-
     /**
      * Constructor for MenuScreen. Sets up the camera, viewport, stage, and UI elements.
      *
      * @param game The main game class, used to access global resources and methods.
      */
-
 
 
     public SelectScreen(MazeRunnerGame game) {
@@ -67,20 +58,22 @@ public class SelectScreen implements Screen{
 
         getMapNames();
         for (int i = 0; i < mapNames.size; i++) {
-            int finalI = i+1;
-            String buttonName = "Level"+ finalI;
-            TextButton levelButton = new TextButton(buttonName,game.getSkin());
+            int finalI = i + 1;
+            String buttonName = "Level" + finalI;
+            TextButton levelButton = new TextButton(buttonName, game.getSkin());
 
             table.add(levelButton).width(300).pad(10).row();
 
             levelButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
+
                     clickSound();
                     selectedMap = mapNames.get(finalI-1);
                     game.selectedMap=selectedMap;
+                   
                     //System.out.println("inside loop"+game.getSelectedMap());
-                    game.goToMenu();
+                    game.goToGame();
 
                 }
 
@@ -90,19 +83,27 @@ public class SelectScreen implements Screen{
 
 
     }
+
+    public String getSelectedMap() {
+        return selectedMap;
+    }
+
+    public void setSelectedMap(String selectedMap) {
+        this.selectedMap = selectedMap;
+    }
+
     private String[] getMapNames() {
         FileHandle dirHandle = Gdx.files.internal("maps"); // Directory where maps are stored
 
         for (FileHandle entry : dirHandle.list()) {
             if (entry.extension().equals("properties")) {
-                mapNames.add("maps/"+entry.name());
+                mapNames.add("maps/" + entry.name());
             }
         }
         mapNames.sort();
 
         return mapNames.toArray(String.class);
     }
-
 
 
     // Create an animation for the skull
@@ -114,7 +115,7 @@ public class SelectScreen implements Screen{
         int animationFramesRow = 3;
 
         for (int i = 0; i < animationFramesRow; i++) {
-            fireFrames.add(new TextureRegion(skullSheet, 144+ i * frameWidth, 64, frameWidth, frameHeight));
+            fireFrames.add(new TextureRegion(skullSheet, 144 + i * frameWidth, 64, frameWidth, frameHeight));
         }
 
         Image fireImage = new Image(fireFrames.get(0));
@@ -138,12 +139,14 @@ public class SelectScreen implements Screen{
     }
 
 
+
     private void clickSound() {
         Music clickMusic = Gdx.audio.newMusic(Gdx.files.internal("click_sound.mp3"));
         clickMusic.setVolume(2.5f);
         clickMusic.setLooping(false);
         clickMusic.play();
     }
+
 
     @Override
     public void render(float delta) {
@@ -182,8 +185,6 @@ public class SelectScreen implements Screen{
     @Override
     public void hide() {
     }
-
-
 
 
 }
