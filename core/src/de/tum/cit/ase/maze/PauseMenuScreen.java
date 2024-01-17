@@ -65,21 +65,8 @@ public class PauseMenuScreen implements Screen {
             }
         });
 
-        TextButton startNewGameButton = new TextButton("Start New Game", game.getSkin());
-        table.add(startNewGameButton).width(300).row();
-        startNewGameButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                clickSound(); // Sound effect
-                buttonStartNewGameFadeAway(startNewGameButton, game);
-                /*game.dispose();
-                game.create();
-                game.goToGame();*/
-                // Change to the game screen when button is pressed
-            }
-        });
 
-        TextButton exitButton = new TextButton("Exit Game", game.getSkin());
+        TextButton exitButton = new TextButton("Start Again", game.getSkin());
         table.add(exitButton).width(300).row();
         exitButton.addListener(new ChangeListener() {
             @Override
@@ -102,13 +89,50 @@ public class PauseMenuScreen implements Screen {
                 ));
             }
         });
+        TextButton selectAgainButton = new TextButton("Select New Map", game.getSkin());
+        table.add(selectAgainButton).width(300).row();
+        selectAgainButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                clickSound();  // Sound effect
+                selectAgainButton.addAction(Actions.sequence(
+                        Actions.fadeOut(0.5f),// Duration of the fade-out effect
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Dispose of the current game and create a new one
+                                game.dispose();
+                                game.create();
+                                // You can add more animation effects here if needed
+
+                                // Switch to the game menu
+                                game.goToSelect();
+                            }
+                        })
+                ));
+            }
+        });
+
+
+        TextButton quitGameButton = new TextButton("Quit Game", game.getSkin());
+        table.add(quitGameButton).width(300).row();
+        quitGameButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                clickSound(); // Sound effect
+                game.closeGame();
+
+            }
+        });
+
+
 
     }
 
     /**
      * Fade away animation for Start New Game button.
      */
-
+/*
     private void buttonStartNewGameFadeAway(TextButton textButton,MazeRunnerGame game){
         textButton.addAction(Actions.sequence(
                 Actions.fadeOut(0.5f),// Duration of the fade-out effect
@@ -117,6 +141,7 @@ public class PauseMenuScreen implements Screen {
                     public void run() {
                         // Dispose of the current game and create a new one
                         game.dispose();
+                        game.goToSelect();
                         game.create();
                         // You can add more animation effects here if needed
 
@@ -126,7 +151,7 @@ public class PauseMenuScreen implements Screen {
                 })
         ));
 
-    }
+    }*/
 
 
     @Override

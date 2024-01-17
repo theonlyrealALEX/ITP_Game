@@ -62,6 +62,10 @@ public class MazeRunnerGame extends Game {
         this.gameScreen = gameScreen;
     }
 
+    public GameScreen getGameScreen() {
+        return gameScreen;
+    }
+
     public Music getBackgroundMusic() {
         return backGroundMusic;
     }
@@ -196,5 +200,8 @@ public class MazeRunnerGame extends Game {
         skin.dispose(); // Dispose the skin
         backGroundMusic.dispose();
 
+    }
+    public void closeGame(){
+        Gdx.app.exit();
     }
 }

@@ -67,8 +67,11 @@ public class SelectScreen implements Screen {
             levelButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    selectedMap = mapNames.get(finalI - 1);
-                    game.selectedMap = selectedMap;
+
+                    clickSound();
+                    selectedMap = mapNames.get(finalI-1);
+                    game.selectedMap=selectedMap;
+                   
                     //System.out.println("inside loop"+game.getSelectedMap());
                     game.goToGame();
 
@@ -133,6 +136,15 @@ public class SelectScreen implements Screen {
 
         fireImage.addAction(skullAnimation);
         return fireImage;
+    }
+
+
+
+    private void clickSound() {
+        Music clickMusic = Gdx.audio.newMusic(Gdx.files.internal("click_sound.mp3"));
+        clickMusic.setVolume(2.5f);
+        clickMusic.setLooping(false);
+        clickMusic.play();
     }
 
 

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.io.Serializable;
 
@@ -37,8 +38,17 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     private float sinusInput = 0f;
     private float playerSpeed = 3;
     private float mapMaxX, mapMaxY;
+    private GameHUD hud;
+
+
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
+
+
     private boolean gameStart, gamePaused;
     private float beforePauseCameraX, beforePauseCameraY;
+
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -48,6 +58,9 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     public GameScreen(MazeRunnerGame game) {
         // Set Miscellaneous values
         this.game = game;
+
+        //this.hud=new GameHUD(game.getSpriteBatch(),game);
+
         gameState = GAME_RUNNING;
         gameStart = true;
         gamePaused = false;
@@ -192,6 +205,20 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
             // DO NOT DELETE, KILLS ANIMATIONS
             sinusInput += delta;
+
+            //float textX = (float) (camera.position.x + Math.sin(sinusInput) * 100);
+            //float textY = (float) (camera.position.y + Math.cos(sinusInput) * 100);
+
+            // Set up and begin drawing with the sprite batch
+            game.getSpriteBatch().setProjectionMatrix(camera.combined);
+
+            //hud.stage.draw();
+
+            game.getSpriteBatch().begin(); // Important to call this before drawing anything
+
+            game.getSpriteBatch().end(); // Important to call this after drawing everything
+
+            player.setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
 
             // Render all Enemies
             for (Enemy enemy : game.getGameEngine().getStaticGameMap().getEnemies()) {
