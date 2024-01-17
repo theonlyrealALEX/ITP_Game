@@ -65,6 +65,19 @@ public class MenuScreen implements Screen {
                 game.goToGame();
             }
         });
+        TextButton quitGameButton = new TextButton("Quit Game", game.getSkin());
+        table.add(quitGameButton).width(300).row();
+        quitGameButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Music clickMusic = Gdx.audio.newMusic(Gdx.files.internal("click_sound.mp3"));
+                clickMusic.setVolume(1.5f);
+                clickMusic.setLooping(false);
+                clickMusic.play();
+                game.closeGame();
+
+            }
+        });
     }
 
     // Create an animation for the skull

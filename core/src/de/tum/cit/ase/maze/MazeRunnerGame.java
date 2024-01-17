@@ -201,4 +201,7 @@ public class MazeRunnerGame extends Game {
         backGroundMusic.dispose();
 
     }
+    public void closeGame(){
+        Gdx.app.exit();
+    }
 }
