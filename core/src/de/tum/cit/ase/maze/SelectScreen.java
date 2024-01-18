@@ -1,6 +1,7 @@
 package de.tum.cit.ase.maze;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
@@ -73,7 +74,7 @@ public class SelectScreen implements Screen {
                     game.selectedMap=selectedMap;
                    
                     //System.out.println("inside loop"+game.getSelectedMap());
-                    game.goToGame();
+                    game.goToMenu();
 
                 }
 
