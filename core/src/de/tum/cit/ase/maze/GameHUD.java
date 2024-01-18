@@ -52,8 +52,9 @@ public class GameHUD extends Stage implements Screen{
         Table table = new Table();
         table.top().setFillParent(true);
 
-        //Create label
+
         keyLabel = new Label(key ? "Key Collected" : "Key Not Collected", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+
         livesLabel = new Label(String.format("%01d", lives), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         // Create animation
         Image heartImage = createHeartAnimation();
