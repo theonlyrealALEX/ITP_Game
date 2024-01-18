@@ -56,8 +56,11 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
      * @param game The main game class, used to access global resources and methods.
      */
     public GameScreen(MazeRunnerGame game) {
+
+
         // Set Miscellaneous values
         this.game = game;
+        hud = new GameHUD(game);
 
         //this.hud=new GameHUD(game.getSpriteBatch(),game);
 
@@ -110,6 +113,15 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     // Main Method for keeping the game running
     @Override
     public void render(float delta) {
+
+
+
+        /*hud.getStage().act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        hud.getStage().draw();
+        hud.getCamera().position.x = camera.position.x;
+        hud.getCamera().position.y = camera.position.y;
+        hud.getCamera().update();*/
+
         if (gameStart) {
             setCameraPositonToPlayer();
             gameStart = false;
@@ -211,12 +223,21 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
             // Set up and begin drawing with the sprite batch
             game.getSpriteBatch().setProjectionMatrix(camera.combined);
-
-            //hud.stage.draw();
-
             game.getSpriteBatch().begin(); // Important to call this before drawing anything
-
             game.getSpriteBatch().end(); // Important to call this after drawing everything
+
+
+            //HUD
+            //hud.getBatch().setProjectionMatrix(hud.getCamera().combined);
+            hud.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+            hud.getBatch().begin();
+            hud.getBatch().end();// Important to call this before drawing anything
+            hud.draw();
+            hud.getCamera().update();
+            //camera.update();
+             // Ensure HUD is updated
+
+
 
             player.setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
 
