@@ -76,6 +76,11 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         game.getGameEngine().getPlayer().setDirection(DOWN);
         setCameraPositonToPlayer();
 
+        //Create Life
+        for (Life l : game.getGameEngine().getStaticGameMap().getLifes()) {
+            l.convertMapToWindow(tileSize);
+        }
+
         game.setGameScreen(this);
     }
 
@@ -314,6 +319,10 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             }
         }
         game.getSpriteBatch().end();
+
+        for (Life l : game.getGameEngine().getStaticGameMap().getLifes()) {
+            draw(l.getAnimation().getKeyFrame(sinusInput, true), l.getX(), l.getY(), 64, 64);
+        }
     }
 
     private void renderStandingEnemy(Enemy enemy) {

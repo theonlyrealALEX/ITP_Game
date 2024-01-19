@@ -11,6 +11,7 @@ import java.util.Properties;
 public class GameMap {
     private MapObject[][] staticMapObjects;
     private List<Enemy> enemies;
+    private List<Life> lifes;
     private int keysLeft;
 
     private List<EntryPoint> entryPoints;
@@ -30,6 +31,7 @@ public class GameMap {
         int[][] intArray;
         int maxRow = 0, maxCol = 0;
         keysLeft = 0;
+        lifes = new ArrayList<>();
         try (InputStream input = new FileInputStream(filePath)) {
             prop.load(input);
 
@@ -100,9 +102,24 @@ public class GameMap {
                     }
                 }
             }
+            lifes.add(getNewRandomLife(maxCol, maxRow));
+            lifes.add(getNewRandomLife(maxCol, maxRow));
+            lifes.add(getNewRandomLife(maxCol, maxRow));
+            lifes.add(getNewRandomLife(maxCol, maxRow));
+            lifes.add(getNewRandomLife(maxCol, maxRow));
+            
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public Life getNewRandomLife(int maxX, int maxY) {
+        int randX = (int) Math.floor(Math.random() * (maxX + 1));
+        int randY = (int) Math.floor(Math.random() * (maxX + 1));
+        if (staticMapObjects[randX][randY] instanceof Path) {
+            return new Life(randX, randY);
+        }
+        return getNewRandomLife(maxX, maxY);
     }
 
     public MapObject[][] getStaticMapObjects() {
@@ -141,5 +158,13 @@ public class GameMap {
 
     public List<EntryPoint> getEntryPoints() {
         return entryPoints;
+    }
+
+    public List<Life> getLifes() {
+        return lifes;
+    }
+
+    public void setLifes(List<Life> lifes) {
+        this.lifes = lifes;
     }
 }
