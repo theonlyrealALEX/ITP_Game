@@ -33,6 +33,43 @@ public class GameHUD extends Stage implements Screen {
         batch = new SpriteBatch();
         lives = 3;
         key = false;
+        Table table = new Table();
+        table.top().setFillParent(true);
+        //Create label
+        keyLabel = new Label(key ? "All Keys Collected!" : "You don't have enough Keys!", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        livesLabel = new Label(String.format("%01d", lives), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+
+        table.add(heartImage).padTop(10);
+        // Add livesLabel and expand it
+        table.add(livesLabel).padTop(13).row();
+        // Add keyLabel and expand it
+        table.add(keyImage).padTop(10);
+        table.add(keyLabel).padTop(13).padLeft(10);
+
+        addActor(table);
+
+        HUDcam.setToOrtho(false);
+        HUDcam.update();
+    }
+
+    public GameHUD(MazeRunnerGame game, boolean key, int lives) {
+        batch = new SpriteBatch();
+        this.lives = lives;
+        this.key = key;
+        Table table = new Table();
+        table.top().setFillParent(true);
+        //Create label
+        keyLabel = new Label(key ? "All Keys Collected!" : "You don't have enough Keys!", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        livesLabel = new Label(String.format("%01d", lives), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+
+        table.add(heartImage).padTop(10);
+        // Add livesLabel and expand it
+        table.add(livesLabel).padTop(13).row();
+        // Add keyLabel and expand it
+        table.add(keyImage).padTop(10);
+        table.add(keyLabel).padTop(13).padLeft(10);
+
+        addActor(table);
 
         HUDcam.setToOrtho(false);
         HUDcam.update();
@@ -121,20 +158,6 @@ public class GameHUD extends Stage implements Screen {
 
     @Override
     public void render(float delta) {
-        Table table = new Table();
-        table.top().setFillParent(true);
-        //Create label
-        keyLabel = new Label(key ? "All Keys Collected!" : "You don't have enough Keys!", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        livesLabel = new Label(String.format("%01d", lives), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-
-        table.add(heartImage).padTop(10);
-        // Add livesLabel and expand it
-        table.add(livesLabel).padTop(13).row();
-        // Add keyLabel and expand it
-        table.add(keyImage).padTop(10);
-        table.add(keyLabel).padTop(13).padLeft(10);
-
-        addActor(table);
 
         //act(Gdx.graphics.getDeltaTime());
         this.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));

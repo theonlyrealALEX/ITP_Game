@@ -234,7 +234,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                 if (isPlayerTouchingEnemy(enemy) && lifeDecrementTimer == 0) {
                     hud.decrementsLives();
                     lifeDecrementTimer = 30;
-
+                    hud = new GameHUD(game, hud.isKey(), hud.getLives());
                 }
             }
             System.out.println(lifeDecrementTimer);
@@ -252,6 +252,7 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                 game.getGameEngine().getStaticGameMap().removeKey(player.getCurrentWindowX() + centerPlayerXOffset, player.getCurrentWindowY() + centerPlayerYOffset, tileSize);
                 if (game.getGameEngine().getStaticGameMap().getKeysLeft() == 0) {
                     hud.setKey(true);
+                    hud = new GameHUD(game, hud.isKey(), hud.getLives());
                 }
             }
         }
