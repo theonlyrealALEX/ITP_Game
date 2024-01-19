@@ -35,8 +35,10 @@ public class GameHUD extends Stage implements Screen {
         key = false;
         Table table = new Table();
         table.top().setFillParent(true);
+
         //Create label
         keyLabel = new Label(key ? "All Keys Collected!" : "You don't have enough Keys!", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+
         livesLabel = new Label(String.format("%01d", lives), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
         table.add(heartImage).padTop(10);
