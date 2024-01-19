@@ -235,6 +235,10 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                     hud.decrementsLives();
                     lifeDecrementTimer = 30;
                     hud = new GameHUD(game, hud.isKey(), hud.getLives());
+                    Music escMusic = Gdx.audio.newMusic(Gdx.files.internal("ESC_sound.mp3"));
+                    escMusic.setVolume(2.5f);
+                    escMusic.setLooping(false);
+                    escMusic.play();
                 }
             }
             System.out.println(lifeDecrementTimer);
@@ -242,7 +246,15 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             // Tile touching logic
             player.setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
             if (player.getCurrentTile() instanceof Trap) {
-                hud.decrementsLives();
+                if (lifeDecrementTimer == 0) {
+                    hud.decrementsLives();
+                    lifeDecrementTimer = 30;
+                    hud = new GameHUD(game, hud.isKey(), hud.getLives());
+                    Music escMusic = Gdx.audio.newMusic(Gdx.files.internal("ESC_sound.mp3"));
+                    escMusic.setVolume(2.5f);
+                    escMusic.setLooping(false);
+                    escMusic.play();
+                }
             }
             if (player.getCurrentTile() instanceof Exit && game.getGameEngine().getStaticGameMap().getKeysLeft() == 0) {
                 gameState = GAME_LEVEL_END;
@@ -254,6 +266,10 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                     hud.setKey(true);
                     hud = new GameHUD(game, hud.isKey(), hud.getLives());
                 }
+                Music escMusic = Gdx.audio.newMusic(Gdx.files.internal("keyCollected.wav"));
+                escMusic.setVolume(2.5f);
+                escMusic.setLooping(false);
+                escMusic.play();
             }
         }
     }
