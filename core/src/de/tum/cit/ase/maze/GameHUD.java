@@ -60,11 +60,11 @@ public class GameHUD extends Stage implements Screen{
         Image keyImage = createKeyAnimation();
 
 
-        table.add(heartImage).center().padTop(10);
+        table.add(heartImage).padTop(10);
         // Add livesLabel and expand it
         table.add(livesLabel).padTop(13).row();
         // Add keyLabel and expand it
-        table.add(keyImage).center().padTop(10);
+        table.add(keyImage).padTop(10);
         table.add(keyLabel).padTop(13).padLeft(10);
 
 
