@@ -35,7 +35,17 @@ public class MazeRunnerGame extends Game {
     private Music backGroundMusic;
     public String selectedMap;
 
+    public MenuScreen getMenuScreen() {
+        return menuScreen;
+    }
 
+    public Music getBackGroundMusic() {
+        return backGroundMusic;
+    }
+
+    public void setBackGroundMusic(Music backGroundMusic) {
+        this.backGroundMusic = backGroundMusic;
+    }
 
     // Character animation downwards
     private Animation<TextureRegion> characterDownAnimation;
@@ -70,6 +80,10 @@ public class MazeRunnerGame extends Game {
         return backGroundMusic;
     }
 
+    public void setCharacterDownAnimation(Animation<TextureRegion> characterDownAnimation) {
+        this.characterDownAnimation = characterDownAnimation;
+    }
+
     public void setSelectScreen(SelectScreen selectScreen) {
         this.selectScreen = selectScreen;
     }
@@ -92,12 +106,10 @@ public class MazeRunnerGame extends Game {
         spriteBatch = new SpriteBatch(); // Create SpriteBatch
         skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json")); // Load UI skin
 
+        setBackGroundMusic(Gdx.audio.newMusic(Gdx.files.internal("MenuSound.mp3")));
         // Play some background music
         // Background sound
-        this.backGroundMusic = Gdx.audio.newMusic(Gdx.files.internal("crystal_cave.mp3"));
-        backGroundMusic.setVolume(0.5f);
-        backGroundMusic.setLooping(true);
-        backGroundMusic.play();
+
 
         // Load Engine and Map
         //gameEngine = new GameEngine();

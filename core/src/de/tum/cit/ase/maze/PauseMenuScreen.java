@@ -35,6 +35,7 @@ public class PauseMenuScreen implements Screen {
      */
     public PauseMenuScreen(MazeRunnerGame game) {
 
+
         game.setPauseMenuScreen(this);
         var camera = new OrthographicCamera();
         camera.zoom = 1.5f; // Set camera zoom for a closer view
@@ -77,6 +78,7 @@ public class PauseMenuScreen implements Screen {
                         Actions.run(new Runnable() {
                             @Override
                             public void run() {
+                                game.getGameScreen().getGameMusic().dispose();
                                 // Dispose of the current game and create a new one
                                 game.dispose();
                                 game.create();
@@ -100,6 +102,7 @@ public class PauseMenuScreen implements Screen {
                         Actions.run(new Runnable() {
                             @Override
                             public void run() {
+                                game.getGameScreen().getGameMusic().dispose();
                                 // Dispose of the current game and create a new one
                                 game.dispose();
                                 game.create();
@@ -119,6 +122,7 @@ public class PauseMenuScreen implements Screen {
         quitGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+
                 clickSound(); // Sound effect
                 game.closeGame();
 
@@ -132,26 +136,7 @@ public class PauseMenuScreen implements Screen {
     /**
      * Fade away animation for Start New Game button.
      */
-/*
-    private void buttonStartNewGameFadeAway(TextButton textButton,MazeRunnerGame game){
-        textButton.addAction(Actions.sequence(
-                Actions.fadeOut(0.5f),// Duration of the fade-out effect
-                Actions.run(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Dispose of the current game and create a new one
-                        game.dispose();
-                        game.goToSelect();
-                        game.create();
-                        // You can add more animation effects here if needed
 
-                        // Switch to the game screen
-                        game.goToGame();
-                    }
-                })
-        ));
-
-    }*/
 
 
     @Override

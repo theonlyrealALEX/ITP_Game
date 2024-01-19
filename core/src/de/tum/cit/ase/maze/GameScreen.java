@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
-
+import com.badlogic.gdx.audio.Music;
 import java.io.Serializable;
 
 import static de.tum.cit.ase.maze.Direction.*;
@@ -42,12 +42,24 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     private float beforePauseCameraX, beforePauseCameraY;
     private int lifeDecrementTimer;
 
+    private Music gameMusic = Gdx.audio.newMusic(Gdx.files.internal("crystal_cave.mp3"));
+
+
+    public Music getGameMusic() {
+        return gameMusic;
+    }
+
     /**
      * Constructor for GameScreen. Sets up the camera and font.
      *
      * @param game The main game class, used to access global resources and methods.
      */
     public GameScreen(MazeRunnerGame game) {
+
+        if(game.getBackGroundMusic()!=null){game.getBackGroundMusic().dispose();}
+        gameMusic.setVolume(0.5f);
+        gameMusic.setLooping(true);
+        gameMusic.play();
 
         // Set Miscellaneous values
         this.game = game;

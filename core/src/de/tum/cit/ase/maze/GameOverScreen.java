@@ -39,7 +39,8 @@ public class GameOverScreen implements Screen {
      */
     public GameOverScreen(MazeRunnerGame game) {
         // Music
-        game.getBackgroundMusic().dispose();
+        if(game.getBackGroundMusic()!=null){game.getBackgroundMusic().dispose();}
+        if(game.getGameScreen().getGameMusic()!=null){game.getGameScreen().getGameMusic().dispose();}
         gameOverMusic.setVolume(0.5f);
         gameOverMusic.setLooping(true);
         gameOverMusic.play();

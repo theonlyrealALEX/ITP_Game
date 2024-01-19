@@ -30,6 +30,7 @@ public class SelectScreen implements Screen {
     private Array<String> mapNames = new Array<>();
 
     private String selectedMap;
+    private Music menuMusic =  Gdx.audio.newMusic(Gdx.files.internal("MenuSound.mp3"));
 
 
     /**
@@ -40,7 +41,13 @@ public class SelectScreen implements Screen {
 
 
     public SelectScreen(MazeRunnerGame game) {
+
+
         game.setSelectScreen(this);
+        game.getBackGroundMusic().setVolume(0.7f);
+        game.getBackGroundMusic().setLooping(true);
+        game.getBackGroundMusic().play();
+
         var camera = new OrthographicCamera();
         camera.zoom = 1.5f; // Set camera zoom for a closer view
 

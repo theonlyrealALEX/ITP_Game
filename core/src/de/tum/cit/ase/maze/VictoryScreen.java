@@ -38,6 +38,7 @@ public class VictoryScreen implements Screen {
      * @param game The main game class, used to access global resources and methods.
      */
     public VictoryScreen(MazeRunnerGame game) {
+        game.getGameScreen().getGameMusic().dispose();
         this.victoryMusic = Gdx.audio.newMusic(Gdx.files.internal("victory2.wav"));
         victoryMusic.setVolume(2.0f);
         victoryMusic.setLooping(false);
@@ -97,6 +98,7 @@ public class VictoryScreen implements Screen {
         startNewGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+
                 clickSound();
                 buttonStartNewGameFadeAway(startNewGameButton, game);
             }

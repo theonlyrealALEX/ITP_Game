@@ -29,12 +29,15 @@ public class MenuScreen implements Screen {
     private final Stage stage;
     private float elapsedTime = 2f;
 
+
     /**
      * Constructor for MenuScreen. Sets up the camera, viewport, stage, and UI elements.
      *
      * @param game The main game class, used to access global resources and methods.
      */
     public MenuScreen(MazeRunnerGame game) {
+        if(game.getGameScreen()!=null){game.getBackgroundMusic().dispose();}
+
         var camera = new OrthographicCamera();
         camera.zoom = 1.5f; // Set camera zoom for a closer view
 
@@ -79,6 +82,8 @@ public class MenuScreen implements Screen {
             }
         });
     }
+
+
 
     // Create an animation for the skull
     private Image createFireAnimation() {
