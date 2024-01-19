@@ -1,6 +1,7 @@
 package de.tum.cit.ase.maze;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,22 +12,70 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.Screen;
-public class GameHUD extends Stage implements Screen{
+
+public class GameHUD extends Stage implements Screen {
 
     private SpriteBatch batch;
     private float elapsedTime = 2f;  // Initialize here
+    // Create animation
+    Image heartImage = createHeartAnimation();
+    Image keyImage = createKeyAnimation();
     private boolean key;
     private Integer lives;
-
     private Label keyLabel;
     private Label livesLabel;
-
     private OrthographicCamera HUDcam = new OrthographicCamera();
 
+    public GameHUD(MazeRunnerGame game) {
+        batch = new SpriteBatch();
+        lives = 3;
+        key = false;
+        Table table = new Table();
+        table.top().setFillParent(true);
+
+        //Create label
+        keyLabel = new Label(key ? "All Keys Collected!" : "You don't have enough Keys!", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+
+        livesLabel = new Label(String.format("%01d", lives), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+
+        table.add(heartImage).padTop(10);
+        // Add livesLabel and expand it
+        table.add(livesLabel).padTop(13).row();
+        // Add keyLabel and expand it
+        table.add(keyImage).padTop(10);
+        table.add(keyLabel).padTop(13).padLeft(10);
+
+        addActor(table);
+
+        HUDcam.setToOrtho(false);
+        HUDcam.update();
+    }
+
+    public GameHUD(MazeRunnerGame game, boolean key, int lives) {
+        batch = new SpriteBatch();
+        this.lives = lives;
+        this.key = key;
+        Table table = new Table();
+        table.top().setFillParent(true);
+        //Create label
+        keyLabel = new Label(key ? "All Keys Collected!" : "You don't have enough Keys!", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        livesLabel = new Label(String.format("%01d", lives), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+
+        table.add(heartImage).padTop(10);
+        // Add livesLabel and expand it
+        table.add(livesLabel).padTop(13).row();
+        // Add keyLabel and expand it
+        table.add(keyImage).padTop(10);
+        table.add(keyLabel).padTop(13).padLeft(10);
+
+        addActor(table);
+
+        HUDcam.setToOrtho(false);
+        HUDcam.update();
+    }
 
     public boolean isKey() {
         return key;
@@ -40,41 +89,6 @@ public class GameHUD extends Stage implements Screen{
         return lives;
     }
 
-    public void setLives(Integer lives) {
-        this.lives = lives;
-    }
-
-    public GameHUD(MazeRunnerGame game) {
-        batch = new SpriteBatch();
-        lives = 3;
-        key = false;
-
-        Table table = new Table();
-        table.top().setFillParent(true);
-
-
-        keyLabel = new Label(key ? "Key Collected" : "Key Not Collected", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-
-        livesLabel = new Label(String.format("%01d", lives), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        // Create animation
-        Image heartImage = createHeartAnimation();
-        Image keyImage = createKeyAnimation();
-
-
-        table.add(heartImage).padTop(10);
-        // Add livesLabel and expand it
-        table.add(livesLabel).padTop(13).row();
-        // Add keyLabel and expand it
-        table.add(keyImage).padTop(10);
-        table.add(keyLabel).padTop(13).padLeft(10);
-
-
-
-        addActor(table);
-
-        HUDcam.setToOrtho(false);
-        HUDcam.update();
-    }
     private Image createHeartAnimation() {
         Array<TextureRegion> heartFrames = new Array<>();
         Texture heartSheet = new Texture(Gdx.files.internal("objects.png"));
@@ -146,9 +160,13 @@ public class GameHUD extends Stage implements Screen{
 
     @Override
     public void render(float delta) {
-        this.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+
         //act(Gdx.graphics.getDeltaTime());
-        draw();
+        this.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        this.getBatch().begin();
+        this.getBatch().end();// Important to call this before drawing anything
+        this.draw();
+        this.getCamera().update();
     }
 
     @Override
@@ -175,5 +193,11 @@ public class GameHUD extends Stage implements Screen{
     public void dispose() {
         batch.dispose();
         super.dispose();
+    }
+
+    public void decrementsLives() {
+        if (lives > 0) {
+            lives--;
+        }
     }
 }
