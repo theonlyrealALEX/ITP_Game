@@ -264,6 +264,10 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             List<Life> toRemove = new ArrayList<>();
             for (Life l : game.getGameEngine().getStaticGameMap().getLifes()) {
                 if (isPlayerTouchinLife(l)) {
+                    Music lifeMusic = Gdx.audio.newMusic(Gdx.files.internal("gain_life.mp3"));
+                    lifeMusic.setVolume(2.7f);
+                    lifeMusic.setLooping(false);
+                    lifeMusic.play();
                     hud.incrementLifes();
                     toRemove.add(l);
                     hud = new GameHUD(game, hud.isKey(), hud.getLives());
