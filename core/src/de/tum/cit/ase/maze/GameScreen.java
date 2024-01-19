@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import static de.tum.cit.ase.maze.Direction.*;
 
@@ -75,6 +77,11 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         game.getGameEngine().getPlayer().setCurrentWindowY(y * tileSize + 16);
         game.getGameEngine().getPlayer().setDirection(DOWN);
         setCameraPositonToPlayer();
+
+        //Create Life
+        for (Life l : game.getGameEngine().getStaticGameMap().getLifes()) {
+            l.convertMapToWindow(tileSize);
+        }
 
         game.setGameScreen(this);
     }
@@ -235,14 +242,35 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                     hud.decrementsLives();
                     lifeDecrementTimer = 30;
                     hud = new GameHUD(game, hud.isKey(), hud.getLives());
+                    Music escMusic = Gdx.audio.newMusic(Gdx.files.internal("ESC_sound.mp3"));
+                    escMusic.setVolume(2.5f);
+                    escMusic.setLooping(false);
+                    escMusic.play();
                 }
             }
-            System.out.println(lifeDecrementTimer);
+
+            List<Life> toRemove = new ArrayList<>();
+            for (Life l : game.getGameEngine().getStaticGameMap().getLifes()) {
+                if (isPlayerTouchinLife(l)) {
+                    hud.incrementLifes();
+                    toRemove.add(l);
+                    hud = new GameHUD(game, hud.isKey(), hud.getLives());
+                }
+            }
+            game.getGameEngine().getStaticGameMap().getLifes().removeAll(toRemove);
 
             // Tile touching logic
             player.setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
             if (player.getCurrentTile() instanceof Trap) {
-                hud.decrementsLives();
+                if (lifeDecrementTimer == 0) {
+                    hud.decrementsLives();
+                    lifeDecrementTimer = 30;
+                    hud = new GameHUD(game, hud.isKey(), hud.getLives());
+                    Music escMusic = Gdx.audio.newMusic(Gdx.files.internal("ESC_sound.mp3"));
+                    escMusic.setVolume(2.5f);
+                    escMusic.setLooping(false);
+                    escMusic.play();
+                }
             }
             if (player.getCurrentTile() instanceof Exit && game.getGameEngine().getStaticGameMap().getKeysLeft() == 0) {
                 gameState = GAME_LEVEL_END;
@@ -254,6 +282,10 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
                     hud.setKey(true);
                     hud = new GameHUD(game, hud.isKey(), hud.getLives());
                 }
+                Music escMusic = Gdx.audio.newMusic(Gdx.files.internal("keyCollected.wav"));
+                escMusic.setVolume(2.5f);
+                escMusic.setLooping(false);
+                escMusic.play();
             }
         }
     }
@@ -282,6 +314,30 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         return false;
     }
 
+    private boolean isPlayerTouchinLife(Life life) {
+        // Yes that's a lot of float's, but it's easier to understand that way
+        Player player = game.getGameEngine().getPlayer();
+        float offsetVerticalTop = 5;
+        float offsetVerticalBottom = 33;
+        float offsetHorizontal = 30;
+        float centerEnemyXOffset = centerPlayerXOffset;
+        float centerEnemyYOffset = centerPlayerYOffset;
+
+        float playerCenterX = player.getCurrentWindowX() + centerPlayerXOffset;
+        float playerCenterY = player.getCurrentWindowY() + centerPlayerYOffset;
+
+        float enemyCenterX = life.getX() + centerEnemyXOffset;
+        float enemyCenterY = life.getY() + centerEnemyYOffset;
+
+        float deltaX = playerCenterX - enemyCenterX;
+        float deltaY = playerCenterY - enemyCenterY;
+
+        if (Math.abs(deltaX) < offsetHorizontal && Math.abs(deltaY) < offsetVerticalBottom) {
+            return true;
+        }
+        return false;
+    }
+
     public void renderMap() {
         MapObject[][] mapObjects = game.getGameEngine().getStaticGameMap().getStaticMapObjects();
         mapMaxX = mapObjects.length * tileSize;
@@ -298,6 +354,10 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             }
         }
         game.getSpriteBatch().end();
+
+        for (Life l : game.getGameEngine().getStaticGameMap().getLifes()) {
+            draw(l.getAnimation().getKeyFrame(sinusInput, true), l.getX(), l.getY(), 64, 64);
+        }
     }
 
     private void renderStandingEnemy(Enemy enemy) {

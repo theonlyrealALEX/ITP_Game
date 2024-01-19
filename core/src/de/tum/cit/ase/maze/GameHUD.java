@@ -200,4 +200,8 @@ public class GameHUD extends Stage implements Screen {
             lives--;
         }
     }
+
+    public void incrementLifes() {
+        lives++;
+    }
 }
