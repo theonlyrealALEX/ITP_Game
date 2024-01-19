@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.io.Serializable;
 
@@ -39,16 +38,9 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     private float playerSpeed = 3;
     private float mapMaxX, mapMaxY;
     private GameHUD hud;
-
-
-    public OrthographicCamera getCamera() {
-        return camera;
-    }
-
-
     private boolean gameStart, gamePaused;
     private float beforePauseCameraX, beforePauseCameraY;
-
+    private int lifeDecrementTimer;
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -57,10 +49,10 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
      */
     public GameScreen(MazeRunnerGame game) {
 
-
         // Set Miscellaneous values
         this.game = game;
         hud = new GameHUD(game);
+        lifeDecrementTimer = 0;
 
         //this.hud=new GameHUD(game.getSpriteBatch(),game);
 
@@ -85,6 +77,10 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         setCameraPositonToPlayer();
 
         game.setGameScreen(this);
+    }
+
+    public OrthographicCamera getCamera() {
+        return camera;
     }
 
     // Sets camera position on the player
@@ -113,15 +109,12 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     // Main Method for keeping the game running
     @Override
     public void render(float delta) {
-
-
-
-        /*hud.getStage().act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        hud.getStage().draw();
-        hud.getCamera().position.x = camera.position.x;
-        hud.getCamera().position.y = camera.position.y;
-        hud.getCamera().update();*/
-
+        if (lifeDecrementTimer > 0) {
+            lifeDecrementTimer--;
+        }
+        if (hud.getLives() <= 0) {
+            gameState = GAME_OVER;
+        }
         if (gameStart) {
             setCameraPositonToPlayer();
             gameStart = false;
@@ -226,33 +219,30 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
             game.getSpriteBatch().begin(); // Important to call this before drawing anything
             game.getSpriteBatch().end(); // Important to call this after drawing everything
 
-
             //HUD
             //hud.getBatch().setProjectionMatrix(hud.getCamera().combined);
-            hud.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-            hud.getBatch().begin();
-            hud.getBatch().end();// Important to call this before drawing anything
-            hud.draw();
-            hud.getCamera().update();
+            hud.render(0.0f);
+
             //camera.update();
-             // Ensure HUD is updated
-
-
+            // Ensure HUD is updated
 
             player.setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
 
             // Render all Enemies
             for (Enemy enemy : game.getGameEngine().getStaticGameMap().getEnemies()) {
                 renderEnemy(enemy);
-                if (isPlayerTouchingEnemy(enemy)) {
-                    gameState = GAME_OVER;
+                if (isPlayerTouchingEnemy(enemy) && lifeDecrementTimer == 0) {
+                    hud.decrementsLives();
+                    lifeDecrementTimer = 30;
+
                 }
             }
+            System.out.println(lifeDecrementTimer);
 
             // Tile touching logic
             player.setCurrentTileFromCoords(game.getGameEngine().getStaticGameMap(), tileSize);
             if (player.getCurrentTile() instanceof Trap) {
-                gameState = GAME_OVER;
+                hud.decrementsLives();
             }
             if (player.getCurrentTile() instanceof Exit && game.getGameEngine().getStaticGameMap().getKeysLeft() == 0) {
                 gameState = GAME_LEVEL_END;
@@ -260,6 +250,9 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
 
             if (player.getCurrentTile() instanceof Key) {
                 game.getGameEngine().getStaticGameMap().removeKey(player.getCurrentWindowX() + centerPlayerXOffset, player.getCurrentWindowY() + centerPlayerYOffset, tileSize);
+                if (game.getGameEngine().getStaticGameMap().getKeysLeft() == 0) {
+                    hud.setKey(true);
+                }
             }
         }
     }
