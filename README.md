@@ -65,6 +65,8 @@ New REadme!!!!
 
 ## Classes
 
+Please check out the UML diagram: ([https://img.shields.io/github/license/:user/:repo.svg](https://drive.google.com/file/d/1M7xw0M8C7JkSlSbCO7nkR9EaGFN3kLQ4/view?usp=sharing))
+
 ### Any optional sections
 
 
