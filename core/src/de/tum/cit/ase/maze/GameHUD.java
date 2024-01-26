@@ -16,12 +16,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 
+/**
+ * The type Game hud.
+ */
 public class GameHUD extends Stage implements Screen {
 
     private SpriteBatch batch;
     private float elapsedTime = 2f;  // Initialize here
-    // Create animation
+    /**
+     * The Heart image.
+     */
+// Create animation
     Image heartImage = createHeartAnimation();
+    /**
+     * The Key image.
+     */
     Image keyImage = createKeyAnimation();
     private boolean key;
     private Integer lives;
@@ -29,6 +38,11 @@ public class GameHUD extends Stage implements Screen {
     private Label livesLabel;
     private OrthographicCamera HUDcam = new OrthographicCamera();
 
+    /**
+     * Instantiates a new Game hud.
+     *
+     * @param game the game
+     */
     public GameHUD(MazeRunnerGame game) {
         batch = new SpriteBatch();
         lives = 3;
@@ -54,6 +68,13 @@ public class GameHUD extends Stage implements Screen {
         HUDcam.update();
     }
 
+    /**
+     * Instantiates a new Game hud.
+     *
+     * @param game  the game
+     * @param key   the key
+     * @param lives the lives
+     */
     public GameHUD(MazeRunnerGame game, boolean key, int lives) {
         batch = new SpriteBatch();
         this.lives = lives;
@@ -77,18 +98,36 @@ public class GameHUD extends Stage implements Screen {
         HUDcam.update();
     }
 
+    /**
+     * Is key boolean.
+     *
+     * @return the boolean
+     */
     public boolean isKey() {
         return key;
     }
 
+    /**
+     * Sets key.
+     *
+     * @param key the key
+     */
     public void setKey(boolean key) {
         this.key = key;
     }
 
+    /**
+     * Gets lives.
+     *
+     * @return the lives
+     */
     public Integer getLives() {
         return lives;
     }
 
+    /**
+     * @return
+     */
     private Image createHeartAnimation() {
         Array<TextureRegion> heartFrames = new Array<>();
         Texture heartSheet = new Texture(Gdx.files.internal("objects.png"));
@@ -121,6 +160,9 @@ public class GameHUD extends Stage implements Screen {
         return heartImage;
     }
 
+    /**
+     * @return
+     */
     private Image createKeyAnimation() {
         Array<TextureRegion> keyFrames = new Array<>();
         Texture keySheet = new Texture(Gdx.files.internal("things.png"));
@@ -158,6 +200,9 @@ public class GameHUD extends Stage implements Screen {
         Gdx.input.setInputProcessor(this);
     }
 
+    /**
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
 
@@ -195,12 +240,18 @@ public class GameHUD extends Stage implements Screen {
         super.dispose();
     }
 
+    /**
+     * Decrements lives.
+     */
     public void decrementsLives() {
         if (lives > 0) {
             lives--;
         }
     }
 
+    /**
+     * Increment lifes.
+     */
     public void incrementLifes() {
         lives++;
     }

@@ -26,6 +26,10 @@ public class Enemy extends MapObject {
     private Personality personality;
     private int movementSmoothing = 0;
 
+    /**
+     * @param tileX
+     * @param tileY
+     */
     public Enemy(int tileX, int tileY) {
         loadCharacterAnimations();
         direction = Direction.DOWN;
@@ -36,6 +40,11 @@ public class Enemy extends MapObject {
 
     }
 
+    /**
+     * Creates new Random Enemy Personality
+     *
+     * @return
+     */
     public Personality getRandomPersonality() {
         Random random = new Random();
         Personality[] personalities = Personality.values();
@@ -43,6 +52,11 @@ public class Enemy extends MapObject {
         return personalities[randomIndex];
     }
 
+    /**
+     * Used for Rotating the Enemy when he is facing an Obstacle
+     *
+     * @return
+     */
     public Rotation getRandomRotation() {
         Random random = new Random();
         Rotation[] rotations = Rotation.values();
@@ -50,63 +64,107 @@ public class Enemy extends MapObject {
         return rotations[randomIndex];
     }
 
-
+    /**
+     * @return
+     */
     public TextureRegion getCharacterStandingUpTexture() {
         return characterStandingUpTexture;
     }
 
+    /**
+     * @return
+     */
     public TextureRegion getCharacterStandingDownTexture() {
         return characterStandingDownTexture;
     }
 
+    /**
+     * @return
+     */
     public TextureRegion getCharacterStandingLeftTexture() {
         return characterStandingLeftTexture;
     }
 
+    /**
+     * @return
+     */
     public TextureRegion getCharacterStandingRightTexture() {
         return characterStandingRightTexture;
     }
 
+    /**
+     * @return
+     */
     public Direction getDirection() {
         return direction;
     }
 
+    /**
+     * @param direction
+     */
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
 
+    /**
+     * @return
+     */
     public int getTileX() {
         return tileX;
     }
 
+    /**
+     * @param tileX
+     */
     public void setTileX(int tileX) {
         this.tileX = tileX;
     }
 
+    /**
+     * @return
+     */
     public int getTileY() {
         return tileY;
     }
 
+    /**
+     * @param tileY
+     */
     public void setTileY(int tileY) {
         this.tileY = tileY;
     }
 
+    /**
+     * @return
+     */
     public float getCurrentWindowX() {
         return currentWindowX;
     }
 
+    /**
+     * @param currentWindowX
+     */
     public void setCurrentWindowX(float currentWindowX) {
         this.currentWindowX = currentWindowX;
     }
 
+    /**
+     * @return
+     */
     public float getCurrentWindowY() {
         return currentWindowY;
     }
 
+    /**
+     * @param currentWindowY
+     */
     public void setCurrentWindowY(float currentWindowY) {
         this.currentWindowY = currentWindowY;
     }
 
+    /**
+     *
+     */
     private void loadCharacterAnimations() {
         Texture walkSheet = new Texture(Gdx.files.internal("mobs.png"));
         int frameWidth = 16;
@@ -124,6 +182,14 @@ public class Enemy extends MapObject {
         characterStandingLeftTexture = new TextureRegion(walkSheet, 64, 80, frameWidth, frameHeight);
     }
 
+    /**
+     * @param sheet
+     * @param startY
+     * @param frameWidth
+     * @param frameHeight
+     * @param frameCount
+     * @return
+     */
     private Animation<TextureRegion> createAnimation(Texture sheet, int startY, int frameWidth, int frameHeight, int frameCount) {
         Array<TextureRegion> frames = new Array<>(TextureRegion.class);
         for (int i = 0; i < frameCount; i++) {
@@ -132,6 +198,17 @@ public class Enemy extends MapObject {
         return new Animation<>(0.1f, frames);
     }
 
+    /**
+     * Putting together the animation from the Textures
+     *
+     * @param sheet
+     * @param startX
+     * @param startY
+     * @param frameWidth
+     * @param frameHeight
+     * @param frameCount
+     * @return
+     */
     private Animation<TextureRegion> createAnimation(Texture sheet, int startX, int startY, int frameWidth, int frameHeight, int frameCount) {
         Array<TextureRegion> frames = new Array<>(TextureRegion.class);
         for (int i = 0; i < frameCount; i++) {
@@ -140,23 +217,39 @@ public class Enemy extends MapObject {
         return new Animation<>(0.1f, frames);
     }
 
-    // Getters for each animation
+    /**
+     * @return
+     */
     public Animation<TextureRegion> getCharacterDownAnimation() {
         return characterDownAnimation;
     }
 
+    /**
+     * @return
+     */
     public Animation<TextureRegion> getCharacterUpAnimation() {
         return characterUpAnimation;
     }
 
+    /**
+     * @return
+     */
     public Animation<TextureRegion> getCharacterRightAnimation() {
         return characterRightAnimation;
     }
 
+    /**
+     * @return
+     */
     public Animation<TextureRegion> getCharacterLeftAnimation() {
         return characterLeftAnimation;
     }
 
+    /**
+     * Moves the Enemy in the direction the he already has by the speed value. Speed is set in the GameScreen class.
+     *
+     * @param speed
+     */
     public void move(float speed) {
         switch (this.direction) {
             case UP:
@@ -177,40 +270,67 @@ public class Enemy extends MapObject {
         }
     }
 
-
+    /**
+     * @return
+     */
     public MapObject getCurrentTile() {
         return currentTile;
     }
 
-
+    /**
+     * Set currentTile to the tile that is underneath the enemy
+     *
+     * @param gameMap
+     * @param tileSize
+     */
     public void setCurrentTileFromCoords(GameMap gameMap, float tileSize) {
         int i = (int) ((getCurrentWindowX() + 32) / tileSize);
         int j = (int) ((getCurrentWindowY() + 48) / tileSize);
         currentTile = gameMap.getStaticMapObjects()[j][i];
     }
 
+    /**
+     * @param tileSize
+     */
     public void setWindowCordsFromTilet(float tileSize) {
         this.currentWindowX = this.tileX * tileSize;
         this.currentWindowY = this.tileY * tileSize;
     }
 
+    /**
+     * @param spriteBatch
+     * @param x
+     * @param y
+     * @param tileSize
+     */
     @Override
     public void render(SpriteBatch spriteBatch, float x, float y, float tileSize) {
     }
 
+    /**
+     * @return
+     */
     public Personality getPersonality() {
         return personality;
     }
 
+    /**
+     * @param personality
+     */
     public void setPersonality(Personality personality) {
         this.personality = personality;
     }
 
+    /**
+     * @return
+     */
     public int getMovementSmoothing() {
         return movementSmoothing;
     }
 
-
+    /**
+     * Used for smoothing the movement at an obstacle
+     */
     public void decrmenentMovementSmoothing() {
         if (movementSmoothing > 0) {
             movementSmoothing--;
@@ -220,6 +340,9 @@ public class Enemy extends MapObject {
 
     }
 
+    /**
+     * change direction, used when at an obstacle
+     */
     public void rotateDirection() {
         if (getRandomRotation() == Rotation.RIGHT) {
             switch (getDirection()) {

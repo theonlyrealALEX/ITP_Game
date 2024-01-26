@@ -5,10 +5,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+/**
+ * The type Entry point.
+ */
 public class EntryPoint extends MapObject {
 
     private static final Texture tilesTexture = new Texture(Gdx.files.internal("basictiles.png"));
-    // Assuming the y-coordinate for the second row is 16, since each tile is 16 pixels in height
     private static final TextureRegion pathTextureRegion = new TextureRegion(tilesTexture, 0, 96, 16, 16);
     private int x;
     private int y;
@@ -17,18 +19,38 @@ public class EntryPoint extends MapObject {
         spriteBatch.draw(pathTextureRegion, x, y, tileSize, tileSize);
     }
 
+    /**
+     * Gets y.
+     *
+     * @return the y
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * Sets y.
+     *
+     * @param y the y
+     */
     public void setY(int y) {
         this.y = y;
     }
 
+    /**
+     * Gets x.
+     *
+     * @return the x
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * Sets x.
+     *
+     * @param j the j
+     */
     public void setX(int j) {
         this.x = j;
     }

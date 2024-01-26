@@ -8,6 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * The type Game map.
+ */
 public class GameMap {
     private MapObject[][] staticMapObjects;
     private List<Enemy> enemies;
@@ -16,15 +19,27 @@ public class GameMap {
 
     private List<EntryPoint> entryPoints;
 
+    /**
+     * Instantiates a new Game map.
+     */
     public GameMap() {
     }
 
+    /**
+     * Gets enemies.
+     *
+     * @return the enemies
+     */
     public List<Enemy> getEnemies() {
         return enemies;
     }
 
 
-    // Load Map from File Path
+    /**
+     * Load map, Enemeies, lives, etc.
+     *
+     * @param filePath the file path
+     */
     public void loadMap(String filePath) {
         enemies = new ArrayList<>();
         Properties prop = new Properties();
@@ -107,12 +122,19 @@ public class GameMap {
             lifes.add(getNewRandomLife(maxCol, maxRow));
             lifes.add(getNewRandomLife(maxCol, maxRow));
             lifes.add(getNewRandomLife(maxCol, maxRow));
-            
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
+    /**
+     * Gets new random life.
+     *
+     * @param maxX the max x
+     * @param maxY the max y
+     * @return the new random life
+     */
     public Life getNewRandomLife(int maxX, int maxY) {
         int randX = (int) Math.floor(Math.random() * (maxX + 1));
         int randY = (int) Math.floor(Math.random() * (maxX + 1));
@@ -122,30 +144,65 @@ public class GameMap {
         return getNewRandomLife(maxX, maxY);
     }
 
+    /**
+     * Get static map objects map object [ ] [ ].
+     *
+     * @return the map object [ ] [ ]
+     */
     public MapObject[][] getStaticMapObjects() {
         return staticMapObjects;
     }
 
+    /**
+     * Gets map width.
+     *
+     * @return the map width
+     */
     public float getMapWidth() {
         return staticMapObjects[0].length;
     }
 
+    /**
+     * Gets map height.
+     *
+     * @return the map height
+     */
     public float getMapHeight() {
         return staticMapObjects.length;
     }
 
 
-    // Returns the contents of a Tile at coordinates x/y in projection plane
+    /**
+     * Gets tile.
+     *
+     * @param x        the x
+     * @param y        the y
+     * @param tileSize the tile size
+     * @return the tile
+     */
+// Returns the contents of a Tile at coordinates x/y in projection plane
     public MapObject getTile(float x, float y, float tileSize) {
         int i = (int) ((x) / tileSize);
         int j = (int) ((y) / tileSize);
         return getStaticMapObjects()[j][i];
     }
 
+    /**
+     * Gets keys left.
+     *
+     * @return the keys left
+     */
     public int getKeysLeft() {
         return keysLeft;
     }
 
+    /**
+     * Remove key.
+     *
+     * @param x        the x
+     * @param y        the y
+     * @param tileSize the tile size
+     */
     public void removeKey(float x, float y, float tileSize) {
         int i = (int) ((x) / tileSize);
         int j = (int) ((y) / tileSize);
@@ -156,14 +213,29 @@ public class GameMap {
         }
     }
 
+    /**
+     * Gets entry points.
+     *
+     * @return the entry points
+     */
     public List<EntryPoint> getEntryPoints() {
         return entryPoints;
     }
 
+    /**
+     * Gets lifes.
+     *
+     * @return the lifes
+     */
     public List<Life> getLifes() {
         return lifes;
     }
 
+    /**
+     * Sets lifes.
+     *
+     * @param lifes the lifes
+     */
     public void setLifes(List<Life> lifes) {
         this.lifes = lifes;
     }
