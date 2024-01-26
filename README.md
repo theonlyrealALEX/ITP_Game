@@ -82,6 +82,8 @@ Similar to the default constructor with parameterized key and lives.
 
 Please check out the UML diagram: ([https://img.shields.io/github/license/:user/:repo.svg](https://drive.google.com/file/d/1M7xw0M8C7JkSlSbCO7nkR9EaGFN3kLQ4/view?usp=sharing))
 
+The main Logic of the Game is in the GameScreen class. It handles most of the events and triggers the correct responses. It can be compared to a Controller in the MVC-Model. It also handles the Camera Logic for changing the view when the Player approaches the end of the visible screen.
+The GameEngine with its subclasses (GameMap, Player, Enemy, MapObject) is the Model of the game. It is responsible for Modeling the behavior of the Characters and Map. There are static map objects that are not movable (MapObject (Abstract): Trap, Path, Wall, EntryPoint, ExitPoint, …) and movable Objects such as the Player and Enemy. The static objects and Enemies are loaded from the Map-File, or randomly distributed on the Paths. The Player’s coordinates are set to the Location of the EntryPoint.
 
 ### Any optional sections
 
