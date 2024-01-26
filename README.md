@@ -109,6 +109,23 @@ Disposes of resources, including the sprite batch.
 
 
 #### SelectScreen:
+The SelectScreen class provides functionality for players to select a map before entering the game. It displays a list of available maps, and players can choose a specific map to play.
+
+Constructor
+- SelectScreen(MazeRunnerGame game)
+Initializes the map selection screen.
+Sets up the camera, viewport, and stage for UI elements.
+Creates UI components, including labels, buttons, and a map selection table.
+Populates the table with buttons corresponding to available maps.
+
+UI Components
+The class includes UI components such as labels, buttons, and a table, organized in a LibGDX Table for proper layout. Buttons represent individual maps, allowing players to choose the desired map.
+
+
+Sound Effects
+Background Music: Plays background music while the player is on the map selection screen.
+Button Click Sound: Plays a sound effect when map buttons are clicked, providing auditory feedback to the player.
+
 
 #### MenuScreen:
 The MenuScreen class in the Maze Runner Game project is responsible for displaying the main menu of the game. It extends the LibGDX Screen class and sets up the UI components for the menu, including animations and buttons. Below is an overview of the class.
@@ -168,8 +185,51 @@ Sound Effects
 The class includes a method, clickSound(), which plays a sound effect when buttons are clicked. This enhances the user experience with auditory feedback.
 
 #### GameOverScreen:
+The GameOverScreen class provides functionality for displaying a game over message, animations, and options for the player to start a new game or return to the main menu.
+
+Constructor
+- GameOverScreen(MazeRunnerGame game)
+Initializes the game over screen.
+Sets up the camera, viewport, and stage for UI elements.
+Creates UI components, including labels, buttons, and an animation for the game over screen.
+
+UI Components
+The class includes UI components such as labels, buttons, and an animation of an explosive skull. These components are organized in a LibGDX Table for proper layout.
+
+Animations
+The class features an animation of an explosive skull created from frames of a texture sheet. The skull animation adds a visually appealing element to the game over screen.
+
+Sound Effects
+Game Over Music: Plays game over music when the player loses the game.
+Button Click Sound: Plays a sound effect when buttons are clicked, providing auditory feedback to the player.
+
+Button Actions
+Play Again Button: Initiates a fade-out animation for the "Play Again" button and starts a new game.
+Back to Menu Button: Initiates a fade-out animation for the "Back to Menu" button, disposes of resources, creates a new game, and returns to the map selection screen.
 
 #### VictoryScreen:
+The VictoryScreen class provides functionality for displaying a victory message, animations, and options for the player to choose a new map or play the game again.
+
+Constructor
+- VictoryScreen(MazeRunnerGame game)
+Initializes the victory screen.
+Sets up the camera, viewport, and stage for UI elements.
+Creates UI components, including labels, buttons, and an animation for the victory screen.
+Plays victory music when the player successfully exits the maze.
+
+UI Components
+The class includes UI components such as labels, buttons, and an animation of a character celebrating the victory. These components are organized in a LibGDX Table for proper layout.
+
+Animations
+The class features an animation of a character celebrating the victory created from frames of a texture sheet. The victory animation adds a visually appealing element to the victory screen.
+
+Button Actions
+Choose New Map Button: Initiates a fade-out animation for the "Choose New Map" button and navigates to the map selection screen.
+Play Again Button: Initiates a fade-out animation for the "Play Again" button and starts a new game.
+
+Sound Effects
+Victory Music: Plays victory music when the player successfully exits the maze.
+Button Click Sound: Plays a sound effect when buttons are clicked, providing auditory feedback to the player.
 
 
 ### Model and Controller Classess
