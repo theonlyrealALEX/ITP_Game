@@ -13,7 +13,6 @@ New REadme!!!!
 
 - [Start](#start)
 - [Additional Game Mechanics](#additionalgamemechanics)
-- [Security](#security)
 - [Background](#background)
 - [Install](#install)
 - [Usage](#usage)
@@ -61,9 +60,6 @@ New REadme!!!!
 ## Additional Game Mechanics
 1. Enemies move intelligently towards the main character: All the moving enemies in this game will be moving towards the main character, so it is harder for the player to avoid them.
 2. Collectable lives: The lives are collectable by walking throught the spinning red hearts in the maze.
-
-
-## Security
 
 ### Any optional sections
 
