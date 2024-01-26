@@ -22,8 +22,6 @@ public class GameEngine {
     }
 
 
-    /*public void loadMap() {
-    }*/
 
 
     public GameMap getStaticGameMap() {
