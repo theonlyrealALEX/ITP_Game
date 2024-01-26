@@ -58,14 +58,52 @@ The GameHUD class extends the LibGDX Stage and implements the Screen interface. 
 
 Constructor
 
-GameHUD(MazeRunnerGame game)
+- GameHUD(MazeRunnerGame game)
 Initializes the HUD with default values.
 Sets up the layout using a LibGDX Table.
 Creates heart and key animations.
 Associates the HUD with the main game.
-GameHUD(MazeRunnerGame game, boolean key, int lives)
+- GameHUD(MazeRunnerGame game, boolean key, int lives)
 Overloaded constructor allowing customization of key and lives.
 Similar to the default constructor with parameterized key and lives.
+
+Public Methods
+
+- isKey(): boolean
+Returns the current key status.
+- setKey(boolean key)
+Sets the key status.
+- getLives(): Integer
+Returns the current number of lives.
+- decrementsLives()
+Decreases the lives count if greater than 0.
+- incrementLifes()
+Increases the lives count.
+
+Animations
+
+The class includes methods for creating heart and key animations. These animations continuously cycle through frames, providing a dynamic visual effect.
+
+
+User Interface Elements
+
+The HUD consists of heart and key images, as well as corresponding labels for key status and lives. These elements are organized in a LibGDX Table for proper layout.
+
+Input Processing
+
+- show()
+Sets the input processor to the HUD.
+
+Lifecycle Methods
+
+- render(float delta)
+Updates and draws the HUD during the game loop.
+- resize(int width, int height)
+Placeholder for handling screen resizing.
+- dispose()
+Disposes of resources, including the sprite batch.
+
+
 
 
 #### SelectScreen:
