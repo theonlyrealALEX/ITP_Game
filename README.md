@@ -49,6 +49,16 @@
 1. Enemies move intelligently towards the main character: All the moving enemies in this game will be moving towards the main character, so it is harder for the player to avoid them.
 2. Collectable lives: The lives are collectable by walking throught the spinning red hearts in the maze.
 
+
+
+## Classes
+
+Please check out the UML diagram: ([https://img.shields.io/github/license/:user/:repo.svg](https://drive.google.com/file/d/1M7xw0M8C7JkSlSbCO7nkR9EaGFN3kLQ4/view?usp=sharing))
+
+The main Logic of the Game is in the GameScreen class. It handles most of the events and triggers the correct responses. It can be compared to a Controller in the MVC-Model. It also handles the Camera Logic for changing the view when the Player approaches the end of the visible screen.
+The GameEngine with its subclasses (GameMap, Player, Enemy, MapObject) is the Model of the game. It is responsible for Modeling the behavior of the Characters and Map. There are static map objects that are not movable (MapObject (Abstract): Trap, Path, Wall, EntryPoint, ExitPoint, …) and movable Objects such as the Player and Enemy. The static objects and Enemies are loaded from the Map-File, or randomly distributed on the Paths. The Player’s coordinates are set to the Location of the EntryPoint.
+The Screen classes are responsible for the visualization of the different screens and the HUD (‘View’ in MVC).
+
 ## Classes
 
 ### Screens
@@ -116,34 +126,20 @@ Disposes of resources, including the sprite batch.
 #### VictoryScreen:
 
 
-## Classes/Structure
+### Model and Controller Classess
+MazeRunnerGame
+The provided Skeleton Class for the Game
 
-Please check out the UML diagram: ([https://img.shields.io/github/license/:user/:repo.svg](https://drive.google.com/file/d/1M7xw0M8C7JkSlSbCO7nkR9EaGFN3kLQ4/view?usp=sharing))
+GameEngine
+Implements the Model of the Game. Has a GameMap for storing the Map, and also the Player and also Enemies.
+ GameMap
+Models the static and dynamic game map.
 
-The main Logic of the Game is in the GameScreen class. It handles most of the events and triggers the correct responses. It can be compared to a Controller in the MVC-Model. It also handles the Camera Logic for changing the view when the Player approaches the end of the visible screen.
-The GameEngine with its subclasses (GameMap, Player, Enemy, MapObject) is the Model of the game. It is responsible for Modeling the behavior of the Characters and Map. There are static map objects that are not movable (MapObject (Abstract): Trap, Path, Wall, EntryPoint, ExitPoint, …) and movable Objects such as the Player and Enemy. The static objects and Enemies are loaded from the Map-File, or randomly distributed on the Paths. The Player’s coordinates are set to the Location of the EntryPoint.
+Player
+Models the Player
+ Enemy
+Models the Enemy.
 
-### Any optional sections
-
-
-### Any optional sections
-
-## Usage
-
-```
-```
-
-Note: The `license` badge image link at the top of this file should be updated with the correct `:user` and `:repo`.
-
-
-## Contributing
-
-See [the contributing file](CONTRIBUTING.md)!
-
-PRs accepted.
-
-Small note: If editing the Readme, please conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification.
-
-### Any optional sections
-
+MapObject
+Superclass for all static map objects.
 
