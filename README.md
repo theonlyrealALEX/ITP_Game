@@ -117,27 +117,27 @@ The MenuScreen class in the Maze Runner Game project is responsible for displayi
 
 Constructor
 - MenuScreen(MazeRunnerGame game)
-* Initializes the main menu screen.
-* Sets up the camera, viewport, and stage for UI elements.
-* Creates UI components, including a title label, animated fire, and buttons to go to the game or quit.
+Initializes the main menu screen.
+Sets up the camera, viewport, and stage for UI elements.
+Creates UI components, including a title label, animated fire, and buttons to go to the game or quit.
 
 Animations
 - createFireAnimation()
-* Creates an animated fire image using a sequence of frames.
-* Utilizes LibGDX Actions to define the animation sequence.
+Creates an animated fire image using a sequence of frames.
+Utilizes LibGDX Actions to define the animation sequence.
 
 Input Processing
 - show()
-* Sets the input processor to the stage, enabling the reception of input events.
+Sets the input processor to the stage, enabling the reception of input events.
 
 Lifecycle Methods
 - render(float delta)
-* Renders the main menu screen.
-* Clears the screen and updates/draws the stage.
-resize(int width, int height)
-* Updates the stage viewport on screen resize.
+Renders the main menu screen.
+Clears the screen and updates/draws the stage.
+- resize(int width, int height)
+Updates the stage viewport on screen resize.
 - dispose()
-* Disposes of resources, including the stage, when the screen is no longer in use.
+Disposes of resources, including the stage, when the screen is no longer in use.
 
 #### PauseMenuScreen:
 #### GameOverScreen:
