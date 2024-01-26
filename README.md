@@ -5,12 +5,8 @@
 
 - [Start](#start)
 - [Additional Game Mechanics](#additionalgamemechanics)
-- [Background](#background)
-- [Install](#install)
-- [Usage](#usage)
-- [API](#api)
-- [Contributing](#contributing)
-- [License](#license)
+- [Classes](#classes)
+- [Classes/Structure](#classes/structure)
 
 
 ## Start!
@@ -53,7 +49,9 @@
 1. Enemies move intelligently towards the main character: All the moving enemies in this game will be moving towards the main character, so it is harder for the player to avoid them.
 2. Collectable lives: The lives are collectable by walking throught the spinning red hearts in the maze.
 
-### Any optional sections
+## Classes
+### Screens
+#### GameHUD
 
 ## Classes/Structure
 
