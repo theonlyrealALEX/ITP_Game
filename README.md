@@ -57,7 +57,7 @@ New REadme!!!!
 3. Click "back to menu" to select a new map.
 
 
-## Additional Game Mechanics
+## AdditionalGameMechanics
 1. Enemies move intelligently towards the main character: All the moving enemies in this game will be moving towards the main character, so it is harder for the player to avoid them.
 2. Collectable lives: The lives are collectable by walking throught the spinning red hearts in the maze.
 
