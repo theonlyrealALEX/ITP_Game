@@ -138,6 +138,34 @@ Updates the stage viewport on screen resize.
 Disposes of resources, including the stage, when the screen is no longer in use.
 
 #### PauseMenuScreen:
+The PauseMenuScreen class serves as an essential component for managing the pause menu within the game. It allows players to make choices like continuing the game, starting a new game, selecting a new map, or quitting the game.
+
+Constructor
+- PauseMenuScreen(MazeRunnerGame game)
+Initializes the pause menu screen.
+Sets up the camera, viewport, and stage for UI elements.
+Creates UI components, including labels and buttons, for various menu options.
+UI Components
+The class includes UI components such as labels and buttons, organized in a LibGDX Table for proper layout. Buttons trigger actions to continue the game, start a new game, select a new map, or quit the game.
+
+Animations
+The class features a fade-out animation for the "Start Again" and "Select New Map" buttons. These buttons smoothly fade out before executing specific actions.
+
+Input Processing
+- show()
+Sets the input processor to the stage, enabling the reception of input events.
+Lifecycle Methods
+- render(float delta)
+Renders the pause menu screen.
+Clears the screen and updates/draws the stage.
+resize(int width, int height)
+Updates the stage viewport on screen resize.
+- dispose()
+Disposes of resources, including the stage, when the screen is no longer in use.
+
+Sound Effects
+The class includes a method, clickSound(), which plays a sound effect when buttons are clicked. This enhances the user experience with auditory feedback.
+
 #### GameOverScreen:
 
 #### VictoryScreen:
