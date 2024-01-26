@@ -50,8 +50,33 @@
 2. Collectable lives: The lives are collectable by walking throught the spinning red hearts in the maze.
 
 ## Classes
+
 ### Screens
-#### GameHUD
+#### GameHUD:
+
+The GameHUD class extends the LibGDX Stage and implements the Screen interface. It utilizes a SpriteBatch for rendering and manages various UI elements, including animations, labels, and camera settings. The HUD displays the player's remaining lives and key status.
+
+Constructor
+
+GameHUD(MazeRunnerGame game)
+Initializes the HUD with default values.
+Sets up the layout using a LibGDX Table.
+Creates heart and key animations.
+Associates the HUD with the main game.
+GameHUD(MazeRunnerGame game, boolean key, int lives)
+Overloaded constructor allowing customization of key and lives.
+Similar to the default constructor with parameterized key and lives.
+
+
+#### SelectScreen:
+
+#### MenuScreen:
+
+#### PauseMenuScreen:
+#### GameOverScreen:
+
+#### VictoryScreen:
+
 
 ## Classes/Structure
 
