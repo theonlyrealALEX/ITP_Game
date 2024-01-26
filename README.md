@@ -76,7 +76,9 @@ Associates the HUD with the main game.
 Overloaded constructor allowing customization of key and lives.
 Similar to the default constructor with parameterized key and lives.
 
+
 Public Methods
+
 - isKey(): boolean
 Returns the current key status.
 - setKey(boolean key)
@@ -88,18 +90,26 @@ Decreases the lives count if greater than 0.
 - incrementLifes()
 Increases the lives count.
 
+
 Animations
+
 The class includes methods for creating heart and key animations. These animations continuously cycle through frames, providing a dynamic visual effect.
 
 
+
 User Interface Elements
+
 The HUD consists of heart and key images, as well as corresponding labels for key status and lives. These elements are organized in a LibGDX Table for proper layout.
 
+
 Input Processing
+
 - show()
 Sets the input processor to the HUD.
 
+
 Lifecycle Methods
+
 - render(float delta)
 Updates and draws the HUD during the game loop.
 - resize(int width, int height)
@@ -111,18 +121,24 @@ Disposes of resources, including the sprite batch.
 #### SelectScreen:
 The SelectScreen class provides functionality for players to select a map before entering the game. It displays a list of available maps, and players can choose a specific map to play.
 
+
 Constructor
+
 - SelectScreen(MazeRunnerGame game)
 Initializes the map selection screen.
 Sets up the camera, viewport, and stage for UI elements.
 Creates UI components, including labels, buttons, and a map selection table.
 Populates the table with buttons corresponding to available maps.
 
+
 UI Components
+
 The class includes UI components such as labels, buttons, and a table, organized in a LibGDX Table for proper layout. Buttons represent individual maps, allowing players to choose the desired map.
 
 
+
 Sound Effects
+
 Background Music: Plays background music while the player is on the map selection screen.
 Button Click Sound: Plays a sound effect when map buttons are clicked, providing auditory feedback to the player.
 
@@ -130,22 +146,30 @@ Button Click Sound: Plays a sound effect when map buttons are clicked, providing
 #### MenuScreen:
 The MenuScreen class in the Maze Runner Game project is responsible for displaying the main menu of the game. It extends the LibGDX Screen class and sets up the UI components for the menu, including animations and buttons. Below is an overview of the class.
 
+
 Constructor
+
 - MenuScreen(MazeRunnerGame game)
 Initializes the main menu screen.
 Sets up the camera, viewport, and stage for UI elements.
 Creates UI components, including a title label, animated fire, and buttons to go to the game or quit.
 
+
 Animations
+
 - createFireAnimation()
 Creates an animated fire image using a sequence of frames.
 Utilizes LibGDX Actions to define the animation sequence.
 
+
 Input Processing
+
 - show()
 Sets the input processor to the stage, enabling the reception of input events.
 
+
 Lifecycle Methods
+
 - render(float delta)
 Renders the main menu screen.
 Clears the screen and updates/draws the stage.
@@ -154,21 +178,31 @@ Updates the stage viewport on screen resize.
 - dispose()
 Disposes of resources, including the stage, when the screen is no longer in use.
 
+
 #### PauseMenuScreen:
 The PauseMenuScreen class serves as an essential component for managing the pause menu within the game. It allows players to make choices like continuing the game, starting a new game, selecting a new map, or quitting the game.
 
+
 Constructor
+
 - PauseMenuScreen(MazeRunnerGame game)
 Initializes the pause menu screen.
 Sets up the camera, viewport, and stage for UI elements.
 Creates UI components, including labels and buttons, for various menu options.
+
+
 UI Components
+
 The class includes UI components such as labels and buttons, organized in a LibGDX Table for proper layout. Buttons trigger actions to continue the game, start a new game, select a new map, or quit the game.
 
+
 Animations
+
 The class features a fade-out animation for the "Start Again" and "Select New Map" buttons. These buttons smoothly fade out before executing specific actions.
 
+
 Input Processing
+
 - show()
 Sets the input processor to the stage, enabling the reception of input events.
 Lifecycle Methods
@@ -180,54 +214,76 @@ Updates the stage viewport on screen resize.
 - dispose()
 Disposes of resources, including the stage, when the screen is no longer in use.
 
+
 Sound Effects
+
 
 The class includes a method, clickSound(), which plays a sound effect when buttons are clicked. This enhances the user experience with auditory feedback.
 
 #### GameOverScreen:
 The GameOverScreen class provides functionality for displaying a game over message, animations, and options for the player to start a new game or return to the main menu.
 
+
 Constructor
+
 - GameOverScreen(MazeRunnerGame game)
 Initializes the game over screen.
 Sets up the camera, viewport, and stage for UI elements.
 Creates UI components, including labels, buttons, and an animation for the game over screen.
 
+
 UI Components
+
 The class includes UI components such as labels, buttons, and an animation of an explosive skull. These components are organized in a LibGDX Table for proper layout.
 
+
 Animations
+
 The class features an animation of an explosive skull created from frames of a texture sheet. The skull animation adds a visually appealing element to the game over screen.
 
+
 Sound Effects
+
 Game Over Music: Plays game over music when the player loses the game.
 Button Click Sound: Plays a sound effect when buttons are clicked, providing auditory feedback to the player.
 
+
 Button Actions
+
 Play Again Button: Initiates a fade-out animation for the "Play Again" button and starts a new game.
 Back to Menu Button: Initiates a fade-out animation for the "Back to Menu" button, disposes of resources, creates a new game, and returns to the map selection screen.
 
 #### VictoryScreen:
 The VictoryScreen class provides functionality for displaying a victory message, animations, and options for the player to choose a new map or play the game again.
 
+
 Constructor
+
 - VictoryScreen(MazeRunnerGame game)
 Initializes the victory screen.
 Sets up the camera, viewport, and stage for UI elements.
 Creates UI components, including labels, buttons, and an animation for the victory screen.
 Plays victory music when the player successfully exits the maze.
 
+
 UI Components
+
 The class includes UI components such as labels, buttons, and an animation of a character celebrating the victory. These components are organized in a LibGDX Table for proper layout.
 
+
 Animations
+
 The class features an animation of a character celebrating the victory created from frames of a texture sheet. The victory animation adds a visually appealing element to the victory screen.
 
+
 Button Actions
+
 Choose New Map Button: Initiates a fade-out animation for the "Choose New Map" button and navigates to the map selection screen.
 Play Again Button: Initiates a fade-out animation for the "Play Again" button and starts a new game.
 
+
 Sound Effects
+
 Victory Music: Plays victory music when the player successfully exits the maze.
 Button Click Sound: Plays a sound effect when buttons are clicked, providing auditory feedback to the player.
 
