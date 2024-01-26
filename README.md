@@ -57,22 +57,16 @@ New REadme!!!!
 3. Click "back to menu" to select a new map.
 
 
-## AdditionalGameMechanics
+## Additional Game Mechanics
 1. Enemies move intelligently towards the main character: All the moving enemies in this game will be moving towards the main character, so it is harder for the player to avoid them.
 2. Collectable lives: The lives are collectable by walking throught the spinning red hearts in the maze.
 
 ### Any optional sections
 
-## Background
+## Classes
 
 ### Any optional sections
 
-## Install
-
-This module depends upon a knowledge of [Markdown]().
-
-```
-```
 
 ### Any optional sections
 
@@ -83,13 +77,6 @@ This module depends upon a knowledge of [Markdown]().
 
 Note: The `license` badge image link at the top of this file should be updated with the correct `:user` and `:repo`.
 
-### Any optional sections
-
-## API
-
-### Any optional sections
-
-## More optional sections
 
 ## Contributing
 
@@ -101,6 +88,4 @@ Small note: If editing the Readme, please conform to the [standard-readme](https
 
 ### Any optional sections
 
-## License
 
-[MIT © Richard McRichface.](../LICENSE)
