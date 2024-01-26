@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.audio.Music;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,19 +22,49 @@ import static de.tum.cit.ase.maze.Direction.*;
  * It handles the game logic and rendering of the game elements.
  */
 public class GameScreen extends ScreenAdapter implements Screen, Serializable {
-    //JODIE TRY
+    /**
+     * The constant GAME_READY.
+     */
+//JODIE TRY
     static final int GAME_READY = 0;
+    /**
+     * The Game running.
+     */
     static final int GAME_RUNNING = 1;
+    /**
+     * The Game paused.
+     */
     static final int GAME_PAUSED = 2;
+    /**
+     * The Game level end.
+     */
     static final int GAME_LEVEL_END = 3;
+    /**
+     * The Game over.
+     */
     static final int GAME_OVER = 4;
+    /**
+     * The Tile size.
+     */
     static final float tileSize = 80;
+    /**
+     * The Enemy speed.
+     */
     static final float enemySpeed = 1;
     private final MazeRunnerGame game;
     private final OrthographicCamera camera;
     private final BitmapFont font;
+    /**
+     * The Game state.
+     */
     int gameState;
+    /**
+     * The Center player x offset.
+     */
     float centerPlayerXOffset = 32;
+    /**
+     * The Center player y offset.
+     */
     float centerPlayerYOffset = 48;
     private float sinusInput = 0f;
     private float playerSpeed = 3;
@@ -47,10 +77,6 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     private Music gameMusic = Gdx.audio.newMusic(Gdx.files.internal("crystal_cave.mp3"));
 
 
-    public Music getGameMusic() {
-        return gameMusic;
-    }
-
     /**
      * Constructor for GameScreen. Sets up the camera and font.
      *
@@ -58,7 +84,9 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
      */
     public GameScreen(MazeRunnerGame game) {
 
-        if(game.getBackGroundMusic()!=null){game.getBackGroundMusic().dispose();}
+        if (game.getBackGroundMusic() != null) {
+            game.getBackGroundMusic().dispose();
+        }
         gameMusic.setVolume(0.5f);
         gameMusic.setLooping(true);
         gameMusic.play();
@@ -98,6 +126,20 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         game.setGameScreen(this);
     }
 
+    /**
+     * Gets game music.
+     *
+     * @return the game music
+     */
+    public Music getGameMusic() {
+        return gameMusic;
+    }
+
+    /**
+     * Gets camera.
+     *
+     * @return the camera
+     */
     public OrthographicCamera getCamera() {
         return camera;
     }
@@ -117,10 +159,20 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
     }
 
 
+    /**
+     * Gets game state.
+     *
+     * @return the game state
+     */
     public int getGameState() {
         return gameState;
     }
 
+    /**
+     * Sets game state.
+     *
+     * @param gameState the game state
+     */
     public void setGameState(int gameState) {
         this.gameState = gameState;
     }
@@ -354,6 +406,9 @@ public class GameScreen extends ScreenAdapter implements Screen, Serializable {
         return false;
     }
 
+    /**
+     * Render map.
+     */
     public void renderMap() {
         MapObject[][] mapObjects = game.getGameEngine().getStaticGameMap().getStaticMapObjects();
         mapMaxX = mapObjects.length * tileSize;
