@@ -108,8 +108,6 @@ Placeholder for handling screen resizing.
 Disposes of resources, including the sprite batch.
 
 
-
-
 #### SelectScreen:
 
 #### MenuScreen:
@@ -149,16 +147,18 @@ Disposes of resources, including the stage, when the screen is no longer in use.
 MazeRunnerGame
 The provided Skeleton Class for the Game
 
-GameEngine
+#### GameEngine
 Implements the Model of the Game. Has a GameMap for storing the Map, and also the Player and also Enemies.
- GameMap
+ 
+#### GameMap
 Models the static and dynamic game map.
 
-Player
+#### Player
 Models the Player
- Enemy
+ 
+#### Enemy
 Models the Enemy.
 
-MapObject
+#### MapObject
 Superclass for all static map objects.
 
