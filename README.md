@@ -291,19 +291,114 @@ Button Click Sound: Plays a sound effect when buttons are clicked, providing aud
 ### Model and Controller Classess
 MazeRunnerGame
 The provided Skeleton Class for the Game
+Overview
+MazeRunnerGame is the core class of the Maze Runner game. It orchestrates game screens, manages global resources like SpriteBatch and Skin, and controls game flow.
+Key Features
+* Manages various screens (Menu, Game, PauseMenu, SelectScreen).
+* Handles the game engine and rendering resources.
+* Controls game music and animations.
+Main Functionalities
+* Screen Management: Switches between different game screens.
+* Resource Handling: Manages SpriteBatch, Skin, and Music.
+* Game Flow Control: Directs game flow, from menu to gameplay, pause, and end screens.
+Methods
+* create(): Initializes the game resources and navigates to the select screen.
+* goToSelect(), goToMenu(), goToGame(), goToPauseMenu(), goToVictoryScreen(), goToGameOverScreen(), continueGame(): Manage screen transitions.
+* dispose(): Cleans up resources upon game closure.
+* Getters and setters for music, screens, and game engine.
+Usage
+Create an instance of MazeRunnerGame to start the game. Utilize its methods to navigate between screens and manage game states.
+
 
 #### GameEngine
 Implements the Model of the Game. Has a GameMap for storing the Map, and also the Player and also Enemies.
+Overview
+The GameEngine class, part of the de.tum.cit.ase.maze package, serves as the central controller for the Maze Runner game. It initializes the game environment, including the map and the player.
+Key Features
+* Initializes game components upon creation.
+* Manages the player and the game map.
+Main Functionalities
+* Initialization: Configures the game with a selected map and a new player instance.
+* Player Management: Offers methods to get and set the player's details.
+* Map Handling: Handles the game map, allowing retrieval of the current map.
+Methods
+* GameEngine(MazeRunnerGame): Constructor that sets up the game engine.
+* getPlayer(): Returns the current player.
+* setPlayer(Player): Updates the player instance.
+* getStaticGameMap(): Retrieves the static game map.
+Usage
+Create an instance of GameEngine with a MazeRunnerGame object to initialize the game. Use provided methods to interact with the player and the map.
  
 #### GameMap
 Models the static and dynamic game map.
+Overview
+GameMap is a central class in the Maze Runner game, responsible for loading and managing the game map's layout, including elements like enemies, lives, and keys.
+Features
+* Dynamic map loading from files.
+* Manages enemies, lives, keys, and entry points.
+* Interactive map functions for gameplay mechanics.
+Key Methods
+* loadMap(String): Loads and sets up the game map.
+* getNewRandomLife(int, int): Generates random life positions.
+* getTile(float, float, float): Retrieves map tile content.
+* removeKey(float, float, float): Removes a key from the map.
+Usage
+Instantiate and use loadMap to load a map, then interact using class methods for game dynamics.
 
 #### Player
 Models the Player
+Overview
+The Player class in the Maze Runner game manages the player's animations, movement, and position within the game world.
+Key Features
+* Character animations for different directions.
+* Methods for player movement and position tracking.
+* Management of the player's current tile and direction.
+Main Functionalities
+* Animation Handling: Loads and manages animations for player movement.
+* Movement: Implements player movement based on speed and direction.
+* Position Tracking: Manages the player's position in the game window and on the game map.
+Methods
+* Player(): Constructor that initializes player animations and sets initial direction.
+* move(float speed): Moves the player based on the current direction and speed.
+* setCurrentTileFromCoords(GameMap, float): Updates the player's current tile based on their coordinates.
+* getOffsetWindowX(float, Personality), getOffsetWindowY(float, Personality): Calculate the player's offset position.
+Usage
+Instantiate a Player object to represent the player in the game. Use its methods to control the player's animations, movements, and interactions with the game environment.
+
  
 #### Enemy
 Models the Enemy.
+Overview
+The Enemy class in the Maze Runner game extends MapObject to represent enemies on the game map. It handles animations, movements, and interactions of enemies within the game.
+Key Features
+* Character animations for different directions.
+* Random personality and rotation for dynamic behavior.
+* Movement mechanics and position tracking.
+Main Functionalities
+* Animation Handling: Loads and manages animations for enemy movement.
+* Movement: Implements enemy movement based on direction, speed, and personality.
+* Position and Rotation: Manages the enemy's position and rotation behavior when encountering obstacles.
+Methods
+* Enemy(int tileX, int tileY): Constructor initializing enemy with tile coordinates.
+* move(float speed): Moves the enemy based on the current direction and speed.
+* setCurrentTileFromCoords(GameMap, float): Updates the enemy's current tile based on their coordinates.
+* rotateDirection(): Changes the enemy's direction when encountering an obstacle.
+* getRandomPersonality(), getRandomRotation(): Randomizes enemy's personality and rotation.
+Usage
+Create Enemy objects to populate the game map with adversaries. Utilize the class methods to control their animations, movements, and interactions with the game environment.
 
 #### MapObject
 Superclass for all static map objects.
+ChatGPT
+README: MapObject Class Summary
+Overview
+MapObject is an abstract class in the Maze Runner game, serving as a base for various elements within the game map. It provides a fundamental structure for rendering objects in the game world.
+Key Feature
+* Establishes a common interface for all map objects to be rendered.
+Main Functionality
+* Rendering Interface: Defines an abstract method for rendering map objects.
+Method
+* render(SpriteBatch spriteBatch, float x, float y, float tileSize): Abstract method that must be implemented by subclasses to render the object on the game map.
+Usage
+Extend MapObject to create different entities in the game (like walls, paths, enemies) that can be rendered on the map. Each subclass should provide its specific implementation of the render method.
 
