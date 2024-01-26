@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class EntryPoint extends MapObject {
 
     private static final Texture tilesTexture = new Texture(Gdx.files.internal("basictiles.png"));
-    // Assuming the y-coordinate for the second row is 16, since each tile is 16 pixels in height
     private static final TextureRegion pathTextureRegion = new TextureRegion(tilesTexture, 0, 96, 16, 16);
     private int x;
     private int y;
