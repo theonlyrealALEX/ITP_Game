@@ -67,7 +67,6 @@ The Screen classes are responsible for the visualization of the different screen
 The GameHUD class extends the LibGDX Stage and implements the Screen interface. It utilizes a SpriteBatch for rendering and manages various UI elements, including animations, labels, and camera settings. The HUD displays the player's remaining lives and key status.
 
 Constructor
-
 - GameHUD(MazeRunnerGame game)
 Initializes the HUD with default values.
 Sets up the layout using a LibGDX Table.
@@ -78,7 +77,6 @@ Overloaded constructor allowing customization of key and lives.
 Similar to the default constructor with parameterized key and lives.
 
 Public Methods
-
 - isKey(): boolean
 Returns the current key status.
 - setKey(boolean key)
@@ -91,21 +89,17 @@ Decreases the lives count if greater than 0.
 Increases the lives count.
 
 Animations
-
 The class includes methods for creating heart and key animations. These animations continuously cycle through frames, providing a dynamic visual effect.
 
 
 User Interface Elements
-
 The HUD consists of heart and key images, as well as corresponding labels for key status and lives. These elements are organized in a LibGDX Table for proper layout.
 
 Input Processing
-
 - show()
 Sets the input processor to the HUD.
 
 Lifecycle Methods
-
 - render(float delta)
 Updates and draws the HUD during the game loop.
 - resize(int width, int height)
@@ -119,6 +113,31 @@ Disposes of resources, including the sprite batch.
 #### SelectScreen:
 
 #### MenuScreen:
+The MenuScreen class in the Maze Runner Game project is responsible for displaying the main menu of the game. It extends the LibGDX Screen class and sets up the UI components for the menu, including animations and buttons. Below is an overview of the class.
+
+Constructor
+- MenuScreen(MazeRunnerGame game)
+* Initializes the main menu screen.
+* Sets up the camera, viewport, and stage for UI elements.
+* Creates UI components, including a title label, animated fire, and buttons to go to the game or quit.
+
+Animations
+- createFireAnimation()
+* Creates an animated fire image using a sequence of frames.
+* Utilizes LibGDX Actions to define the animation sequence.
+
+Input Processing
+- show()
+* Sets the input processor to the stage, enabling the reception of input events.
+
+Lifecycle Methods
+- render(float delta)
+* Renders the main menu screen.
+* Clears the screen and updates/draws the stage.
+resize(int width, int height)
+* Updates the stage viewport on screen resize.
+- dispose()
+* Disposes of resources, including the stage, when the screen is no longer in use.
 
 #### PauseMenuScreen:
 #### GameOverScreen:
