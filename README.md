@@ -164,6 +164,7 @@ Updates the stage viewport on screen resize.
 Disposes of resources, including the stage, when the screen is no longer in use.
 
 Sound Effects
+
 The class includes a method, clickSound(), which plays a sound effect when buttons are clicked. This enhances the user experience with auditory feedback.
 
 #### GameOverScreen:
