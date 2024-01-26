@@ -40,10 +40,6 @@ public class GameEngine {
         this.player = player;
     }
 
-
-    /*public void loadMap() {
-    }*/
-
     /**
      * Gets static game map.
      *

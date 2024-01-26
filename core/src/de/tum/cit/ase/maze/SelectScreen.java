@@ -1,7 +1,6 @@
 package de.tum.cit.ase.maze;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
@@ -22,6 +21,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+/**
+ * The type Select screen.
+ */
 public class SelectScreen implements Screen {
 
     private final Stage stage;
@@ -30,7 +32,7 @@ public class SelectScreen implements Screen {
     private Array<String> mapNames = new Array<>();
 
     private String selectedMap;
-    private Music menuMusic =  Gdx.audio.newMusic(Gdx.files.internal("MenuSound.mp3"));
+    private Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("MenuSound.mp3"));
 
 
     /**
@@ -38,10 +40,7 @@ public class SelectScreen implements Screen {
      *
      * @param game The main game class, used to access global resources and methods.
      */
-
-
     public SelectScreen(MazeRunnerGame game) {
-
 
         game.setSelectScreen(this);
         game.getBackGroundMusic().setVolume(0.7f);
@@ -78,9 +77,9 @@ public class SelectScreen implements Screen {
                 public void changed(ChangeEvent event, Actor actor) {
 
                     clickSound();
-                    selectedMap = mapNames.get(finalI-1);
-                    game.selectedMap=selectedMap;
-                   
+                    selectedMap = mapNames.get(finalI - 1);
+                    game.selectedMap = selectedMap;
+
                     //System.out.println("inside loop"+game.getSelectedMap());
                     game.goToMenu();
 
@@ -93,10 +92,20 @@ public class SelectScreen implements Screen {
 
     }
 
+    /**
+     * Gets selected map.
+     *
+     * @return the selected map
+     */
     public String getSelectedMap() {
         return selectedMap;
     }
 
+    /**
+     * Sets selected map.
+     *
+     * @param selectedMap the selected map
+     */
     public void setSelectedMap(String selectedMap) {
         this.selectedMap = selectedMap;
     }
@@ -146,7 +155,6 @@ public class SelectScreen implements Screen {
         fireImage.addAction(skullAnimation);
         return fireImage;
     }
-
 
 
     private void clickSound() {

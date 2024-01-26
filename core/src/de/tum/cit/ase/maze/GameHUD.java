@@ -125,6 +125,9 @@ public class GameHUD extends Stage implements Screen {
         return lives;
     }
 
+    /**
+     * @return
+     */
     private Image createHeartAnimation() {
         Array<TextureRegion> heartFrames = new Array<>();
         Texture heartSheet = new Texture(Gdx.files.internal("objects.png"));
@@ -157,6 +160,9 @@ public class GameHUD extends Stage implements Screen {
         return heartImage;
     }
 
+    /**
+     * @return
+     */
     private Image createKeyAnimation() {
         Array<TextureRegion> keyFrames = new Array<>();
         Texture keySheet = new Texture(Gdx.files.internal("things.png"));
@@ -194,6 +200,9 @@ public class GameHUD extends Stage implements Screen {
         Gdx.input.setInputProcessor(this);
     }
 
+    /**
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
 

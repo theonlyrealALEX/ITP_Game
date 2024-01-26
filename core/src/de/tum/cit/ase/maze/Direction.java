@@ -1,5 +1,39 @@
 package de.tum.cit.ase.maze;
 
+/**
+ * The enum Direction.
+ */
 public enum Direction {
-    UP, DOWN, LEFT, RIGHT, STANDINGUP, STANDINGDOWN, STANDINGLEFT, STANDINGRIGHT
+    /**
+     * Up direction.
+     */
+    UP,
+    /**
+     * Down direction.
+     */
+    DOWN,
+    /**
+     * Left direction.
+     */
+    LEFT,
+    /**
+     * Right direction.
+     */
+    RIGHT,
+    /**
+     * Standingup direction.
+     */
+    STANDINGUP,
+    /**
+     * Standingdown direction.
+     */
+    STANDINGDOWN,
+    /**
+     * Standingleft direction.
+     */
+    STANDINGLEFT,
+    /**
+     * Standingright direction.
+     */
+    STANDINGRIGHT
 }

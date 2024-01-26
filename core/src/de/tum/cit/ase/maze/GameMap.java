@@ -36,11 +36,10 @@ public class GameMap {
 
 
     /**
-     * Load map.
+     * Load map, Enemeies, lives, etc.
      *
      * @param filePath the file path
      */
-// Load Map from File Path
     public void loadMap(String filePath) {
         enemies = new ArrayList<>();
         Properties prop = new Properties();
